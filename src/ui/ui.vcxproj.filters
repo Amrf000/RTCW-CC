@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4a2c64ef-5ab9-4cc7-9ea3-c19fb858b49e}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{bfa27dc5-bc82-4ba0-9d6d-298281f36076}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{394c786a-ed3c-41ac-9e0c-746b9f9276e8}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\game\bg_misc.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\q_math.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game\q_shared.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_atoms.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_gameinfo.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_players.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_shared.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_syscalls.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_util.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ui.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\game\bg_public.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="keycodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\main\ui\menudef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\q_shared.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game\surfaceflags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cgame\tr_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_local.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_public.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_shared.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

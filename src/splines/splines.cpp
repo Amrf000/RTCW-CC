@@ -33,7 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "q_splineshared.h"  //DAJ was q_shared.h conflicted with qcommon
 #include "splines.h"
 
-extern "C" {
+//extern "C" {
 int FS_Write( const void *buffer, int len, fileHandle_t h );
 int FS_ReadFile( const char *qpath, void **buffer );
 void FS_FreeFile( void *buffer );
@@ -41,13 +41,13 @@ fileHandle_t FS_FOpenFileWrite( const char *filename );
 void FS_FCloseFile( fileHandle_t f );
 void Cbuf_AddText( const char *text );
 void Cbuf_Execute( void );
-}
+//}
 
-float Q_fabs( float f ) {
-	int tmp = *( int * ) &f;
-	tmp &= 0x7FFFFFFF;
-	return *( float * ) &tmp;
-}
+//float Q_fabs( float f ) {
+//	int tmp = *( int * ) &f;
+//	tmp &= 0x7FFFFFFF;
+//	return *( float * ) &tmp;
+//}
 
 // (SA) making a list of cameras so I can use
 //		the splines as targets for other things.
@@ -58,20 +58,20 @@ float Q_fabs( float f ) {
 
 idCameraDef camera[MAX_CAMERAS];
 
-extern "C" {
-qboolean loadCamera( int camNum, const char *name ) {
+// extern "C" {
+bool loadCamera( int camNum, const char *name ) {
 	if ( camNum < 0 || camNum >= MAX_CAMERAS ) {
-		return qfalse;
+		return false;
 	}
 	camera[camNum].clear();
 	// TTimo static_cast confused gcc, went for C-style casting
-	return (qboolean)( camera[camNum].load( name ) );
+	return (bool)( camera[camNum].load( name ) );
 }
 
-qboolean getCameraInfo( int camNum, int time, float *origin, float *angles, float *fov ) {
+bool getCameraInfo( int camNum, int time, float *origin, float *angles, float *fov ) {
 	idVec3 dir, org;
 	if ( camNum < 0 || camNum >= MAX_CAMERAS ) {
-		return qfalse;
+		return false;
 	}
 	org[0] = origin[0];
 	org[1] = origin[1];
@@ -82,9 +82,9 @@ qboolean getCameraInfo( int camNum, int time, float *origin, float *angles, floa
 		origin[2] = org[2];
 		angles[1] = atan2( dir[1], dir[0] ) * 180 / 3.14159;
 		angles[0] = asin( dir[2] ) * 180 / 3.14159;
-		return qtrue;
+		return true;
 	}
-	return qfalse;
+	return false;
 }
 
 void startCamera( int camNum, int time ) {
@@ -94,7 +94,7 @@ void startCamera( int camNum, int time ) {
 	camera[camNum].startCamera( time );
 }
 
-}
+//}
 
 
 //#include "../shared/windings.h"

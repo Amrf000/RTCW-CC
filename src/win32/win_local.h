@@ -63,7 +63,7 @@ void    Sys_DestroyConsole( void );
 
 char    *Sys_ConsoleInput( void );
 
-qboolean    Sys_GetPacket( netadr_t *net_from, msg_t *net_message );
+bool    Sys_GetPacket( netadr_t *net_from, msg_t *net_message );
 
 // Input subsystem
 
@@ -76,7 +76,7 @@ void    IN_Move( usercmd_t *cmd );
 
 void    IN_DeactivateWin32Mouse( void );
 
-void    IN_Activate( qboolean active );
+void    IN_Activate( bool active );
 void    IN_Frame( void );
 
 // window procedure
@@ -95,12 +95,12 @@ typedef struct
 {
 
 	HINSTANCE reflib_library;           // Handle to refresh DLL
-	qboolean reflib_active;
+	bool reflib_active;
 
 	HWND hWnd;
 	HINSTANCE hInstance;
-	qboolean activeApp;
-	qboolean isMinimized;
+	bool activeApp;
+	bool isMinimized;
 	OSVERSIONINFO osversion;
 
 	// when we get a windows message, we store the time off so keyboard processing

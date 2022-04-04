@@ -235,7 +235,7 @@ typedef struct
 typedef struct
 {
 	char    *actionString;
-	qboolean ( *actionFunc )( struct cast_state_s *cs, char *params );
+	bool ( *actionFunc )( struct cast_state_s *cs, char *params );
 } cast_script_stack_action_t;
 //
 typedef struct
@@ -264,7 +264,7 @@ typedef struct
 typedef struct
 {
 	char        *eventStr;
-	qboolean ( *eventMatch )( cast_script_event_t *event, char *eventParm );
+	bool ( *eventMatch )( cast_script_event_t *event, char *eventParm );
 } cast_script_event_define_t;
 //
 typedef struct
@@ -312,10 +312,10 @@ typedef enum
 typedef struct aicast_checkattack_cache_s
 {
 	int enemy;
-	qboolean allowHitWorld;
+	bool allowHitWorld;
 	int time;
 	int weapon;
-	qboolean result;
+	bool result;
 } aicast_checkattack_cache_t;
 //
 // --------------------------------------------------------------------------------
@@ -388,9 +388,9 @@ typedef struct cast_state_s
 
 	int followEntity;
 	float followDist;
-	qboolean followIsGoto;      // we are really just going to the entity, but should wait until scripting tells us we can stop
+	bool followIsGoto;      // we are really just going to the entity, but should wait until scripting tells us we can stop
 	int followTime;             // if this runs out, the scripting has probably been interupted
-	qboolean followSlowApproach;
+	bool followSlowApproach;
 
 	int leaderNum;              // entnum of player we are following
 
@@ -435,7 +435,7 @@ typedef struct cast_state_s
 	int lastEnemy, nextIdleAngleChange;
 	float idleYawChange, idleYaw;
 
-	qboolean crouchHideFlag;
+	bool crouchHideFlag;
 
 	int doorMarker, doorEntNum;
 
@@ -444,7 +444,7 @@ typedef struct cast_state_s
 	int attacksnd;
 	int painSoundTime;
 	int firstSightTime;
-	qboolean secondDeadTime;
+	bool secondDeadTime;
 	// done
 
 	int startGrenadeFlushTime;
@@ -478,7 +478,7 @@ typedef struct cast_state_s
 
 	int attempts;
 
-	qboolean grenadeGrabFlag;       // if this is set, we need to play the anim before we can grab it
+	bool grenadeGrabFlag;       // if this is set, we need to play the anim before we can grab it
 
 	vec3_t lastMoveToPosGoalOrg;    // if this changes, we should reset the Bot Avoid Reach
 
@@ -578,15 +578,15 @@ void    AICast_Printf( int type, const char *fmt, ... );
 gentity_t *AICast_CreateCharacter( gentity_t *ent, float *attributes, cast_weapon_info_t *weaponInfo, char *castname, char *model, char *head, char *sex, char *color, char *handicap );
 void    AICast_Init( void );
 void    AICast_DelayedSpawnCast( gentity_t *ent, int castType );
-qboolean AICast_SolidsInBBox( vec3_t pos, vec3_t mins, vec3_t maxs, int entnum, int mask );
+bool AICast_SolidsInBBox( vec3_t pos, vec3_t mins, vec3_t maxs, int entnum, int mask );
 void    AICast_CheckLevelAttributes( cast_state_t *cs, gentity_t *ent, char **ppStr );
 //
 // ai_cast_sight.c
 void    AICast_SightUpdate( int numchecks );
-qboolean AICast_VisibleFromPos( vec3_t srcpos, int srcnum,
-								vec3_t destpos, int destnum, qboolean updateVisPos );
-void    AICast_UpdateVisibility( gentity_t *srcent, gentity_t *destent, qboolean shareVis, qboolean directview );
-qboolean AICast_CheckVisibility( gentity_t *srcent, gentity_t *destent );
+bool AICast_VisibleFromPos( vec3_t srcpos, int srcnum,
+								vec3_t destpos, int destnum, bool updateVisPos );
+void    AICast_UpdateVisibility( gentity_t *srcent, gentity_t *destent, bool shareVis, bool directview );
+bool AICast_CheckVisibility( gentity_t *srcent, gentity_t *destent );
 void    AICast_SightSoundEvent( cast_state_t *cs, float range );
 //
 // ai_cast_debug.c
@@ -603,7 +603,7 @@ float   AICast_SpeedScaleForDistance( cast_state_t *cs, float startdist, float i
 char    *AIFunc_DefaultStart( cast_state_t *cs );
 char    *AIFunc_IdleStart( cast_state_t *cs );
 char    *AIFunc_ChaseGoalIdleStart( cast_state_t *cs, int entitynum, float reachdist );
-char    *AIFunc_ChaseGoalStart( cast_state_t *cs, int entitynum, float reachdist, qboolean slowApproach );
+char    *AIFunc_ChaseGoalStart( cast_state_t *cs, int entitynum, float reachdist, bool slowApproach );
 char    *AIFunc_BattleChaseStart( cast_state_t *cs );
 char    *AIFunc_BattleStart( cast_state_t *cs );
 char    *AIFunc_DoorMarkerStart( cast_state_t *cs, int doornum, int markernum );
@@ -642,30 +642,30 @@ char    *AIFunc_Helga_IdleStart( cast_state_t *cs );
 char    *AIFunc_FlameZombie_PortalStart( cast_state_t *cs );
 //
 // ai_cast_fight.c
-qboolean AICast_StateChange( cast_state_t *cs, aistateEnum_t newaistate );
+bool AICast_StateChange( cast_state_t *cs, aistateEnum_t newaistate );
 void    AICast_WeaponSway( cast_state_t *cs, vec3_t ofs );
 int     AICast_ScanForEnemies( cast_state_t *cs, int *enemies );
 void    AICast_UpdateBattleInventory( cast_state_t *cs, int enemy );
 float   AICast_Aggression( cast_state_t *cs );
 int     AICast_WantsToChase( cast_state_t *cs );
-int     AICast_WantsToTakeCover( cast_state_t *cs, qboolean attacking );
-qboolean AICast_EntityVisible( cast_state_t *cs, int enemynum, qboolean directview );
+int     AICast_WantsToTakeCover( cast_state_t *cs, bool attacking );
+bool AICast_EntityVisible( cast_state_t *cs, int enemynum, bool directview );
 bot_moveresult_t AICast_CombatMove( cast_state_t *cs, int tfl );
-qboolean AICast_AimAtEnemy( cast_state_t *cs );
-qboolean AICast_CheckAttackAtPos( int entnum, int enemy, vec3_t pos, qboolean ducking, qboolean allowHitWorld );
-qboolean AICast_CheckAttack( cast_state_t *cs, int enemy, qboolean allowHitWorld );
+bool AICast_AimAtEnemy( cast_state_t *cs );
+bool AICast_CheckAttackAtPos( int entnum, int enemy, vec3_t pos, bool ducking, bool allowHitWorld );
+bool AICast_CheckAttack( cast_state_t *cs, int enemy, bool allowHitWorld );
 void    AICast_ProcessAttack( cast_state_t *cs );
-void    AICast_ChooseWeapon( cast_state_t *cs, qboolean battleFunc );
-qboolean AICast_GetTakeCoverPos( cast_state_t *cs, int enemyNum, vec3_t enemyPos, vec3_t returnPos );
-qboolean AICast_CanMoveWhileFiringWeapon( int weaponnum );
+void    AICast_ChooseWeapon( cast_state_t *cs, bool battleFunc );
+bool AICast_GetTakeCoverPos( cast_state_t *cs, int enemyNum, vec3_t enemyPos, vec3_t returnPos );
+bool AICast_CanMoveWhileFiringWeapon( int weaponnum );
 float   AICast_GetWeaponSoundRange( int weapon );
-qboolean AICast_StopAndAttack( cast_state_t *cs );
-qboolean AICast_WantToRetreat( cast_state_t *cs );
+bool AICast_StopAndAttack( cast_state_t *cs );
+bool AICast_WantToRetreat( cast_state_t *cs );
 int     AICast_SafeMissileFire( gentity_t *ent, int duration, int enemyNum, vec3_t enemyPos, int selfNum, vec3_t endPos );
 void    AIChar_AttackSound( cast_state_t *cs );
-qboolean AICast_GotEnoughAmmoForWeapon( cast_state_t *cs, int weapon );
-qboolean AICast_HostileEnemy( cast_state_t *cs, int enemynum );
-qboolean AICast_QueryEnemy( cast_state_t *cs, int enemynum );
+bool AICast_GotEnoughAmmoForWeapon( cast_state_t *cs, int weapon );
+bool AICast_HostileEnemy( cast_state_t *cs, int enemynum );
+bool AICast_QueryEnemy( cast_state_t *cs, int enemynum );
 void AICast_AudibleEvent( int srcnum, vec3_t pos, float range );
 
 //
@@ -682,13 +682,13 @@ void AICast_UpdateInput( cast_state_t *cs, int time );
 void AICast_InputToUserCommand( cast_state_t * cs, bot_input_t * bi, usercmd_t * ucmd, int delta_angles[3] );
 void AICast_PredictMovement( cast_state_t *cs, int numframes, float frametime, aicast_predictmove_t *move, usercmd_t *ucmd, int checkHitEnt );
 void AICast_Blocked( cast_state_t *cs, bot_moveresult_t *moveresult, int activate, bot_goal_t *goal );
-qboolean AICast_RequestCrouchAttack( cast_state_t *cs, vec3_t org, float time );
-qboolean AICast_GetAvoid( cast_state_t *cs, bot_goal_t *goal, vec3_t outpos, qboolean reverse, int blockEnt );
+bool AICast_RequestCrouchAttack( cast_state_t *cs, vec3_t org, float time );
+bool AICast_GetAvoid( cast_state_t *cs, bot_goal_t *goal, vec3_t outpos, bool reverse, int blockEnt );
 void AICast_QueryThink( cast_state_t *cs );
 void AICast_DeadClipWalls( cast_state_t *cs );
 //
 // ai_cast_script.c
-qboolean AICast_ScriptRun( cast_state_t *cs, qboolean force );
+bool AICast_ScriptRun( cast_state_t *cs, bool force );
 //
 // ai_cast_soldier.c
 void    AIChar_spawn( gentity_t *ent );

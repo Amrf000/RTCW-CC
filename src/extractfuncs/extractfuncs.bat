@@ -1,3 +1,3 @@
 cd ..\game
-..\extractfuncs\extractfuncs *.c
+..\extractfuncs\extractfuncs *.cc
 cd ..

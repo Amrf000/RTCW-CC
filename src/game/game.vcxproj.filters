@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0a337d19-444b-4484-aabe-71d6597d975d}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ccefad89-c7b9-4900-bf3a-4245bc0d87ce}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;fi;fd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{9fc9c4db-b63c-4aa5-98d7-3f1ac831e3da}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ai_cast.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_characters.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_debug.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_events.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_fight.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_func_attack.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_func_boss1.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_funcs.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_script.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_script_actions.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_script_ents.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_sight.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ai_cast_think.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\botai\ai_chat.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\botai\ai_cmd.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\botai\ai_dmnet.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\botai\ai_dmq3.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\botai\ai_main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\botai\ai_team.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bg_animation.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bg_misc.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bg_pmove.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bg_slidemove.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_active.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_alarm.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_antilag.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_bot.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_client.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_cmds.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_combat.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_items.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_mem.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_misc.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_missile.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_mover.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_props.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_save.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_script.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_script_actions.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_session.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_spawn.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_svcmds.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_syscalls.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_target.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_team.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_tramcar.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_trigger.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_utils.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_weapon.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="q_math.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="q_shared.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ai_cast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ai_cast_fight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ai_cast_global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\ai_chat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\ai_cmd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\ai_dmnet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\ai_dmq3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\ai_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\ai_team.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_aas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_ai_char.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_ai_chat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_ai_gen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_ai_goal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_ai_move.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_ai_weap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="be_ea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bg_local.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bg_public.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\botai.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="botlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\chars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="g_local.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="g_public.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="g_team.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\inv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\match.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="q_shared.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="surfaceflags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\botai\syn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

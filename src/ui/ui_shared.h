@@ -196,7 +196,7 @@ typedef struct listBoxDef_s {
 	int numColumns;
 	columnInfo_t columnInfo[MAX_LB_COLUMNS];
 	const char *doubleClick;
-	qboolean notselectable;
+	bool notselectable;
 } listBoxDef_t;
 
 typedef struct editFieldDef_s {
@@ -216,7 +216,7 @@ typedef struct multiDef_s {
 	const char *cvarStr[MAX_MULTI_CVARS];
 	float cvarValue[MAX_MULTI_CVARS];
 	int count;
-	qboolean strDef;
+	bool strDef;
 } multiDef_t;
 
 typedef struct modelDef_s {
@@ -284,7 +284,7 @@ typedef struct itemDef_s {
 typedef struct {
 	Window window;
 	const char  *font;              // font
-	qboolean fullScreen;            // covers entire screen
+	bool fullScreen;            // covers entire screen
 	int itemCount;                  // number of items;
 	int fontIndex;                  //
 	int cursorItem;                 // which item as the cursor
@@ -333,7 +333,7 @@ typedef struct {
 	float shadowY;
 	vec4_t shadowColor;
 	float shadowFadeClamp;
-	qboolean fontRegistered;
+	bool fontRegistered;
 
 	// player settings
 	qhandle_t fxBasePic;
@@ -368,17 +368,17 @@ typedef struct {
 	void ( *registerFont )( const char *pFontname, int pointSize, fontInfo_t *font );
 	void ( *ownerDrawItem )( float x, float y, float w, float h, float text_x, float text_y, int ownerDraw, int ownerDrawFlags, int align, float special, float scale, vec4_t color, qhandle_t shader, int textStyle );
 	float ( *getValue )( int ownerDraw, int type );
-	qboolean ( *ownerDrawVisible )( int flags );
+	bool ( *ownerDrawVisible )( int flags );
 	void ( *runScript )( char **p );
 	void ( *getTeamColor )( vec4_t *color );
 	void ( *getCVarString )( const char *cvar, char *buffer, int bufsize );
 	float ( *getCVarValue )( const char *cvar );
 	void ( *setCVar )( const char *cvar, const char *value );
 	void ( *drawTextWithCursor )( float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style );
-	void ( *setOverstrikeMode )( qboolean b );
-	qboolean ( *getOverstrikeMode )();
+	void ( *setOverstrikeMode )( bool b );
+	bool ( *getOverstrikeMode )();
 	void ( *startLocalSound )( sfxHandle_t sfx, int channelNum );
-	qboolean ( *ownerDrawHandleKey )( int ownerDraw, int flags, float *special, int key );
+	bool ( *ownerDrawHandleKey )( int ownerDraw, int flags, float *special, int key );
 	int ( *feederCount )( float feederID );
 	const char *( *feederItemText )( float feederID, int index, int column, qhandle_t * handle );
 	const char *( *fileText )( char *flieName );
@@ -395,9 +395,9 @@ typedef struct {
 	void ( *executeText )( int exec_when, const char *text );
 	void ( *Error )( int level, const char *error, ... );
 	void ( *Print )( const char *msg, ... );
-	void ( *Pause )( qboolean b );
+	void ( *Pause )( bool b );
 	int ( *ownerDrawWidth )( int ownerDraw, float scale );
-//	sfxHandle_t (*registerSound)(const char *name, qboolean compressed);
+//	sfxHandle_t (*registerSound)(const char *name, bool compressed);
 	sfxHandle_t ( *registerSound )( const char *name );
 	void ( *startBackgroundTrack )( const char *intro, const char *loop );
 	void ( *stopBackgroundTrack )();
@@ -413,7 +413,7 @@ typedef struct {
 	int frameTime;
 	int cursorx;
 	int cursory;
-	qboolean debug;
+	bool debug;
 
 	cachedAssets_t Assets;
 
@@ -434,55 +434,55 @@ void Menu_Init( menuDef_t *menu );
 void Item_Init( itemDef_t *item );
 void Menu_PostParse( menuDef_t *menu );
 menuDef_t *Menu_GetFocused();
-void Menu_HandleKey( menuDef_t *menu, int key, qboolean down );
+void Menu_HandleKey( menuDef_t *menu, int key, bool down );
 void Menu_HandleMouseMove( menuDef_t *menu, float x, float y );
-void Menu_ScrollFeeder( menuDef_t *menu, int feeder, qboolean down );
-qboolean Float_Parse( char **p, float *f );
-qboolean Color_Parse( char **p, vec4_t *c );
-qboolean Int_Parse( char **p, int *i );
-qboolean Rect_Parse( char **p, rectDef_t *r );
-qboolean String_Parse( char **p, const char **out );
-qboolean Script_Parse( char **p, const char **out );
-qboolean PC_Float_Parse( int handle, float *f );
-qboolean PC_Color_Parse( int handle, vec4_t *c );
-qboolean PC_Int_Parse( int handle, int *i );
-qboolean PC_Rect_Parse( int handle, rectDef_t *r );
-qboolean PC_String_Parse( int handle, const char **out );
-qboolean PC_Script_Parse( int handle, const char **out );
-qboolean PC_Char_Parse( int handle, char *out );              // NERVE - SMF
+void Menu_ScrollFeeder( menuDef_t *menu, int feeder, bool down );
+bool Float_Parse( char **p, float *f );
+bool Color_Parse( char **p, vec4_t *c );
+bool Int_Parse( char **p, int *i );
+bool Rect_Parse( char **p, rectDef_t *r );
+bool String_Parse( char **p, const char **out );
+bool Script_Parse( char **p, const char **out );
+bool PC_Float_Parse( int handle, float *f );
+bool PC_Color_Parse( int handle, vec4_t *c );
+bool PC_Int_Parse( int handle, int *i );
+bool PC_Rect_Parse( int handle, rectDef_t *r );
+bool PC_String_Parse( int handle, const char **out );
+bool PC_Script_Parse( int handle, const char **out );
+bool PC_Char_Parse( int handle, char *out );              // NERVE - SMF
 int Menu_Count();
 void Menu_New( int handle );
 void Menu_PaintAll();
-menuDef_t *Menus_ActivateByName( const char *p, qboolean modalStack );
+menuDef_t *Menus_ActivateByName( const char *p, bool modalStack );
 void Menu_Reset();
-qboolean Menus_AnyFullScreenVisible();
+bool Menus_AnyFullScreenVisible();
 void  Menus_Activate( menuDef_t *menu );
 
 displayContextDef_t *Display_GetContext();
 void        *Display_CaptureItem( int x, int y );
-qboolean    Display_MouseMove( void *p, int x, int y );
+bool    Display_MouseMove( void *p, int x, int y );
 int         Display_CursorType( int x, int y );
-qboolean    Display_KeyBindPending();
+bool    Display_KeyBindPending();
 void        Menus_OpenByName( const char *p );
 menuDef_t   *Menus_FindByName( const char *p );
 void        Menus_ShowByName( const char *p );
 void        Menus_CloseByName( const char *p );
-void        Display_HandleKey( int key, qboolean down, int x, int y );
+void        Display_HandleKey( int key, bool down, int x, int y );
 void        LerpColor( vec4_t a, vec4_t b, vec4_t c, float t );
 void        Menus_CloseAll();
-void        Menu_Paint( menuDef_t *menu, qboolean forcePaint );
+void        Menu_Paint( menuDef_t *menu, bool forcePaint );
 void        Menu_SetFeederSelection( menuDef_t *menu, int feeder, int index, const char *name );
 void        Display_CacheAll();
 
 // TTimo
-void Menu_ShowItemByName( menuDef_t *menu, const char *p, qboolean bShow );
+void Menu_ShowItemByName( menuDef_t *menu, const char *p, bool bShow );
 
 void        *UI_Alloc( int size );
 void        UI_InitMemory( void );
-qboolean    UI_OutOfMemory();
+bool    UI_OutOfMemory();
 
 void        Controls_GetConfig( void );
-void        Controls_SetConfig( qboolean restart );
+void        Controls_SetConfig( bool restart );
 void        Controls_SetDefaults( void );
 
 int         trap_PC_AddGlobalDefine( char *define );

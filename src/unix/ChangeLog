@@ -43,7 +43,7 @@
     merged Rhea's g_antilag.c changes
     - cancel out syntax changes (makes diff harder to read)
     - IS_ACTIVE macro replaces our former test:
-					  x->r.linked == qtrue && \
+					  x->r.linked == true && \
 					  x->client->ps.stats[STAT_HEALTH] > 0 && \
 					  x->client->sess.sessionTeam != TEAM_SPECTATOR && \
 					  (x->client->ps.pm_flags & PMF_LIMBO) == 0 \
@@ -1150,7 +1150,7 @@ conflict      - renderer/tr_animation.c
     using his code
 I have newer  - server/server.h
   Sean / Version 3 on 09/17/2001
-  TA Merge - adds a qboolean connected; to challenge_t
+  TA Merge - adds a bool connected; to challenge_t
   built server.h.patch
 I have newer  - server/sv_client.c
   Sean / Version 4 on 09/17/2001
@@ -1318,7 +1318,7 @@ added -fshort-enums to the flags, catches enum warnings
 adding a -1 valued enum in enum declarations
 
 .//botlib/be_aas_entity.c:453:
-  // TTimo WTF?? qboolean blocking
+  // TTimo WTF?? bool blocking
   // warning: comparison is always false due to limited range of data type
   // 	if (VectorCompare( absmin, absmax ) && blocking < 0) {
 	if (VectorCompare( absmin, absmax )) {

@@ -136,7 +136,7 @@ typedef struct face_s
 	int outputnumber;
 	winding_t           *w;
 	int numpoints;
-	qboolean badstartvert;                  // tjunctions cannot be fixed without a midpoint vertex
+	bool badstartvert;                  // tjunctions cannot be fixed without a midpoint vertex
 	int vertexnums[MAXEDGES];
 } face_t;
 //bsp brush
@@ -159,7 +159,7 @@ typedef struct node_s
 	bspbrush_t      *volume;        // one for each leaf/node
 
 	// nodes only
-	qboolean detail_seperator;              // a detail brush caused the split
+	bool detail_seperator;              // a detail brush caused the split
 	side_t          *side;      // the side that created the node
 	struct node_s   *children[2];
 	face_t          *faces;
@@ -189,7 +189,7 @@ typedef struct portal_s
 	struct portal_s *next[2];
 	winding_t *winding;
 
-	qboolean sidefound;             // false if ->side hasn't been checked
+	bool sidefound;             // false if ->side hasn't been checked
 	side_t *side;                   // NULL = non-visible
 	face_t *face[2];                // output face in bsp file
 #ifdef ME
@@ -209,25 +209,25 @@ typedef struct
 // bspc.c
 //=============================================================================
 
-extern qboolean noprune;
-extern qboolean nodetail;
-extern qboolean fulldetail;
-extern qboolean nomerge;
-extern qboolean nosubdiv;
-extern qboolean nowater;
-extern qboolean noweld;
-extern qboolean noshare;
-extern qboolean notjunc;
-extern qboolean onlyents;
+extern bool noprune;
+extern bool nodetail;
+extern bool fulldetail;
+extern bool nomerge;
+extern bool nosubdiv;
+extern bool nowater;
+extern bool noweld;
+extern bool noshare;
+extern bool notjunc;
+extern bool onlyents;
 #ifdef ME
-extern qboolean nocsg;
-extern qboolean create_aas;
-extern qboolean freetree;
-extern qboolean lessbrushes;
-extern qboolean nobrushmerge;
-extern qboolean cancelconversion;
-extern qboolean noliquids;
-extern qboolean capsule_collision;
+extern bool nocsg;
+extern bool create_aas;
+extern bool freetree;
+extern bool lessbrushes;
+extern bool nobrushmerge;
+extern bool cancelconversion;
+extern bool noliquids;
+extern bool capsule_collision;
 #endif //ME
 
 extern float subdivide_size;
@@ -306,7 +306,7 @@ int PlaneFromPoints( int *p0, int *p1, int *p2 );
 //add bevels to the map brush
 void AddBrushBevels( mapbrush_t *b );
 //makes brush side windings for the brush
-qboolean MakeBrushWindings( mapbrush_t *ob );
+bool MakeBrushWindings( mapbrush_t *ob );
 //marks brush bevels of the brush as bevel
 void MarkBrushBevels( mapbrush_t *brush );
 //returns true if the map brush already exists
@@ -411,7 +411,7 @@ tree_t *ProcessWorldBrushes( int brush_start, int brush_end );
 #define PSIDE_BOTH          ( PSIDE_FRONT | PSIDE_BACK )
 #define PSIDE_FACING        4
 
-void WriteBrushList( char *name, bspbrush_t *brush, qboolean onlyvis );
+void WriteBrushList( char *name, bspbrush_t *brush, bool onlyvis );
 bspbrush_t *CopyBrush( bspbrush_t *brush );
 void SplitBrush( bspbrush_t *brush, int planenum, bspbrush_t **front, bspbrush_t **back );
 node_t *AllocNode( void );
@@ -425,8 +425,8 @@ tree_t *BrushBSP( bspbrush_t *brushlist, vec3_t mins, vec3_t maxs );
 
 bspbrush_t *BrushFromBounds( vec3_t mins, vec3_t maxs );
 int BrushMostlyOnSide( bspbrush_t *brush, plane_t *plane );
-qboolean WindingIsHuge( winding_t *w );
-qboolean WindingIsTiny( winding_t *w );
+bool WindingIsHuge( winding_t *w );
+bool WindingIsTiny( winding_t *w );
 void ResetBrushBSP( void );
 
 //=============================================================================
@@ -437,8 +437,8 @@ int VisibleContents( int contents );
 void MakeHeadnodePortals( tree_t *tree );
 void MakeNodePortal( node_t *node );
 void SplitNodePortals( node_t *node );
-qboolean    Portal_VisFlood( portal_t *p );
-qboolean FloodEntities( tree_t *tree );
+bool    Portal_VisFlood( portal_t *p );
+bool FloodEntities( tree_t *tree );
 void FillOutside( node_t *headnode );
 void FloodAreas( tree_t *tree );
 void MarkVisibleSides( tree_t *tree, int start, int end );
@@ -458,7 +458,7 @@ void WriteGLView( tree_t *tree, char *source );
 //=============================================================================
 
 extern vec3_t draw_mins, draw_maxs;
-extern qboolean drawflag;
+extern bool drawflag;
 
 void Draw_ClearWindow( void );
 void DrawWinding( winding_t *w );

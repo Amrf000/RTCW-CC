@@ -87,7 +87,7 @@ void S_BeginRegistration( void );
 #ifdef DOOMSOUND    ///// (SA) DOOMSOUND
 sfxHandle_t S_RegisterSound( const char *sample );
 #else
-sfxHandle_t S_RegisterSound( const char *sample, qboolean compressed );
+sfxHandle_t S_RegisterSound( const char *sample, bool compressed );
 #endif ///// (SA) DOOMSOUND
 
 void S_DisplayFreeMemory( void );

@@ -49,7 +49,7 @@ bsp_link_t *AAS_BSPLinkEntity( vec3_t absmins,
 							   int modelnum );
 
 //calculates collision with given entity
-qboolean AAS_EntityCollision( int entnum,
+bool AAS_EntityCollision( int entnum,
 							  vec3_t start,
 							  vec3_t boxmins,
 							  vec3_t boxmaxs,
@@ -73,11 +73,11 @@ bsp_trace_t AAS_Trace(  vec3_t start,
 //returns the contents at the given point
 int AAS_PointContents( vec3_t point );
 //returns true when p2 is in the PVS of p1
-qboolean AAS_inPVS( vec3_t p1, vec3_t p2 );
+bool AAS_inPVS( vec3_t p1, vec3_t p2 );
 //returns true when p2 is in the PHS of p1
-qboolean AAS_inPHS( vec3_t p1, vec3_t p2 );
+bool AAS_inPHS( vec3_t p1, vec3_t p2 );
 //returns true if the given areas are connected
-qboolean AAS_AreasConnected( int area1, int area2 );
+bool AAS_AreasConnected( int area1, int area2 );
 //creates a list with entities totally or partly within the given box
 int AAS_BoxEntities( vec3_t absmins, vec3_t absmaxs, int *list, int maxcount );
 //gets the mins, maxs and origin of a BSP model

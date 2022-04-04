@@ -54,7 +54,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifndef __BYTEBOOL__
 #define __BYTEBOOL__
-typedef enum {false, true} qboolean;
+
 typedef unsigned char byte;
 #endif
 
@@ -100,7 +100,7 @@ void    SafeWrite( FILE *f, void *buffer, int count );
 int LoadFile( char *filename, void **bufferptr, int offset, int length );
 int TryLoadFile( char *filename, void **bufferptr );
 void SaveFile( char *filename, void *buffer, int count );
-qboolean    FileExists( char *filename );
+bool    FileExists( char *filename );
 
 void    DefaultExtension( char *path, char *extension );
 void    DefaultPath( char *path, char *basepath );
@@ -131,7 +131,7 @@ unsigned          LittleUnsigned( unsigned l );
 char *COM_Parse( char *data );
 
 extern char com_token[1024];
-extern qboolean com_eof;
+extern bool com_eof;
 
 char *copystring( char *s );
 
@@ -143,11 +143,11 @@ unsigned short CRC_Value( unsigned short crcvalue );
 void    CreatePath( char *path );
 void    QCopyFile( char *from, char *to );
 
-extern qboolean archive;
+extern bool archive;
 extern char archivedir[1024];
 
 
-extern qboolean verbose;
+extern bool verbose;
 void qprintf( char *format, ... );
 
 void ExpandWildcards( int *argc, char ***argv );

@@ -82,12 +82,12 @@ void ConvertPath( char *path );
 //append a path seperator to the given path not exceeding the length
 void AppendPathSeperator( char *path, int length );
 //find a file in a pak file
-qboolean FindFileInPak( char *pakfile, char *filename, foundfile_t *file );
+bool FindFileInPak( char *pakfile, char *filename, foundfile_t *file );
 //find a quake file
 #ifdef BOTLIB
-qboolean FindQuakeFile( char *filename, foundfile_t *file );
+bool FindQuakeFile( char *filename, foundfile_t *file );
 #else //BOTLIB
-qboolean FindQuakeFile( char *basedir, char *gamedir, char *filename, foundfile_t *file );
+bool FindQuakeFile( char *basedir, char *gamedir, char *filename, foundfile_t *file );
 #endif //BOTLIB
 
 

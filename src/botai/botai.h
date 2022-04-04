@@ -74,8 +74,8 @@ typedef struct bsp_surface_s
 //a trace is returned when a box is swept through the world
 typedef struct bsp_trace_s
 {
-	qboolean allsolid;          // if true, plane is not valid
-	qboolean startsolid;        // if true, the initial point was in a solid area
+	bool allsolid;          // if true, plane is not valid
+	bool startsolid;        // if true, the initial point was in a solid area
 	float fraction;             // time completed, 1.0 = didn't hit anything
 	vec3_t endpos;          // final position
 	cplane_t plane;             // surface normal at impact
@@ -104,7 +104,7 @@ void	trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int buf
 void	trap_GetConfigstring( int num, char *buffer, int bufferSize );
 void	trap_GetServerinfo( char *buffer, int bufferSize );
 int		trap_PointContents( const vec3_t point, int passEntityNum );
-qboolean trap_InPVS( const vec3_t p1, const vec3_t p2 );
+bool trap_InPVS( const vec3_t p1, const vec3_t p2 );
 int		trap_BotAllocateClient( void );
 void	trap_BotFreeClient( int clientNum );
 */

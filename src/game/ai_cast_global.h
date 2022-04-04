@@ -43,14 +43,14 @@ struct cast_state_s;
 #define DANGER_CLIENTAIM    ( 1 << 1 )
 #define DANGER_FLAMES       ( 1 << 2 )
 
-extern qboolean saveGamePending;
+extern bool saveGamePending;
 
-qboolean AICast_SameTeam( struct cast_state_s *cs, int enemynum );
+bool AICast_SameTeam( struct cast_state_s *cs, int enemynum );
 struct cast_state_s *AICast_GetCastState( int entitynum );
 void AICast_ScriptLoad( void );
 void AICast_ScriptEvent( struct cast_state_s *cs, char *eventStr, char *params );
 void AICast_ForceScriptEvent( struct cast_state_s *cs, char *eventStr, char *params );
-qboolean AICast_AIDamageOK( struct cast_state_s *cs, struct cast_state_s *ocs );
+bool AICast_AIDamageOK( struct cast_state_s *cs, struct cast_state_s *ocs );
 gentity_t *AICast_FindEntityForName( char *name );
 gentity_t *AICast_TravEntityForName( gentity_t *startent, char *name );
 void AICast_ScriptParse( struct cast_state_s *cs );
@@ -60,18 +60,18 @@ void AICast_RecordWeaponFire( gentity_t *ent );
 void AICast_AIDoor_Touch( gentity_t *ent, gentity_t *aidoor_trigger, gentity_t *door );
 float AICast_GetAccuracy( int entnum );
 void AICast_Activate( int activatorNum, int entNum );
-void AICast_CheckDangerousEntity( gentity_t *ent, int dangerFlags, float dangerDist, float tacticalLevel, float aggressionLevel, qboolean hurtFriendly );
-qboolean AICast_NoFlameDamage( int entNum );
-qboolean AICast_HasFiredWeapon( int entNum, int weapon );
-void G_SetAASBlockingEntity( gentity_t *ent, qboolean blocking );
-qboolean AICast_InFieldOfVision( vec3_t viewangles, float fov, vec3_t angles );
-qboolean AICast_VisibleFromPos( vec3_t srcpos, int srcnum,
-								vec3_t destpos, int destnum, qboolean updateVisPos );
-qboolean AICast_AllowFlameDamage( int entNum );
+void AICast_CheckDangerousEntity( gentity_t *ent, int dangerFlags, float dangerDist, float tacticalLevel, float aggressionLevel, bool hurtFriendly );
+bool AICast_NoFlameDamage( int entNum );
+bool AICast_HasFiredWeapon( int entNum, int weapon );
+void G_SetAASBlockingEntity( gentity_t *ent, bool blocking );
+bool AICast_InFieldOfVision( vec3_t viewangles, float fov, vec3_t angles );
+bool AICast_VisibleFromPos( vec3_t srcpos, int srcnum,
+								vec3_t destpos, int destnum, bool updateVisPos );
+bool AICast_AllowFlameDamage( int entNum );
 void AICast_AdjustIdealYawForMover( int entnum, float yaw );
 void AICast_AgePlayTime( int entnum );
 int AICast_NoReload( int entnum );
 void AICast_RecordScriptSound( int client );
-void AICast_UpdateVisibility( gentity_t *srcent, gentity_t *destent, qboolean shareVis, qboolean directview );
+void AICast_UpdateVisibility( gentity_t *srcent, gentity_t *destent, bool shareVis, bool directview );
 void AICast_ProcessBullet( gentity_t *attacker, vec3_t start, vec3_t end );
 void AICast_AudibleEvent( int srcnum, vec3_t pos, float range );

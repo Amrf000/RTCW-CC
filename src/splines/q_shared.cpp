@@ -38,8 +38,8 @@ GROWLISTS
 */
 
 // malloc / free all in one place for debugging
-extern "C" void *Com_Allocate( int bytes );
-extern "C" void Com_Dealloc( void *ptr );
+/*extern "C"*/ void* Com_Allocate(int bytes);
+/*extern "C" */  void Com_Dealloc( void *ptr );
 
 void Com_InitGrowList( growList_t *list, int maxElements ) {
 	list->maxElements = maxElements;
@@ -107,15 +107,15 @@ int Com_IndexForGrowListElement( const growList_t *list, const void *element ) {
 //============================================================================
 
 
-float Com_Clamp( float min, float max, float value ) {
-	if ( value < min ) {
-		return min;
-	}
-	if ( value > max ) {
-		return max;
-	}
-	return value;
-}
+//float Com_Clamp( float min, float max, float value ) {
+//	if ( value < min ) {
+//		return min;
+//	}
+//	if ( value > max ) {
+//		return max;
+//	}
+//	return value;
+//}
 
 /*
 ============
@@ -169,7 +169,7 @@ int Com_Filter( const char *filter, const char *name, int casesensitive ) {
 			if ( strlen( buf ) ) {
 				ptr = Com_StringContains( name, buf, casesensitive );
 				if ( !ptr ) {
-					return qfalse;
+					return false;
 				}
 				name = ptr + strlen( buf );
 			}
@@ -180,7 +180,7 @@ int Com_Filter( const char *filter, const char *name, int casesensitive ) {
 			filter++;
 		} else if ( *filter == '[' )      {
 			filter++;
-			found = qfalse;
+			found = false;
 			while ( *filter && !found ) {
 				if ( *filter == ']' && *( filter + 1 ) != ']' ) {
 					break;
@@ -188,30 +188,30 @@ int Com_Filter( const char *filter, const char *name, int casesensitive ) {
 				if ( *( filter + 1 ) == '-' && *( filter + 2 ) && ( *( filter + 2 ) != ']' || *( filter + 3 ) == ']' ) ) {
 					if ( casesensitive ) {
 						if ( *name >= *filter && *name <= *( filter + 2 ) ) {
-							found = qtrue;
+							found = true;
 						}
 					} else {
 						if ( toupper( *name ) >= toupper( *filter ) &&
 							 toupper( *name ) <= toupper( *( filter + 2 ) ) ) {
-							found = qtrue;
+							found = true;
 						}
 					}
 					filter += 3;
 				} else {
 					if ( casesensitive ) {
 						if ( *filter == *name ) {
-							found = qtrue;
+							found = true;
 						}
 					} else {
 						if ( toupper( *filter ) == toupper( *name ) ) {
-							found = qtrue;
+							found = true;
 						}
 					}
 					filter++;
 				}
 			}
 			if ( !found ) {
-				return qfalse;
+				return false;
 			}
 			while ( *filter ) {
 				if ( *filter == ']' && *( filter + 1 ) != ']' ) {
@@ -224,18 +224,18 @@ int Com_Filter( const char *filter, const char *name, int casesensitive ) {
 		} else {
 			if ( casesensitive ) {
 				if ( *filter != *name ) {
-					return qfalse;
+					return false;
 				}
 			} else {
 				if ( toupper( *filter ) != toupper( *name ) ) {
-					return qfalse;
+					return false;
 				}
 			}
 			filter++;
 			name++;
 		}
 	}
-	return qtrue;
+	return true;
 }
 
 
@@ -336,95 +336,95 @@ void Com_DefaultExtension( char *path, int maxSize, const char *extension ) {
 
 // can't just use function pointers, or dll linkage can
 // mess up when qcommon is included in multiple places
-static short ( *_BigShort )( short l );
-static short ( *_LittleShort )( short l );
-static int ( *_BigLong )( int l );
-static int ( *_LittleLong )( int l );
-static float ( *_BigFloat )( float l );
-static float ( *_LittleFloat )( float l );
+//static short ( *_BigShort )( short l );
+//static short ( *_LittleShort )( short l );
+//static int ( *_BigLong )( int l );
+//static int ( *_LittleLong )( int l );
+//static float ( *_BigFloat )( float l );
+//static float ( *_LittleFloat )( float l );
 
-short   BigShort( short l ) {return _BigShort( l );}
-short   LittleShort( short l ) {return _LittleShort( l );}
-int     BigLong( int l ) {return _BigLong( l );}
-int     LittleLong( int l ) {return _LittleLong( l );}
-float   BigFloat( float l ) {return _BigFloat( l );}
-float   LittleFloat( float l ) {return _LittleFloat( l );}
+//short   BigShort( short l ) {return _BigShort( l );}
+//short   LittleShort( short l ) {return _LittleShort( l );}
+//int     BigLong( int l ) {return _BigLong( l );}
+//int     LittleLong( int l ) {return _LittleLong( l );}
+//float   BigFloat( float l ) {return _BigFloat( l );}
+//float   LittleFloat( float l ) {return _LittleFloat( l );}
+//
+//short   ShortSwap( short l ) {
+//	byte b1,b2;
+//
+//	b1 = l & 255;
+//	b2 = ( l >> 8 ) & 255;
+//
+//	return ( b1 << 8 ) + b2;
+//}
 
-short   ShortSwap( short l ) {
-	byte b1,b2;
+//short   ShortNoSwap( short l ) {
+//	return l;
+//}
+//
+//int    LongSwap( int l ) {
+//	byte b1,b2,b3,b4;
+//
+//	b1 = l & 255;
+//	b2 = ( l >> 8 ) & 255;
+//	b3 = ( l >> 16 ) & 255;
+//	b4 = ( l >> 24 ) & 255;
+//
+//	return ( (int)b1 << 24 ) + ( (int)b2 << 16 ) + ( (int)b3 << 8 ) + b4;
+//}
+//
+//int LongNoSwap( int l ) {
+//	return l;
+//}
 
-	b1 = l & 255;
-	b2 = ( l >> 8 ) & 255;
+//float FloatSwap( float f ) {
+//	union
+//	{
+//		float f;
+//		byte b[4];
+//	} dat1, dat2;
+//
+//
+//	dat1.f = f;
+//	dat2.b[0] = dat1.b[3];
+//	dat2.b[1] = dat1.b[2];
+//	dat2.b[2] = dat1.b[1];
+//	dat2.b[3] = dat1.b[0];
+//	return dat2.f;
+//}
 
-	return ( b1 << 8 ) + b2;
-}
-
-short   ShortNoSwap( short l ) {
-	return l;
-}
-
-int    LongSwap( int l ) {
-	byte b1,b2,b3,b4;
-
-	b1 = l & 255;
-	b2 = ( l >> 8 ) & 255;
-	b3 = ( l >> 16 ) & 255;
-	b4 = ( l >> 24 ) & 255;
-
-	return ( (int)b1 << 24 ) + ( (int)b2 << 16 ) + ( (int)b3 << 8 ) + b4;
-}
-
-int LongNoSwap( int l ) {
-	return l;
-}
-
-float FloatSwap( float f ) {
-	union
-	{
-		float f;
-		byte b[4];
-	} dat1, dat2;
-
-
-	dat1.f = f;
-	dat2.b[0] = dat1.b[3];
-	dat2.b[1] = dat1.b[2];
-	dat2.b[2] = dat1.b[1];
-	dat2.b[3] = dat1.b[0];
-	return dat2.f;
-}
-
-float FloatNoSwap( float f ) {
-	return f;
-}
+//float FloatNoSwap( float f ) {
+//	return f;
+//}
 
 /*
 ================
 Swap_Init
 ================
 */
-void Swap_Init( void ) {
-	byte swaptest[2] = {1,0};
-
-// set the byte swapping variables in a portable manner
-	if ( *(short *)swaptest == 1 ) {
-		_BigShort = ShortSwap;
-		_LittleShort = ShortNoSwap;
-		_BigLong = LongSwap;
-		_LittleLong = LongNoSwap;
-		_BigFloat = FloatSwap;
-		_LittleFloat = FloatNoSwap;
-	} else
-	{
-		_BigShort = ShortNoSwap;
-		_LittleShort = ShortSwap;
-		_BigLong = LongNoSwap;
-		_LittleLong = LongSwap;
-		_BigFloat = FloatNoSwap;
-		_LittleFloat = FloatSwap;
-	}
-
-}
+//void Swap_Init( void ) {
+//	byte swaptest[2] = {1,0};
+//
+//// set the byte swapping variables in a portable manner
+//	if ( *(short *)swaptest == 1 ) {
+//		_BigShort = ShortSwap;
+//		_LittleShort = ShortNoSwap;
+//		_BigLong = LongSwap;
+//		_LittleLong = LongNoSwap;
+//		_BigFloat = FloatSwap;
+//		_LittleFloat = FloatNoSwap;
+//	} else
+//	{
+//		_BigShort = ShortNoSwap;
+//		_LittleShort = ShortSwap;
+//		_BigLong = LongNoSwap;
+//		_LittleLong = LongSwap;
+//		_BigFloat = FloatNoSwap;
+//		_LittleFloat = FloatSwap;
+//	}
+//
+//}
 
 /*
 ===============
@@ -745,58 +745,58 @@ key and returns the associated value, or an empty string.
 FIXME: overflow check?
 ===============
 */
-char *Info_ValueForKey( const char *s, const char *key ) {
-	char pkey[MAX_INFO_KEY];
-	static char value[2][MAX_INFO_VALUE];   // use two buffers so compares
-											// work without stomping on each other
-	static int valueindex = 0;
-	char    *o;
-
-	if ( !s || !key ) {
-		return "";
-	}
-
-	if ( strlen( s ) >= MAX_INFO_STRING ) {
-		Com_Error( ERR_DROP, "Info_ValueForKey: oversize infostring" );
-	}
-
-	valueindex ^= 1;
-	if ( *s == '\\' ) {
-		s++;
-	}
-	while ( 1 )
-	{
-		o = pkey;
-		while ( *s != '\\' )
-		{
-			if ( !*s ) {
-				return "";
-			}
-			*o++ = *s++;
-		}
-		*o = 0;
-		s++;
-
-		o = value[valueindex];
-
-		while ( *s != '\\' && *s )
-		{
-			*o++ = *s++;
-		}
-		*o = 0;
-
-		if ( !Q_stricmp( key, pkey ) ) {
-			return value[valueindex];
-		}
-
-		if ( !*s ) {
-			break;
-		}
-		s++;
-	}
-
-	return "";
-}
+//char *Info_ValueForKey( const char *s, const char *key ) {
+//	char pkey[MAX_INFO_KEY];
+//	static char value[2][MAX_INFO_VALUE];   // use two buffers so compares
+//											// work without stomping on each other
+//	static int valueindex = 0;
+//	char    *o;
+//
+//	if ( !s || !key ) {
+//		return "";
+//	}
+//
+//	if ( strlen( s ) >= MAX_INFO_STRING ) {
+//		Com_Error( ERR_DROP, "Info_ValueForKey: oversize infostring" );
+//	}
+//
+//	valueindex ^= 1;
+//	if ( *s == '\\' ) {
+//		s++;
+//	}
+//	while ( 1 )
+//	{
+//		o = pkey;
+//		while ( *s != '\\' )
+//		{
+//			if ( !*s ) {
+//				return "";
+//			}
+//			*o++ = *s++;
+//		}
+//		*o = 0;
+//		s++;
+//
+//		o = value[valueindex];
+//
+//		while ( *s != '\\' && *s )
+//		{
+//			*o++ = *s++;
+//		}
+//		*o = 0;
+//
+//		if ( !Q_stricmp( key, pkey ) ) {
+//			return value[valueindex];
+//		}
+//
+//		if ( !*s ) {
+//			break;
+//		}
+//		s++;
+//	}
+//
+//	return "";
+//}
 
 
 /*
@@ -845,58 +845,58 @@ void Info_NextPair( const char *( *head ), char key[MAX_INFO_KEY], char value[MA
 Info_RemoveKey
 ===================
 */
-void Info_RemoveKey( char *s, const char *key ) {
-	char    *start;
-	char pkey[MAX_INFO_KEY];
-	char value[MAX_INFO_VALUE];
-	char    *o;
-
-	if ( strlen( s ) >= MAX_INFO_STRING ) {
-		Com_Error( ERR_DROP, "Info_RemoveKey: oversize infostring" );
-	}
-
-	if ( strchr( key, '\\' ) ) {
-		return;
-	}
-
-	while ( 1 )
-	{
-		start = s;
-		if ( *s == '\\' ) {
-			s++;
-		}
-		o = pkey;
-		while ( *s != '\\' )
-		{
-			if ( !*s ) {
-				return;
-			}
-			*o++ = *s++;
-		}
-		*o = 0;
-		s++;
-
-		o = value;
-		while ( *s != '\\' && *s )
-		{
-			if ( !*s ) {
-				return;
-			}
-			*o++ = *s++;
-		}
-		*o = 0;
-
-		if ( !strcmp( key, pkey ) ) {
-			strcpy( start, s );  // remove this part
-			return;
-		}
-
-		if ( !*s ) {
-			return;
-		}
-	}
-
-}
+//void Info_RemoveKey( char *s, const char *key ) {
+//	char    *start;
+//	char pkey[MAX_INFO_KEY];
+//	char value[MAX_INFO_VALUE];
+//	char    *o;
+//
+//	if ( strlen( s ) >= MAX_INFO_STRING ) {
+//		Com_Error( ERR_DROP, "Info_RemoveKey: oversize infostring" );
+//	}
+//
+//	if ( strchr( key, '\\' ) ) {
+//		return;
+//	}
+//
+//	while ( 1 )
+//	{
+//		start = s;
+//		if ( *s == '\\' ) {
+//			s++;
+//		}
+//		o = pkey;
+//		while ( *s != '\\' )
+//		{
+//			if ( !*s ) {
+//				return;
+//			}
+//			*o++ = *s++;
+//		}
+//		*o = 0;
+//		s++;
+//
+//		o = value;
+//		while ( *s != '\\' && *s )
+//		{
+//			if ( !*s ) {
+//				return;
+//			}
+//			*o++ = *s++;
+//		}
+//		*o = 0;
+//
+//		if ( !strcmp( key, pkey ) ) {
+//			strcpy( start, s );  // remove this part
+//			return;
+//		}
+//
+//		if ( !*s ) {
+//			return;
+//		}
+//	}
+//
+//}
 
 
 /*
@@ -907,15 +907,15 @@ Some characters are illegal in info strings because they
 can mess up the server's parsing
 ==================
 */
-qboolean Info_Validate( const char *s ) {
-	if ( strchr( s, '\"' ) ) {
-		return qfalse;
-	}
-	if ( strchr( s, ';' ) ) {
-		return qfalse;
-	}
-	return qtrue;
-}
+//bool Info_Validate( const char *s ) {
+//	if ( strchr( s, '\"' ) ) {
+//		return false;
+//	}
+//	if ( strchr( s, ';' ) ) {
+//		return false;
+//	}
+//	return true;
+//}
 
 /*
 ==================
@@ -924,42 +924,42 @@ Info_SetValueForKey
 Changes or adds a key/value pair
 ==================
 */
-void Info_SetValueForKey( char *s, const char *key, const char *value ) {
-	char newi[MAX_INFO_STRING];
-
-	if ( strlen( s ) >= MAX_INFO_STRING ) {
-		Com_Error( ERR_DROP, "Info_SetValueForKey: oversize infostring" );
-	}
-
-	if ( strchr( key, '\\' ) || strchr( value, '\\' ) ) {
-		Com_Printf( "Can't use keys or values with a \\\n" );
-		return;
-	}
-
-	if ( strchr( key, ';' ) || strchr( value, ';' ) ) {
-		Com_Printf( "Can't use keys or values with a semicolon\n" );
-		return;
-	}
-
-	if ( strchr( key, '\"' ) || strchr( value, '\"' ) ) {
-		Com_Printf( "Can't use keys or values with a \"\n" );
-		return;
-	}
-
-	Info_RemoveKey( s, key );
-	if ( !value || !strlen( value ) ) {
-		return;
-	}
-
-	Com_sprintf( newi, sizeof( newi ), "\\%s\\%s", key, value );
-
-	if ( strlen( newi ) + strlen( s ) > MAX_INFO_STRING ) {
-		Com_Printf( "Info string length exceeded\n" );
-		return;
-	}
-
-	strcat( s, newi );
-}
+//void Info_SetValueForKey( char *s, const char *key, const char *value ) {
+//	char newi[MAX_INFO_STRING];
+//
+//	if ( strlen( s ) >= MAX_INFO_STRING ) {
+//		Com_Error( ERR_DROP, "Info_SetValueForKey: oversize infostring" );
+//	}
+//
+//	if ( strchr( key, '\\' ) || strchr( value, '\\' ) ) {
+//		Com_Printf( "Can't use keys or values with a \\\n" );
+//		return;
+//	}
+//
+//	if ( strchr( key, ';' ) || strchr( value, ';' ) ) {
+//		Com_Printf( "Can't use keys or values with a semicolon\n" );
+//		return;
+//	}
+//
+//	if ( strchr( key, '\"' ) || strchr( value, '\"' ) ) {
+//		Com_Printf( "Can't use keys or values with a \"\n" );
+//		return;
+//	}
+//
+//	Info_RemoveKey( s, key );
+//	if ( !value || !strlen( value ) ) {
+//		return;
+//	}
+//
+//	Com_sprintf( newi, sizeof( newi ), "\\%s\\%s", key, value );
+//
+//	if ( strlen( newi ) + strlen( s ) > MAX_INFO_STRING ) {
+//		Com_Printf( "Info string length exceeded\n" );
+//		return;
+//	}
+//
+//	strcat( s, newi );
+//}
 
 //====================================================================
 
@@ -969,25 +969,25 @@ void Info_SetValueForKey( char *s, const char *key, const char *value ) {
 ParseHex
 ===============
 */
-int ParseHex( const char *text ) {
-	int value;
-	int c;
-
-	value = 0;
-	while ( ( c = *text++ ) != 0 ) {
-		if ( c >= '0' && c <= '9' ) {
-			value = value * 16 + c - '0';
-			continue;
-		}
-		if ( c >= 'a' && c <= 'f' ) {
-			value = value * 16 + 10 + c - 'a';
-			continue;
-		}
-		if ( c >= 'A' && c <= 'F' ) {
-			value = value * 16 + 10 + c - 'A';
-			continue;
-		}
-	}
-
-	return value;
-}
+//int ParseHex( const char *text ) {
+//	int value;
+//	int c;
+//
+//	value = 0;
+//	while ( ( c = *text++ ) != 0 ) {
+//		if ( c >= '0' && c <= '9' ) {
+//			value = value * 16 + c - '0';
+//			continue;
+//		}
+//		if ( c >= 'a' && c <= 'f' ) {
+//			value = value * 16 + 10 + c - 'a';
+//			continue;
+//		}
+//		if ( c >= 'A' && c <= 'F' ) {
+//			value = value * 16 + 10 + c - 'A';
+//			continue;
+//		}
+//	}
+//
+//	return value;
+//}

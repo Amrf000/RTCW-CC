@@ -31,7 +31,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "../cgame/tr_types.h"
 
-void        CM_LoadMap( const char *name, qboolean clientload, int *checksum );
+void        CM_LoadMap( const char *name, bool clientload, int *checksum );
 void        CM_ClearMap( void );
 
 clipHandle_t CM_InlineModel( int index );       // 0 = world, 1 + are bmodels
@@ -68,8 +68,8 @@ int         CM_BoxLeafnums( const vec3_t mins, const vec3_t maxs, int *list,
 int         CM_LeafCluster( int leafnum );
 int         CM_LeafArea( int leafnum );
 
-void        CM_AdjustAreaPortalState( int area1, int area2, qboolean open );
-qboolean    CM_AreasConnected( int area1, int area2 );
+void        CM_AdjustAreaPortalState( int area1, int area2, bool open_ );
+bool    CM_AreasConnected( int area1, int area2 );
 
 int         CM_WriteAreaBits( byte *buffer, int area );
 

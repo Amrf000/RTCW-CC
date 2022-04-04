@@ -49,8 +49,8 @@ typedef struct {
 
 	int msec;
 
-	qboolean walking;
-	qboolean groundPlane;
+	bool walking;
+	bool groundPlane;
 	trace_t groundTrace;
 
 	float impactSpeed;
@@ -60,7 +60,7 @@ typedef struct {
 	int previous_waterlevel;
 
 	// Ridah, ladders
-	qboolean ladder;
+	bool ladder;
 } pml_t;
 
 extern pmove_t     *pm;
@@ -94,6 +94,6 @@ extern int c_pmove;
 void PM_AddTouchEnt( int entityNum );
 void PM_AddEvent( int newEvent );
 
-qboolean    PM_SlideMove( qboolean gravity );
-void        PM_StepSlideMove( qboolean gravity );
+bool    PM_SlideMove( bool gravity );
+void        PM_StepSlideMove( bool gravity );
 

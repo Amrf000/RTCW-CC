@@ -69,8 +69,8 @@ typedef struct {
 
 	float axisLength;           // compensate for non-normalized axis
 
-	qboolean needDlights;       // true for bmodels that touch a dlight
-	qboolean lightingCalculated;
+	bool needDlights;       // true for bmodels that touch a dlight
+	bool lightingCalculated;
 	vec3_t lightDir;            // normalized direction towards light
 	vec3_t ambientLight;        // color normalized to 0-255
 	int ambientLightInt;            // 32 bit rgba packed
@@ -96,8 +96,8 @@ typedef struct image_s {
 	int internalFormat;
 	int TMU;                        // only needed for voodoo2
 
-	qboolean mipmap;
-	qboolean allowPicmip;
+	bool mipmap;
+	bool allowPicmip;
 	int wrapClampMode;              // GL_CLAMP or GL_REPEAT
 
 	int hash;           // for fast building of the backupHash
@@ -295,15 +295,15 @@ typedef struct {
 	texModInfo_t    *texMods;
 
 	int videoMapHandle;
-	qboolean isLightmap;
-	qboolean vertexLightmap;
-	qboolean isVideoMap;
+	bool isLightmap;
+	bool vertexLightmap;
+	bool isVideoMap;
 } textureBundle_t;
 
 #define NUM_TEXTURE_BUNDLES 2
 
 typedef struct {
-	qboolean active;
+	bool active;
 
 	textureBundle_t bundle[NUM_TEXTURE_BUNDLES];
 
@@ -322,8 +322,8 @@ typedef struct {
 	// Ridah
 	float zFadeBounds[2];
 
-	qboolean isDetail;
-	qboolean isFogged;              // used only for shaders that have fog disabled, so we can enable it for individual stages
+	bool isDetail;
+	bool isFogged;              // used only for shaders that have fog disabled, so we can enable it for individual stages
 } shaderStage_t;
 
 struct shaderCommands_s;
@@ -365,20 +365,20 @@ typedef struct shader_s {
 
 	float sort;                         // lower numbered shaders draw before higher numbered
 
-	qboolean defaultShader;             // we want to return index 0 if the shader failed to
+	bool defaultShader;             // we want to return index 0 if the shader failed to
 										// load for some reason, but R_FindShader should
 										// still keep a name allocated for it, so if
 										// something calls RE_RegisterShader again with
 										// the same name, we don't try looking for it again
 
-	qboolean explicitlyDefined;         // found in a .shader file
+	bool explicitlyDefined;         // found in a .shader file
 
 	int surfaceFlags;                   // if explicitlyDefined, this will have SURF_* flags
 	int contentFlags;
 
-	qboolean entityMergable;            // merge across entites optimizable (smoke, blood)
+	bool entityMergable;            // merge across entites optimizable (smoke, blood)
 
-	qboolean isSky;
+	bool isSky;
 	skyParms_t sky;
 	fogParms_t fogParms;
 
@@ -387,19 +387,19 @@ typedef struct shader_s {
 	int multitextureEnv;                // 0, GL_MODULATE, GL_ADD (FIXME: put in stage)
 
 	cullType_t cullType;                // CT_FRONT_SIDED, CT_BACK_SIDED, or CT_TWO_SIDED
-	qboolean polygonOffset;             // set for decals and other items that must be offset
-	qboolean noMipMaps;                 // for console fonts, 2D elements, etc.
-	qboolean noPicMip;                  // for images that must always be full resolution
+	bool polygonOffset;             // set for decals and other items that must be offset
+	bool noMipMaps;                 // for console fonts, 2D elements, etc.
+	bool noPicMip;                  // for images that must always be full resolution
 
 	fogPass_t fogPass;                  // draw a blended pass, possibly with depth test equals
 
-	qboolean needsNormal;               // not all shaders will need all data to be gathered
-	qboolean needsST1;
-	qboolean needsST2;
-	qboolean needsColor;
+	bool needsNormal;               // not all shaders will need all data to be gathered
+	bool needsST1;
+	bool needsST2;
+	bool needsColor;
 
 	// Ridah
-	qboolean noFog;
+	bool noFog;
 
 	int numDeforms;
 	deformStage_t deforms[MAX_SHADER_DEFORMS];
@@ -431,7 +431,7 @@ typedef struct corona_s {
 	vec3_t transformed;         // origin in local coordinate system
 	float scale;                // uses r_flaresize as the baseline (1.0)
 	int id;
-	qboolean visible;           // still send the corona request, even if not visible, for proper fading
+	bool visible;           // still send the corona request, even if not visible, for proper fading
 } corona_t;
 
 typedef struct dlight_s {
@@ -447,7 +447,7 @@ typedef struct dlight_s {
 
 	shader_t    *dlshader;  //----(SA) adding a shader to dlights, so, if desired, we can change the blend or texture of a dlight
 
-	qboolean forced;        //----(SA)	use this dlight when r_dynamiclight is either 1 or 2 (rather than just 1) for "important" gameplay lights (alarm lights, etc)
+	bool forced;        //----(SA)	use this dlight when r_dynamiclight is either 1 or 2 (rather than just 1) for "important" gameplay lights (alarm lights, etc)
 	//done
 
 } dlight_t;
@@ -465,7 +465,7 @@ typedef struct {
 
 	// 1 bits will prevent the associated area from rendering at all
 	byte areamask[MAX_MAP_AREA_BYTES];
-	qboolean areamaskModified;      // qtrue if areamask changed since last scene
+	bool areamaskModified;      // true if areamask changed since last scene
 
 	float floatTime;                // tr.refdef.time / 1000.0
 
@@ -524,7 +524,7 @@ typedef struct {
 	fogParms_t parms;
 
 	// for clipping distance in fog when outside
-	qboolean hasSurface;
+	bool hasSurface;
 	float surface[4];
 } fog_t;
 
@@ -532,8 +532,8 @@ typedef struct {
 	orientationr_t  or;
 	orientationr_t world;
 	vec3_t pvsOrigin;               // may be different than or.origin for portals
-	qboolean isPortal;              // true if this view is through a portal
-	qboolean isMirror;              // the portal is a mirror, invert the face culling
+	bool isPortal;              // true if this view is through a portal
+	bool isMirror;              // the portal is a mirror, invert the face culling
 	int frameSceneNum;              // copied from tr.frameSceneNum
 	int frameCount;                 // copied from tr.frameCount
 	cplane_t portalPlane;           // clip anything behind this if mirroring
@@ -886,7 +886,7 @@ typedef struct {
 typedef struct {
 	int currenttextures[2];
 	int currenttmu;
-	qboolean finishCalled;
+	bool finishCalled;
 	int texEnv[2];
 	int faceCulling;
 	unsigned long glStateBits;
@@ -915,13 +915,13 @@ typedef struct {
 	viewParms_t viewParms;
 	orientationr_t  or;
 	backEndCounters_t pc;
-	qboolean isHyperspace;
+	bool isHyperspace;
 	trRefEntity_t   *currentEntity;
-	qboolean skyRenderedThisView;       // flag for drawing sun
+	bool skyRenderedThisView;       // flag for drawing sun
 
-	qboolean projection2D;      // if qtrue, drawstretchpic doesn't need to change modes
+	bool projection2D;      // if true, drawstretchpic doesn't need to change modes
 	byte color2D[4];
-	qboolean vertexes2D;        // shader needs to be finished
+	bool vertexes2D;        // shader needs to be finished
 	trRefEntity_t entity2D;     // currentEntity will point at this when doing 2D rendering
 } backEndState_t;
 
@@ -934,7 +934,7 @@ typedef struct {
 ** by the frontend.
 */
 typedef struct {
-	qboolean registered;                    // cleared at shutdown, set at beginRegistration
+	bool registered;                    // cleared at shutdown, set at beginRegistration
 
 	int visCount;                           // incremented every time a new vis cluster is entered
 	int frameCount;                         // incremented every frame
@@ -946,7 +946,7 @@ typedef struct {
 
 	int frameSceneNum;                      // zeroed at RE_BeginFrame
 
-	qboolean worldMapLoaded;
+	bool worldMapLoaded;
 	world_t                 *world;
 
 	const byte              *externalVisData;   // from RE_SetWorldVisData, shared with CM_Load
@@ -998,7 +998,7 @@ typedef struct {
 	float lightGridMulDirected;         //
 //----(SA)	end
 
-//	qboolean				levelGLFog;
+//	bool				levelGLFog;
 
 	frontEndCounters_t pc;
 	int frontEndMsec;                           // not in pc due to clearing issue
@@ -1210,7 +1210,7 @@ void R_RenderView( viewParms_t *parms );
 void R_AddMD3Surfaces( trRefEntity_t *e );
 void R_AddNullModelSurfaces( trRefEntity_t *e );
 void R_AddBeamSurfaces( trRefEntity_t *e );
-void R_AddRailSurfaces( trRefEntity_t *e, qboolean isUnderwater );
+void R_AddRailSurfaces( trRefEntity_t *e, bool isUnderwater );
 void R_AddLightningBoltSurfaces( trRefEntity_t *e );
 
 void R_TagInfo_f( void );
@@ -1281,8 +1281,8 @@ void    GL_Cull( int cullType );
 
 #define GLS_DEFAULT         GLS_DEPTHMASK_TRUE
 
-void    RE_StretchRaw( int x, int y, int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty );
-void    RE_UploadCinematic( int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty );
+void    RE_StretchRaw( int x, int y, int w, int h, int cols, int rows, const byte *data, int client, bool dirty );
+void    RE_UploadCinematic( int w, int h, int cols, int rows, const byte *data, int client, bool dirty );
 
 void        RE_BeginFrame( stereoFrame_t stereoFrame );
 void        RE_BeginRegistration( glconfig_t *glconfig );
@@ -1290,23 +1290,23 @@ void        RE_LoadWorldMap( const char *mapname );
 void        RE_SetWorldVisData( const byte *vis );
 qhandle_t   RE_RegisterModel( const char *name );
 qhandle_t   RE_RegisterSkin( const char *name );
-void        RE_Shutdown( qboolean destroyWindow );
+void        RE_Shutdown( bool destroyWindow );
 
-qboolean    R_GetEntityToken( char *buffer, int size );
+bool    R_GetEntityToken( char *buffer, int size );
 
 //----(SA)
-qboolean    RE_GetSkinModel( qhandle_t skinid, const char *type, char *name );
+bool    RE_GetSkinModel( qhandle_t skinid, const char *type, char *name );
 qhandle_t   RE_GetShaderFromModel( qhandle_t modelid, int surfnum, int withlightmap );    //----(SA)
 //----(SA) end
 
 model_t     *R_AllocModel( void );
 
 void        R_Init( void );
-image_t     *R_FindImageFile( const char *name, qboolean mipmap, qboolean allowPicmip, int glWrapClampMode );
+image_t     *R_FindImageFile( const char *name, bool mipmap, bool allowPicmip, int glWrapClampMode );
 
-image_t     *R_CreateImage( const char *name, const byte *pic, int width, int height, qboolean mipmap
-							, qboolean allowPicmip, int wrapClampMode );
-qboolean    R_GetModeInfo( int *width, int *height, float *windowAspect, int mode );
+image_t     *R_CreateImage( const char *name, const byte *pic, int width, int height, bool mipmap
+							, bool allowPicmip, int wrapClampMode );
+bool    R_GetModeInfo( int *width, int *height, float *windowAspect, int mode );
 
 void        R_SetColorMappings( void );
 void        R_GammaCorrect( byte *buffer, int bufSize );
@@ -1331,9 +1331,9 @@ skin_t  *R_GetSkinByHandle( qhandle_t hSkin );
 qhandle_t        RE_RegisterShaderLightMap( const char *name, int lightmapIndex );
 qhandle_t        RE_RegisterShader( const char *name );
 qhandle_t        RE_RegisterShaderNoMip( const char *name );
-qhandle_t RE_RegisterShaderFromImage( const char *name, int lightmapIndex, image_t *image, qboolean mipRawImage );
+qhandle_t RE_RegisterShaderFromImage( const char *name, int lightmapIndex, image_t *image, bool mipRawImage );
 
-shader_t    *R_FindShader( const char *name, int lightmapIndex, qboolean mipRawImage );
+shader_t    *R_FindShader( const char *name, int lightmapIndex, bool mipRawImage );
 shader_t    *R_GetShaderByHandle( qhandle_t hShader );
 shader_t    *R_GetShaderByState( int index, long *cycleTime );
 shader_t *R_FindShaderByName( const char *name );
@@ -1353,7 +1353,7 @@ void        GLimp_Init( void );
 void        GLimp_Shutdown( void );
 void        GLimp_EndFrame( void );
 
-qboolean GLimp_SpawnRenderThread( void ( *function )( void ) );
+bool GLimp_SpawnRenderThread( void ( *function )( void ) );
 void        *GLimp_RendererSleep( void );
 void        GLimp_FrontEndSleep( void );
 void        GLimp_WakeRenderer( void *data );
@@ -1449,7 +1449,7 @@ FLARES
 
 void R_ClearFlares( void );
 
-void RB_AddFlare( void *surface, int fogNum, vec3_t point, vec3_t color, float scale, vec3_t normal, int id, qboolean visible );    //----(SA)	added scale.  added id.  added visible
+void RB_AddFlare( void *surface, int fogNum, vec3_t point, vec3_t color, float scale, vec3_t normal, int id, bool visible );    //----(SA)	added scale.  added id.  added visible
 void RB_AddDlightFlares( void );
 void RB_RenderFlares( void );
 
@@ -1541,7 +1541,7 @@ void RE_AddPolysToScene( qhandle_t hShader, int numVerts, const polyVert_t *vert
 void RE_AddLightToScene( const vec3_t org, float intensity, float r, float g, float b, int overdraw );
 // done.
 //----(SA)
-void RE_AddCoronaToScene( const vec3_t org, float r, float g, float b, float scale, int id, qboolean visible );
+void RE_AddCoronaToScene( const vec3_t org, float r, float g, float b, float scale, int id, bool visible );
 //----(SA)
 void RE_RenderScene( const refdef_t *fd );
 
@@ -1708,7 +1708,7 @@ extern backEndData_t   *backEndData[SMP_FRAMES];    // the second one may not be
 
 extern volatile renderCommandList_t    *renderCommandList;
 
-extern volatile qboolean renderThreadActive;
+extern volatile bool renderThreadActive;
 
 
 void *R_GetCommandBuffer( int bytes );
@@ -1739,18 +1739,18 @@ void RE_RegisterFont( const char *fontName, int pointSize, fontInfo_t *font );
 
 // Ridah, caching system
 // NOTE: to disable this for development, set "r_cache 0" in autoexec.cfg
-void R_InitTexnumImages( qboolean force );
+void R_InitTexnumImages( bool force );
 
 void *R_CacheModelAlloc( int size );
 void R_CacheModelFree( void *ptr );
 void R_PurgeModels( int count );
 void R_BackupModels( void );
-qboolean R_FindCachedModel( const char *name, model_t *newmod );
+bool R_FindCachedModel( const char *name, model_t *newmod );
 void R_LoadCacheModels( void );
 
 void *R_CacheImageAlloc( int size );
 void R_CacheImageFree( void *ptr );
-qboolean R_TouchImage( image_t *inImage );
+bool R_TouchImage( image_t *inImage );
 image_t *R_FindCachedImage( const char *name, int hash );
 void R_FindFreeTexnum( image_t *image );
 void R_LoadCacheImages( void );
@@ -1813,7 +1813,7 @@ GL FOG
 extern glfog_t glfogsettings[NUM_FOGS];         // [0] never used (FOG_NONE)
 extern glfogType_t glfogNum;                    // fog type to use (from the fog_t enum list)
 
-extern qboolean fogIsOn;
+extern bool fogIsOn;
 
 extern void         R_FogOff( void );
 extern void         R_FogOn( void );
