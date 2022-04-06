@@ -1799,8 +1799,8 @@ void CG_KeyEvent( int key, bool down );
 void CG_MouseEvent( int x, int y );
 void CG_EventHandling( int type );
 
-bool CG_GetTag( int clientNum, char *tagname, orientation_t * or );
-bool CG_GetWeaponTag( int clientNum, char *tagname, orientation_t * or );
+bool CG_GetTag( int clientNum, char *tagname, orientation_t * orx );
+bool CG_GetWeaponTag( int clientNum, char *tagname, orientation_t * orx );
 
 bool CG_CheckCenterView();
 

@@ -36,7 +36,7 @@ static int ( QDECL * syscall )( int arg, ... ) = ( int ( QDECL * )( int, ... ) )
 #if defined( __MACOS__ )
 #pragma export on
 #endif
-void dllEntry( int ( QDECL *syscallptr )( int arg,... ) ) {
+extern "C" __declspec(dllexport) void dllEntry( int ( QDECL *syscallptr )( int arg,... ) ) {
 	syscall = syscallptr;
 }
 #if defined( __MACOS__ )
@@ -237,8 +237,8 @@ void trap_SnapVector( float *v ) {
 	return;
 }
 
-bool trap_GetTag( int clientNum, char *tagName, orientation_t *or ) {
-	return syscall( G_GETTAG, clientNum, tagName, or );
+bool trap_GetTag( int clientNum, char *tagName, orientation_t *orx ) {
+    return syscall( G_GETTAG, clientNum, tagName, orx );
 }
 
 // BotLib traps start here

@@ -529,7 +529,7 @@ float TriangleArea( vec3_c a, vec3_c b, vec3_c c );
 
 //=============================================
 
-float Com_Clamp( float min, float max, float value );
+float Com_Clamp( float minv, float maxv, float value );
 
 #define FILE_HASH_SIZE      1024
 int Com_HashString( const char *fname );

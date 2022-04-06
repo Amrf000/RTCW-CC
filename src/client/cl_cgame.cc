@@ -1338,10 +1338,10 @@ void CL_SetCGameTime( void ) {
 CL_GetTag
 ====================
 */
-bool CL_GetTag( int clientNum, char *tagname, orientation_t *or ) {
+bool CL_GetTag( int clientNum, char *tagname, orientation_t *orx ) {
 	if ( !cgvm ) {
 		return false;
 	}
 
-	return VM_Call( cgvm, CG_GET_TAG, clientNum, tagname, or );
+    return VM_Call( cgvm, CG_GET_TAG, clientNum, tagname, orx );
 }

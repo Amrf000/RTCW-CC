@@ -1268,7 +1268,7 @@ int     trap_BotAllocateClient( void );
 void    trap_BotFreeClient( int clientNum );
 void    trap_GetUsercmd( int clientNum, usercmd_t *cmd );
 bool    trap_GetEntityToken( char *buffer, int bufferSize );
-bool trap_GetTag( int clientNum, char *tagName, orientation_t * or );
+bool trap_GetTag( int clientNum, char *tagName, orientation_t * orx );
 
 int     trap_DebugPolygonCreate( int color, int numPoints, vec3_t *points );
 void    trap_DebugPolygonDelete( int id );

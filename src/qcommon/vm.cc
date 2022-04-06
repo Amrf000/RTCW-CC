@@ -479,7 +479,7 @@ vm_t *VM_Create( const char *module, int ( *systemCalls )(int *),
 	vm->systemCall = systemCalls;
 
 	if ( interpret == VMI_NATIVE ) {
-		// try to load as a system dll
+        // try to load as a system dll
 		vm->dllHandle = Sys_LoadDll( module, vm->fqpath, &vm->entryPoint, VM_DllSyscall );
 		if ( vm->dllHandle ) {
 			return vm;

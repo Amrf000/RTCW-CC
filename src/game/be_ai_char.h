@@ -42,11 +42,11 @@ void BotFreeCharacter( int character );
 //float characteristic
 float Characteristic_Float( int character, int index );
 //bounded float characteristic
-float Characteristic_BFloat( int character, int index, float min, float max );
+float Characteristic_BFloat( int character, int index, float minv, float maxv );
 //integer characteristic
 int Characteristic_Integer( int character, int index );
 //bounded integer characteristic
-int Characteristic_BInteger( int character, int index, int min, int max );
+int Characteristic_BInteger( int character, int index, int minv, int maxv );
 //string characteristic
 void Characteristic_String( int character, int index, char *buf, int size );
 //free cached bot characters

@@ -274,7 +274,7 @@ typedef enum {
 //	void (*CG_EventHandling)(int type);
 
 	CG_GET_TAG,
-//	bool CG_GetTag( int clientNum, char *tagname, orientation_t *or );
+//	bool CG_GetTag( int clientNum, char *tagname, orientation_t *orx );
 
 	CG_CHECKCENTERVIEW,
 //	bool CG_CheckCenterView();

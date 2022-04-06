@@ -1585,7 +1585,7 @@ AICast_DeadClipWalls
 void AICast_DeadClipWalls( cast_state_t *cs ) {
 /*
 	//animation_t *anim;
-	orientation_t or;
+    orientation_t orx;
 	vec3_t	src, vel;
 	trace_t	tr;
 
