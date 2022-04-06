@@ -99,7 +99,7 @@ cvar_t  *cl_updatefiles;
 clientActive_t cl;
 clientConnection_t clc;
 clientStatic_t cls;
-vm_t                *cgvm;
+bool               cgvm;
 
 // Structure containing functions exported from refresh DLL
 refexport_t re;
@@ -808,7 +808,7 @@ void CL_Disconnect( bool showMainMenu ) {
 	}
 
 	if ( uivm && showMainMenu ) {
-		VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_NONE );
+		VM_Call_UI_SET_ACTIVE_MENU(UIMENU_NONE );
 	}
 
 	SCR_StopCinematic();
@@ -2193,12 +2193,12 @@ void CL_Frame( int msec ) {
 	if ( cls.cddialog ) {
 		// bring up the cd error dialog if needed
 		cls.cddialog = false;
-		VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_NEED_CD );
+		VM_Call_UI_SET_ACTIVE_MENU( UIMENU_NEED_CD );
 	} else if ( cls.state == CA_DISCONNECTED && !( cls.keyCatchers & KEYCATCH_UI )
 				&& !com_sv_running->integer ) {
 		// if disconnected, bring up the menu
 		S_StopAllSounds();
-		VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_MAIN );
+		VM_Call_UI_SET_ACTIVE_MENU( UIMENU_MAIN );
 	}
 
 	// if recording an avi, lock to a fixed fps
@@ -3265,7 +3265,7 @@ void CL_UpdateInfoPacket( netadr_t from ) {
 
 	if ( !Q_stricmp( cl_updateavailable->string, "1" ) ) {
 		Cvar_Set( "cl_updatefiles", Cmd_Argv( 2 ) );
-		VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_WM_AUTOUPDATE );
+		VM_Call_UI_SET_ACTIVE_MENU( UIMENU_WM_AUTOUPDATE );
 	}
 }
 // DHM - Nerve

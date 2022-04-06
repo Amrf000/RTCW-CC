@@ -95,7 +95,7 @@ typedef struct {
 	void ( *spawn )( void );
 } spawn_t;
 
-spawn_t spawns[] = {
+static spawn_t spawns[] = {
 	{0, 0}
 };
 
@@ -208,38 +208,39 @@ bool CG_ParseSpawnVars( void ) {
 	return true;
 }
 
-void SP_worldspawn( void ) {
-	char    *s;
-
-	CG_SpawnString( "classname", "", &s );
-	if ( Q_stricmp( s, "worldspawn" ) ) {
-		CG_Error( "SP_worldspawn: The first entity isn't 'worldspawn'" );
-	}
-
-	cg.twoMinuteSound_g[0] = cg.twoMinuteSound_a[0] = cg.thirtySecondSound_g[0] = cg.thirtySecondSound_a[0] = '\0';
-
-	CG_SpawnString( "twoMinuteSound_axis", "sound/multiplayer/axis/g-twominutes1.wav", &s );
-	Q_strncpyz( cg.twoMinuteSound_g, s, sizeof( cg.twoMinuteSound_g ) );
-	CG_SpawnString( "twoMinuteSound_allied", "sound/multiplayer/allies/a-twominutes1.wav", &s );
-	Q_strncpyz( cg.twoMinuteSound_a, s, sizeof( cg.twoMinuteSound_a ) );
-	CG_SpawnString( "thirtySecondSound_axis", "sound/multiplayer/axis/g-thirtyseconds1.wav", &s );
-	Q_strncpyz( cg.thirtySecondSound_g, s, sizeof( cg.thirtySecondSound_g ) );
-	CG_SpawnString( "thirtySecondSound_allied", "sound/multiplayer/allies/a-thirtyseconds1.wav", &s );
-	Q_strncpyz( cg.thirtySecondSound_a, s, sizeof( cg.thirtySecondSound_a ) );
-
-	if ( cg.twoMinuteSound_g[0] != '0' ) {
-		cgs.media.twoMinuteSound_g = trap_S_RegisterSound( cg.twoMinuteSound_g );
-	}
-	if ( cg.twoMinuteSound_a[0] != '0' ) {
-		cgs.media.twoMinuteSound_a = trap_S_RegisterSound( cg.twoMinuteSound_a );
-	}
-	if ( cg.thirtySecondSound_g[0] != '0' ) {
-		cgs.media.thirtySecondSound_g = trap_S_RegisterSound( cg.thirtySecondSound_g );
-	}
-	if ( cg.thirtySecondSound_a[0] != '0' ) {
-		cgs.media.thirtySecondSound_a = trap_S_RegisterSound( cg.thirtySecondSound_a );
-	}
-}
+void SP_worldspawn(void);
+//void SP_worldspawn( void ) {
+//	char    *s;
+//
+//	CG_SpawnString( "classname", "", &s );
+//	if ( Q_stricmp( s, "worldspawn" ) ) {
+//		CG_Error( "SP_worldspawn: The first entity isn't 'worldspawn'" );
+//	}
+//
+//	cg.twoMinuteSound_g[0] = cg.twoMinuteSound_a[0] = cg.thirtySecondSound_g[0] = cg.thirtySecondSound_a[0] = '\0';
+//
+//	CG_SpawnString( "twoMinuteSound_axis", "sound/multiplayer/axis/g-twominutes1.wav", &s );
+//	Q_strncpyz( cg.twoMinuteSound_g, s, sizeof( cg.twoMinuteSound_g ) );
+//	CG_SpawnString( "twoMinuteSound_allied", "sound/multiplayer/allies/a-twominutes1.wav", &s );
+//	Q_strncpyz( cg.twoMinuteSound_a, s, sizeof( cg.twoMinuteSound_a ) );
+//	CG_SpawnString( "thirtySecondSound_axis", "sound/multiplayer/axis/g-thirtyseconds1.wav", &s );
+//	Q_strncpyz( cg.thirtySecondSound_g, s, sizeof( cg.thirtySecondSound_g ) );
+//	CG_SpawnString( "thirtySecondSound_allied", "sound/multiplayer/allies/a-thirtyseconds1.wav", &s );
+//	Q_strncpyz( cg.thirtySecondSound_a, s, sizeof( cg.thirtySecondSound_a ) );
+//
+//	if ( cg.twoMinuteSound_g[0] != '0' ) {
+//		cgs.media.twoMinuteSound_g = trap_S_RegisterSound( cg.twoMinuteSound_g );
+//	}
+//	if ( cg.twoMinuteSound_a[0] != '0' ) {
+//		cgs.media.twoMinuteSound_a = trap_S_RegisterSound( cg.twoMinuteSound_a );
+//	}
+//	if ( cg.thirtySecondSound_g[0] != '0' ) {
+//		cgs.media.thirtySecondSound_g = trap_S_RegisterSound( cg.thirtySecondSound_g );
+//	}
+//	if ( cg.thirtySecondSound_a[0] != '0' ) {
+//		cgs.media.thirtySecondSound_a = trap_S_RegisterSound( cg.thirtySecondSound_a );
+//	}
+//}
 
 /*
 ==============

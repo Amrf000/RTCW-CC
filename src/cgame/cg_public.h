@@ -1,3 +1,4 @@
+#pragma once
 /*
 ===========================================================================
 
@@ -233,52 +234,65 @@ functions exported to the main executable
 ==================================================================
 */
 
-typedef enum {
-	CG_INIT,
-//	void CG_Init( int serverMessageNum, int serverCommandSequence )
-	// called when the level loads or when the renderer is restarted
-	// all media should be registered at this time
-	// cgame will display loading status by calling SCR_Update, which
-	// will call CG_DrawInformation during the loading process
-	// reliableCommandSequence will be 0 on fresh loads, but higher for
-	// demos, tourney restarts, or vid_restarts
-
-	CG_SHUTDOWN,
-//	void (*CG_Shutdown)( void );
-	// oportunity to flush and close any open files
-
-	CG_CONSOLE_COMMAND,
-//	bool (*CG_ConsoleCommand)( void );
-	// a console command has been issued locally that is not recognized by the
-	// main game system.
-	// use Cmd_Argc() / Cmd_Argv() to read the command, return false if the
-	// command is not known to the game
-
-	CG_DRAW_ACTIVE_FRAME,
-//	void (*CG_DrawActiveFrame)( int serverTime, stereoFrame_t stereoView, bool demoPlayback );
-	// Generates and draws a game scene and status information at the given time.
-	// If demoPlayback is set, local movement prediction will not be enabled
-
-	CG_CROSSHAIR_PLAYER,
-//	int (*CG_CrosshairPlayer)( void );
-
-	CG_LAST_ATTACKER,
-//	int (*CG_LastAttacker)( void );
-
-	CG_KEY_EVENT,
-//	void	(*CG_KeyEvent)( int key, bool down );
-
-	CG_MOUSE_EVENT,
-//	void	(*CG_MouseEvent)( int dx, int dy );
-	CG_EVENT_HANDLING,
-//	void (*CG_EventHandling)(int type);
-
-	CG_GET_TAG,
-//	bool CG_GetTag( int clientNum, char *tagname, orientation_t *or );
-
-	CG_CHECKCENTERVIEW,
-//	bool CG_CheckCenterView();
-
-} cgameExport_t;
+//typedef enum {
+//	CG_INIT,
+////	void CG_Init( int serverMessageNum, int serverCommandSequence )
+//	// called when the level loads or when the renderer is restarted
+//	// all media should be registered at this time
+//	// cgame will display loading status by calling SCR_Update, which
+//	// will call CG_DrawInformation during the loading process
+//	// reliableCommandSequence will be 0 on fresh loads, but higher for
+//	// demos, tourney restarts, or vid_restarts
+//
+//	CG_SHUTDOWN,
+////	void (*CG_Shutdown)( void );
+//	// oportunity to flush and close any open files
+//
+//	CG_CONSOLE_COMMAND,
+////	bool (*CG_ConsoleCommand)( void );
+//	// a console command has been issued locally that is not recognized by the
+//	// main game system.
+//	// use Cmd_Argc() / Cmd_Argv() to read the command, return false if the
+//	// command is not known to the game
+//
+//	CG_DRAW_ACTIVE_FRAME,
+////	void (*CG_DrawActiveFrame)( int serverTime, stereoFrame_t stereoView, bool demoPlayback );
+//	// Generates and draws a game scene and status information at the given time.
+//	// If demoPlayback is set, local movement prediction will not be enabled
+//
+//	CG_CROSSHAIR_PLAYER,
+////	int (*CG_CrosshairPlayer)( void );
+//
+//	CG_LAST_ATTACKER,
+////	int (*CG_LastAttacker)( void );
+//
+//	CG_KEY_EVENT,
+////	void	(*CG_KeyEvent)( int key, bool down );
+//
+//	CG_MOUSE_EVENT,
+////	void	(*CG_MouseEvent)( int dx, int dy );
+//	CG_EVENT_HANDLING,
+////	void (*CG_EventHandling)(int type);
+//
+//	CG_GET_TAG,
+////	bool CG_GetTag( int clientNum, char *tagname, orientation_t *orx );
+//
+//	CG_CHECKCENTERVIEW,
+////	bool CG_CheckCenterView();
+//
+//} cgameExport_t;
 
 //----------------------------------------------
+int VM_Call_CG_INIT(int serverMessageNum, int serverCommandSequence, int clientNum);
+int VM_Call_CG_SHUTDOWN();
+int VM_Call_CG_CONSOLE_COMMAND();
+int VM_Call_CG_DRAW_ACTIVE_FRAME(int serverTime, stereoFrame_t stereoView, bool demoPlayback);
+int VM_Call_CG_CROSSHAIR_PLAYER();
+int VM_Call_CG_LAST_ATTACKER();
+int VM_Call_CG_KEY_EVENT(int key, bool down);
+int VM_Call_CG_MOUSE_EVENT(int x, int y);
+int VM_Call_CG_EVENT_HANDLING(int type);
+int VM_Call_CG_GET_TAG(int clientNum, char* tagname, orientation_t* orx);
+int VM_Call_CG_CHECKCENTERVIEW();
+
+

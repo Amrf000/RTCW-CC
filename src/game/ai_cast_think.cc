@@ -331,7 +331,7 @@ void AICast_UpdateInput( cast_state_t *cs, int time ) {
 	//
 	if ( cs->pauseTime > level.time ) {
 		trap_EA_View( bs->client, bs->viewangles );
-		trap_EA_GetInput( bs->client, (float) time / 1000, &bi );
+		trap_EA_GetInput( bs->client, (float) time / 1000, (struct bot_input_s*)&bi );
 		AICast_InputToUserCommand( cs, &bi, &bs->lastucmd, bs->cur_ps.delta_angles );
 		g_entities[cs->bs->entitynum].client->ps.pm_flags &= ~PMF_RESPAWNED;
 		//
@@ -343,7 +343,7 @@ void AICast_UpdateInput( cast_state_t *cs, int time ) {
 		return;
 	}
 	//
-	trap_EA_GetInput( bs->client, (float) time / 1000, &bi );
+	trap_EA_GetInput( bs->client, (float) time / 1000, (struct bot_input_s*)&bi );
 	//
 	// restrict the speed according to the character and their current speedScale
 	// HACK, don't slow down while crouching
@@ -436,7 +436,7 @@ void AICast_Think( int client, float thinktime ) {
 		return;
 	}
 	//
-	trap_EA_ResetInput( client, NULL );
+	trap_EA_ResetInput( client, (bot_input_t*)NULL );
 	cs->aiFlags &= ~AIFL_VIEWLOCKED;
 	//cs->bs->weaponnum = ent->client->ps.weapon;
 	//
@@ -1255,7 +1255,7 @@ void AICast_Blocked( cast_state_t *cs, bot_moveresult_t *moveresult, int activat
 				return;
 			}
 			// are we going to hit someone soon?
-			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi );
+			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*) & bi);
 			AICast_InputToUserCommand( cs, &bi, &ucmd, cs->bs->cur_ps.delta_angles );
 			AICast_PredictMovement( cs, 1, 0.6, &move, &ucmd, ( goal && goal->entitynum > -1 ) ? goal->entitynum : cs->entityNum );
 
@@ -1585,7 +1585,7 @@ AICast_DeadClipWalls
 void AICast_DeadClipWalls( cast_state_t *cs ) {
 /*
 	//animation_t *anim;
-	orientation_t or;
+    orientation_t orx;
 	vec3_t	src, vel;
 	trace_t	tr;
 

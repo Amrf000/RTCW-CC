@@ -1716,22 +1716,22 @@ void CL_KeyEvent( int key, bool down, unsigned time ) {
 		// escape always gets out of CGAME stuff
 		if ( cls.keyCatchers & KEYCATCH_CGAME ) {
 			cls.keyCatchers &= ~KEYCATCH_CGAME;
-			VM_Call( cgvm, CG_EVENT_HANDLING, CGAME_EVENT_NONE );
+			VM_Call_CG_EVENT_HANDLING(CGAME_EVENT_NONE );
 			return;
 		}
 
 		if ( !( cls.keyCatchers & KEYCATCH_UI ) ) {
 			if ( cls.state == CA_ACTIVE && !clc.demoplaying ) {
-				VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_INGAME );
+				VM_Call_UI_SET_ACTIVE_MENU(UIMENU_INGAME );
 			} else {
 				CL_Disconnect_f();
 				S_StopAllSounds();
-				VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_MAIN );
+				VM_Call_UI_SET_ACTIVE_MENU(UIMENU_MAIN );
 			}
 			return;
 		}
 
-		VM_Call( uivm, UI_KEY_EVENT, key, down );
+		VM_Call_UI_KEY_EVENT(key, down );
 		return;
 	}
 
@@ -1751,9 +1751,9 @@ void CL_KeyEvent( int key, bool down, unsigned time ) {
 		}
 
 		if ( cls.keyCatchers & KEYCATCH_UI && uivm ) {
-			VM_Call( uivm, UI_KEY_EVENT, key, down );
+			VM_Call_UI_KEY_EVENT(key, down );
 		} else if ( cls.keyCatchers & KEYCATCH_CGAME && cgvm ) {
-			VM_Call( cgvm, CG_KEY_EVENT, key, down );
+			VM_Call_CG_KEY_EVENT(key, down );
 		}
 
 		return;
@@ -1776,7 +1776,7 @@ void CL_KeyEvent( int key, bool down, unsigned time ) {
 	} else if ( cls.keyCatchers & KEYCATCH_UI && !bypassMenu ) {
 		kb = keys[key].binding;
 
-		if ( VM_Call( uivm, UI_GET_ACTIVE_MENU ) == UIMENU_CLIPBOARD ) {
+		if ( VM_Call_UI_GET_ACTIVE_MENU() == UIMENU_CLIPBOARD ) {
 			// any key gets out of clipboard
 			key = K_ESCAPE;
 		} else {
@@ -1785,23 +1785,23 @@ void CL_KeyEvent( int key, bool down, unsigned time ) {
 
 			if ( kb ) {
 				if ( !Q_stricmp( "notebook", kb ) ) {
-					if ( VM_Call( uivm, UI_GET_ACTIVE_MENU ) == UIMENU_NOTEBOOK ) {
+					if ( VM_Call_UI_GET_ACTIVE_MENU() == UIMENU_NOTEBOOK ) {
 						key = K_ESCAPE;
 					}
 				}
 
 				if ( !Q_stricmp( "help", kb ) ) {
-					if ( VM_Call( uivm, UI_GET_ACTIVE_MENU ) == UIMENU_HELP ) {
+					if ( VM_Call_UI_GET_ACTIVE_MENU() == UIMENU_HELP ) {
 						key = K_ESCAPE;
 					}
 				}
 			}
 		}
 
-		VM_Call( uivm, UI_KEY_EVENT, key, down );
+		VM_Call_UI_KEY_EVENT(key, down );
 	} else if ( cls.keyCatchers & KEYCATCH_CGAME ) {
 		if ( cgvm ) {
-			VM_Call( cgvm, CG_KEY_EVENT, key, down );
+			VM_Call_CG_KEY_EVENT(key, down );
 		}
 	} else if ( cls.keyCatchers & KEYCATCH_MESSAGE ) {
 		Message_Key( key );
@@ -1847,7 +1847,7 @@ void CL_CharEvent( int key ) {
 	if ( cls.keyCatchers & KEYCATCH_CONSOLE ) {
 		Field_CharEvent( &g_consoleField, key );
 	} else if ( cls.keyCatchers & KEYCATCH_UI )   {
-		VM_Call( uivm, UI_KEY_EVENT, key | K_CHAR_FLAG, true );
+		VM_Call_UI_KEY_EVENT(key | K_CHAR_FLAG, true );
 	} else if ( cls.keyCatchers & KEYCATCH_MESSAGE )   {
 		Field_CharEvent( &chatField, key );
 	} else if ( cls.state == CA_DISCONNECTED )   {

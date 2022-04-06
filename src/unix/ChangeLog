@@ -1156,7 +1156,7 @@ I have newer  - server/sv_client.c
   Sean / Version 4 on 09/17/2001
   TA Merge, see above
   built sv_client.c.patch
-    NOTE: also has VM_Call( gvm, GAME_CLIENT_DISCONNECT, newcl - svs.clients ); commented out
+    NOTE: also has VM_Call_GAME_CLIENT_DISCONNECT( newcl - svs.clients ); commented out
 I have newer  - server/sv_main.c
   Sean / Version 5 on 09/17/2001
   TA Merge, see above

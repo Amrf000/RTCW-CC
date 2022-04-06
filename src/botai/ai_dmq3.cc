@@ -2183,10 +2183,10 @@ int BotEntityToActivate( int entitynum ) {
 BotSetMovedir
 ==================
 */
-vec3_t VEC_UP           = {0, -1,  0};
-vec3_t MOVEDIR_UP       = {0,  0,  1};
-vec3_t VEC_DOWN     = {0, -2,  0};
-vec3_t MOVEDIR_DOWN = {0,  0, -1};
+static vec3_t VEC_UP           = {0, -1,  0};
+static vec3_t MOVEDIR_UP       = {0,  0,  1};
+static vec3_t VEC_DOWN     = {0, -2,  0};
+static vec3_t MOVEDIR_DOWN = {0,  0, -1};
 
 void BotSetMovedir( vec3_t angles, vec3_t movedir ) {
 	if ( VectorCompare( angles, VEC_UP ) ) {

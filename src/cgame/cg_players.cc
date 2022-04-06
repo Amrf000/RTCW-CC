@@ -2480,19 +2480,19 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, int powerups, int team, enti
 	*ent = backupRefEnt;
 }
 
-char    *vtosf( const vec3_t v ) {
-	static int index;
-	static char str[8][64];
-	char    *s;
-
-	// use an array so that multiple vtos won't collide
-	s = str[index];
-	index = ( index + 1 ) & 7;
-
-	Com_sprintf( s, 64, "(%f %f %f)", v[0], v[1], v[2] );
-
-	return s;
-}
+//char    *vtosf( const vec3_t v ) {
+//	static int index;
+//	static char str[8][64];
+//	char    *s;
+//
+//	 use an array so that multiple vtos won't collide
+//	s = str[index];
+//	index = ( index + 1 ) & 7;
+//
+//	Com_sprintf( s, 64, "(%f %f %f)", v[0], v[1], v[2] );
+//
+//	return s;
+//}
 
 
 /*
@@ -3009,7 +3009,7 @@ void CG_GetBleedOrigin( vec3_t head_origin, vec3_t torso_origin, vec3_t legs_ori
 CG_GetTag
 ===============
 */
-bool CG_GetTag( int clientNum, char *tagname, orientation_t *or ) {
+bool CG_GetTag( int clientNum, char *tagname, orientation_t *orx ) {
 	clientInfo_t    *ci;
 	centity_t       *cent;
 	refEntity_t     *refent;
@@ -3034,21 +3034,21 @@ bool CG_GetTag( int clientNum, char *tagname, orientation_t *or ) {
 
 	refent = &cent->pe.legsRefEnt;
 
-	if ( trap_R_LerpTag( or, refent, tagname, 0 ) < 0 ) {
+    if ( trap_R_LerpTag( orx, refent, tagname, 0 ) < 0 ) {
 		return false;
 	}
 
 	VectorCopy( refent->origin, org );
 
 	for ( i = 0 ; i < 3 ; i++ ) {
-		VectorMA( org, or->origin[i], refent->axis[i], org );
+        VectorMA( org, orx->origin[i], refent->axis[i], org );
 	}
 
-	VectorCopy( org, or->origin );
+    VectorCopy( org, orx->origin );
 
 	// rotate with entity
-	MatrixMultiply( refent->axis, or->axis, tempAxis );
-	memcpy( or->axis, tempAxis, sizeof( vec3_t ) * 3 );
+    MatrixMultiply( refent->axis, orx->axis, tempAxis );
+    memcpy( orx->axis, tempAxis, sizeof( vec3_t ) * 3 );
 
 	return true;
 }
@@ -3058,7 +3058,7 @@ bool CG_GetTag( int clientNum, char *tagname, orientation_t *or ) {
 CG_GetWeaponTag
 ===============
 */
-bool CG_GetWeaponTag( int clientNum, char *tagname, orientation_t *or ) {
+bool CG_GetWeaponTag( int clientNum, char *tagname, orientation_t *orx ) {
 	clientInfo_t    *ci;
 	centity_t       *cent;
 	refEntity_t     *refent;
@@ -3087,21 +3087,21 @@ bool CG_GetWeaponTag( int clientNum, char *tagname, orientation_t *or ) {
 
 	refent = &cent->pe.gunRefEnt;
 
-	if ( trap_R_LerpTag( or, refent, tagname, 0 ) < 0 ) {
+    if ( trap_R_LerpTag( orx, refent, tagname, 0 ) < 0 ) {
 		return false;
 	}
 
 	VectorCopy( refent->origin, org );
 
 	for ( i = 0 ; i < 3 ; i++ ) {
-		VectorMA( org, or->origin[i], refent->axis[i], org );
+        VectorMA( org, orx->origin[i], refent->axis[i], org );
 	}
 
-	VectorCopy( org, or->origin );
+    VectorCopy( org, orx->origin );
 
 	// rotate with entity
-	MatrixMultiply( refent->axis, or->axis, tempAxis );
-	memcpy( or->axis, tempAxis, sizeof( vec3_t ) * 3 );
+    MatrixMultiply( refent->axis, orx->axis, tempAxis );
+    memcpy( orx->axis, tempAxis, sizeof( vec3_t ) * 3 );
 
 	return true;
 }

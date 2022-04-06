@@ -258,7 +258,7 @@ bot_moveresult_t *AICast_MoveToPos( cast_state_t *cs, vec3_t pos, int entnum ) {
 	if ( 0 ) { // (SA) added to hide the print
 		bot_input_t bi;
 
-		trap_EA_GetInput( cs->bs->client, (float) level.time / 1000, &bi );
+		trap_EA_GetInput( cs->bs->client, (float) level.time / 1000, (struct bot_input_s*)&bi );
 		G_Printf( "spd: %i\n", (int)bi.speed );
 	}
 
@@ -642,7 +642,7 @@ char *AIFunc_InspectFriendly( cast_state_t *cs ) {
 					dir[2] = 0;
 				}
 				trap_EA_Move( cs->entityNum, dir, 400 );
-				trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi );
+				trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*)&bi );
 				AICast_InputToUserCommand( cs, &bi, &ucmd, bs->cur_ps.delta_angles );
 				AICast_PredictMovement( cs, 10, 0.8, &move, &ucmd, cs->followEntity );
 
@@ -1050,7 +1050,7 @@ char *AIFunc_InspectAudibleEvent( cast_state_t *cs ) {
 					dir[2] = 0;
 				}
 				trap_EA_Move( cs->entityNum, dir, 400 );
-				trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi );
+				trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*)&bi );
 				AICast_InputToUserCommand( cs, &bi, &ucmd, bs->cur_ps.delta_angles );
 				AICast_PredictMovement( cs, 10, 0.8, &move, &ucmd, gent->s.number );
 				//
@@ -1496,7 +1496,7 @@ char *AIFunc_ChaseGoal( cast_state_t *cs ) {
 				dir[2] = 0;
 			}
 			trap_EA_Move( cs->entityNum, dir, 400 );
-			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi );
+			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*)&bi );
 			AICast_InputToUserCommand( cs, &bi, &ucmd, bs->cur_ps.delta_angles );
 			AICast_PredictMovement( cs, 10, 0.8, &move, &ucmd, cs->followEntity );
 
@@ -2618,7 +2618,7 @@ char *AIFunc_BattleChase( cast_state_t *cs ) {
 				dir[2] = 0;
 			}
 			trap_EA_Move( cs->entityNum, dir, 400 );
-			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi );
+			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*)&bi );
 			AICast_InputToUserCommand( cs, &bi, &ucmd, bs->cur_ps.delta_angles );
 			AICast_PredictMovement( cs, 5, 2.0, &move, &ucmd, bs->enemy );
 
@@ -3566,7 +3566,7 @@ char *AIFunc_GrenadeFlush( cast_state_t *cs ) {
 					dir[2] = 0;
 				}
 				trap_EA_Move( cs->entityNum, dir, 400 );
-				trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi );
+				trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*)&bi );
 				AICast_InputToUserCommand( cs, &bi, &ucmd, bs->cur_ps.delta_angles );
 				AICast_PredictMovement( cs, 5, 2.0, &move, &ucmd, bs->enemy );
 
@@ -4564,17 +4564,17 @@ char *AIFunc_Battle( cast_state_t *cs ) {
 
 			cs->lastRollMove = level.time;
 
-			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi_back );
-			trap_EA_ResetInput( cs->entityNum, NULL );
+			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*)&bi_back );
+			trap_EA_ResetInput( cs->entityNum, (bot_input_t*)NULL );
 			if ( level.time % 200 < 100 ) {
 				VectorNegate( right, dir );
 			} else { VectorCopy( right, dir );}
 			trap_EA_Move( cs->entityNum, dir, 400 );
-			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, &bi );
+			trap_EA_GetInput( cs->entityNum, (float) level.time / 1000, (struct bot_input_s*)&bi );
 			AICast_InputToUserCommand( cs, &bi, &ucmd, bs->cur_ps.delta_angles );
 			AICast_PredictMovement( cs, 4, simTime / 4, &move, &ucmd, bs->enemy );
 
-			trap_EA_ResetInput( cs->entityNum, &bi_back );
+			trap_EA_ResetInput( cs->entityNum, (bot_input_t*)&bi_back );
 
 			if ( move.groundEntityNum == ENTITYNUM_WORLD &&
 				 VectorDistance( move.endpos, cs->bs->origin ) > simTime * cs->attributes[RUNNING_SPEED] * 0.8 ) {

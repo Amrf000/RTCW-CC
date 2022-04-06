@@ -1600,7 +1600,7 @@ void AICast_ProcessAttack( cast_state_t *cs ) {
 			AICast_AimAtEnemy( cs );    // keep looking at them regardless
 		}
 		// if we're trying to move somewhere, don't let us shoot, until we've arrived
-		trap_EA_GetInput( bs->client, (float) level.time / 1000, &bi );
+		trap_EA_GetInput( bs->client, (float) level.time / 1000, (struct bot_input_s*)&bi );
 		if (    ( cs->castScriptStatus.scriptNoMoveTime < level.time ) &&
 				(   ( bi.actionflags & ACTION_MOVEFORWARD ) ||
 					( bi.actionflags & ACTION_MOVEBACK ) ||

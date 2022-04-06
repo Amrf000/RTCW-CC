@@ -283,63 +283,106 @@ void _UI_MouseEvent( int dx, int dy );
 void _UI_Refresh( int realtime );
 bool _UI_IsFullscreen( void );
 
-#if defined( __MACOS__ )
-#pragma export on
-#endif
-int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
-#if defined( __MACOS__ )
-#pragma export off
-#endif
-
-	switch ( command ) {
-	case UI_GETAPIVERSION:
-		return UI_API_VERSION;
-
-	case UI_INIT:
-		_UI_Init( arg0 );
-		return 0;
-
-	case UI_SHUTDOWN:
-		_UI_Shutdown();
-		return 0;
-
-	case UI_KEY_EVENT:
-		_UI_KeyEvent( arg0, arg1 );
-		return 0;
-
-	case UI_MOUSE_EVENT:
-		_UI_MouseEvent( arg0, arg1 );
-		return 0;
-
-	case UI_REFRESH:
-		_UI_Refresh( arg0 );
-		return 0;
-
-	case UI_IS_FULLSCREEN:
-		return _UI_IsFullscreen();
-
-	case UI_SET_ACTIVE_MENU:
-		_UI_SetActiveMenu( (uiMenuCommand_t)arg0 );
-		return 0;
-
-	case UI_GET_ACTIVE_MENU:
-		return _UI_GetActiveMenu();
-
-	case UI_CONSOLE_COMMAND:
-		return UI_ConsoleCommand( arg0 );
-
-	case UI_DRAW_CONNECT_SCREEN:
-		UI_DrawConnectScreen( arg0 );
-		return 0;
-	case UI_HASUNIQUECDKEY:             // mod authors need to observe this
-		return true;
-		// NERVE - SMF
-	case UI_CHECKEXECKEY:
-		return UI_CheckExecKey( arg0 );
-	}
-
-	return -1;
+// system reserved
+int VM_Call_UI_GETAPIVERSION() {
+	return UI_API_VERSION;
 }
+		
+
+// void	UI_Init(void);
+int VM_Call_UI_INIT(bool inGameLoad) {
+	_UI_Init(inGameLoad);
+	return 0;
+}
+
+
+//	void	UI_Shutdown( void );
+int VM_Call_UI_SHUTDOWN() {
+	_UI_Shutdown();
+	return 0;
+}
+
+//	void	UI_KeyEvent( int key );
+int VM_Call_UI_KEY_EVENT(int key, bool down) {
+	_UI_KeyEvent(key, down);
+	return 0;
+}
+
+//	void	UI_MouseEvent( int dx, int dy );
+int VM_Call_UI_MOUSE_EVENT(int dx, int dy) {
+	_UI_MouseEvent(dx, dy);
+	return 0;
+}
+
+
+//	void	UI_Refresh( int time );
+int VM_Call_UI_REFRESH(int time) {
+		_UI_Refresh(time);
+		return 0;
+}
+//	bool UI_IsFullscreen( void );
+bool VM_Call_UI_IS_FULLSCREEN() {
+	return _UI_IsFullscreen();
+}
+//	void	UI_SetActiveMenu( uiMenuCommand_t menu );
+int VM_Call_UI_SET_ACTIVE_MENU(uiMenuCommand_t menu) {
+	_UI_SetActiveMenu((uiMenuCommand_t)menu);
+	return 0;
+}
+
+
+//	void	UI_GetActiveMenu( void );
+int VM_Call_UI_GET_ACTIVE_MENU(){
+		return _UI_GetActiveMenu();
+}
+
+
+
+//	bool UI_ConsoleCommand( void );
+bool VM_Call_UI_CONSOLE_COMMAND(int realTime) {
+	return UI_ConsoleCommand(realTime);
+}
+
+int VM_Call_UI_DRAW_CONNECT_SCREEN(bool overlay) {
+	UI_DrawConnectScreen(overlay);
+	return 0;
+}
+
+//	void	UI_DrawConnectScreen( bool overlay );
+bool VM_Call_UI_HASUNIQUECDKEY() {             // mod authors need to observe this
+	return true;
+}
+
+// if !overlay, the background will be drawn, otherwise it will be
+// overlayed over whatever the cgame has drawn.
+// a GetClientState syscall will be made to get the current strings
+// NERVE - SMF
+bool VM_Call_UI_CHECKEXECKEY(int key) {
+	return UI_CheckExecKey(key);
+}
+
+
+
+
+//#if defined( __MACOS__ )
+//#pragma export on
+//#endif
+//extern "C" __declspec(dllexport) int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
+//#if defined( __MACOS__ )
+//#pragma export off
+//#endif
+//
+//	switch ( command ) {
+//		
+//
+//
+//
+//
+//
+//	}
+//
+//	return -1;
+//}
 
 
 
@@ -7499,7 +7542,7 @@ vmCvar_t ui_userAxisRespawnTime;
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 // -NERVE - SMF
 
-cvarTable_t cvarTable[] = {
+static cvarTable_t cvarTable[] = {
 
 	{ &ui_glCustom, "ui_glCustom", "4", CVAR_ARCHIVE }, // JPW NERVE missing from q3ta
 	{ &ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE },
@@ -7628,7 +7671,7 @@ cvarTable_t cvarTable[] = {
 	{ &ui_hudAlpha, "cg_hudAlpha", "1.0", CVAR_ARCHIVE }
 };
 
-int cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
+static int cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
 
 
 /*

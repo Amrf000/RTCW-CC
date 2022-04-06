@@ -60,7 +60,7 @@ typedef enum {
 	SS_GAME             // actively running
 } serverState_t;
 
-typedef struct {
+struct server_t {
 	serverState_t state;
 	bool restarting;                // if true, send configstring changes during SS_LOADING
 	int serverId;                       // changes each server start
@@ -101,7 +101,7 @@ typedef struct {
 	float ucompAve;
 	int ucompNum;
 	// -NERVE - SMF
-} server_t;
+};
 
 
 
@@ -255,7 +255,7 @@ extern int numVersions;
 
 extern serverStatic_t svs;                  // persistant server info across maps
 extern server_t sv;                         // cleared each map
-extern vm_t            *gvm;                // game virtual machine
+extern bool            gvm;                // game virtual machine
 
 
 #define MAX_MASTER_SERVERS  5
@@ -382,7 +382,7 @@ void        SV_InitGameProgs( void );
 void        SV_ShutdownGameProgs( void );
 void        SV_RestartGameProgs( void );
 bool    SV_inPVS( const vec3_t p1, const vec3_t p2 );
-bool SV_GetTag( int clientNum, char *tagname, orientation_t * or );
+bool SV_GetTag( int clientNum, char *tagname, orientation_t * orx );
 
 //
 // sv_bot.c

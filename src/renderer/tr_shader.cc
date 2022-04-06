@@ -1630,7 +1630,7 @@ static bool ParseShader( char **text ) {
 			tr.allowCompress = true;
 			continue;
 		} else if ( !Q_stricmp( token, "nocompress" ) )   {
-			tr.allowCompress = -1;
+			tr.allowCompress = false;
 			continue;
 		}
 		// done.

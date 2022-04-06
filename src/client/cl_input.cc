@@ -279,7 +279,7 @@ void IN_ButtonUp( void ) {
 void IN_CenterView( void ) {
 	bool ok = true;
 	if ( cgvm ) {
-		ok = VM_Call( cgvm, CG_CHECKCENTERVIEW );
+		ok = VM_Call_CG_CHECKCENTERVIEW();
 	}
 	if ( ok ) {
 		cl.viewangles[PITCH] = -SHORT2ANGLE( cl.snap.ps.delta_angles[PITCH] );
@@ -288,13 +288,13 @@ void IN_CenterView( void ) {
 
 void IN_Notebook( void ) {
 	//if ( cls.state == CA_ACTIVE && !clc.demoplaying ) {
-	//VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_NOTEBOOK);	// startup notebook
+	//VM_Call_UI_SET_ACTIVE_MENU( UIMENU_NOTEBOOK);	// startup notebook
 	//}
 }
 
 void IN_Help( void ) {
 	if ( cls.state == CA_ACTIVE && !clc.demoplaying ) {
-		VM_Call( uivm, UI_SET_ACTIVE_MENU, UIMENU_HELP );        // startup help system
+		VM_Call_UI_SET_ACTIVE_MENU(UIMENU_HELP );        // startup help system
 	}
 }
 
@@ -426,11 +426,11 @@ void CL_MouseEvent( int dx, int dy, int time ) {
 			cl.mouseDx[cl.mouseIndex] += dx;
 			cl.mouseDy[cl.mouseIndex] += dy;
 		} else {
-			VM_Call( uivm, UI_MOUSE_EVENT, dx, dy );
+			VM_Call_UI_MOUSE_EVENT(dx, dy );
 		}
 
 	} else if ( cls.keyCatchers & KEYCATCH_CGAME ) {
-		VM_Call( cgvm, CG_MOUSE_EVENT, dx, dy );
+		VM_Call_CG_MOUSE_EVENT(dx, dy );
 	} else {
 		cl.mouseDx[cl.mouseIndex] += dx;
 		cl.mouseDy[cl.mouseIndex] += dy;

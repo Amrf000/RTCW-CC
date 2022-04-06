@@ -24,32 +24,6 @@
     <ClCompile Include="..\game\q_shared.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui_atoms.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ui_gameinfo.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ui_main.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ui_players.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ui_shared.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ui_syscalls.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ui_util.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ui.def">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\bg_public.h">
@@ -79,5 +53,10 @@
     <ClInclude Include="ui_shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ui.def">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

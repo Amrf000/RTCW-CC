@@ -35,3 +35,4 @@
 **/.vs/*
 bin/*
 **/wolf.vcxproj.user
+build-wolf-Desktop_Qt_5_15_2_*/**

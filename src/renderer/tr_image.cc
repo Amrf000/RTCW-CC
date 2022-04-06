@@ -858,7 +858,7 @@ image_t *R_CreateImage( const char *name, const byte *pic, int width, int height
 	// RF, if the shader hasn't specifically asked for it, don't allow compression
 	if ( r_ext_compressed_textures->integer == 2 && ( tr.allowCompress != true ) ) {
 		noCompress = true;
-	} else if ( r_ext_compressed_textures->integer == 1 && ( tr.allowCompress < 0 ) )     {
+	} else if ( r_ext_compressed_textures->integer == 1 && ( tr.allowCompress == false ) )     {
 		noCompress = true;
 	}
 

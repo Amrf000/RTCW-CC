@@ -589,7 +589,7 @@ bool verbose = false;
 
 #ifdef _WIN32
 
-void main( int argc, char *argv[] ) {
+int main( int argc, char *argv[] ) {
 	WIN32_FIND_DATA filedata;
 	HWND handle;
 	int done; //, i;

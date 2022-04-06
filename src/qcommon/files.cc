@@ -929,7 +929,7 @@ FS_FilenameCompare
 Ignore case and seprator char distinctions
 ===========
 */
-bool FS_FilenameCompare( const char *s1, const char *s2 ) {
+int FS_FilenameCompare( const char *s1, const char *s2 ) {
 	int c1, c2;
 
 	do {

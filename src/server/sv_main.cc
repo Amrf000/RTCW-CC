@@ -31,7 +31,7 @@ If you have questions concerning this license or the applicable additional terms
 
 serverStatic_t svs;                 // persistant server info
 server_t sv;                        // local server
-vm_t            *gvm = NULL;                // game virtual machine // bk001212 init
+bool gvm = false;                // game virtual machine // bk001212 init
 
 #ifdef UPDATE_SERVER
 versionMapping_t versionMap[MAX_UPDATE_VERSIONS];
@@ -1076,7 +1076,7 @@ void SV_Frame( int msec ) {
 
 		// let everything in the world think and move
 #ifndef UPDATE_SERVER
-		VM_Call( gvm, GAME_RUN_FRAME, svs.time );
+		VM_Call_GAME_RUN_FRAME(svs.time );
 #endif
 	}
 

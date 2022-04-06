@@ -356,21 +356,21 @@ typedef enum {
 	TRAP_TESTPRINTFLOAT
 } sharedTraps_t;
 
-void    VM_Init( void );
-vm_t    *VM_Create( const char *module, int ( *systemCalls )( int * ),
-					vmInterpret_t interpret );
+//void    VM_Init( void );
+//vm_t    *VM_Create( const char *module, int ( *systemCalls )( int * ),
+//					vmInterpret_t interpret );
 // module should be bare: "cgame", not "cgame.dll" or "vm/cgame.qvm"
 
-void    VM_Free( vm_t *vm );
-void    VM_Clear( void );
-vm_t    *VM_Restart( vm_t *vm );
+//void    VM_Free( vm_t *vm );
+//void    VM_Clear( void );
+//vm_t    *VM_Restart( vm_t *vm );
 
-int QDECL VM_Call( vm_t *vm, int callNum, ... );
-
-void    VM_Debug( int level );
-
-void    *VM_ArgPtr( int intValue );
-void    *VM_ExplicitArgPtr( vm_t *vm, int intValue );
+//int QDECL VM_Call( vm_t *vm, int callNum, ... );
+//
+//void    VM_Debug( int level );
+//
+//void    *VM_ArgPtr( int intValue );
+//void    *VM_ExplicitArgPtr( vm_t *vm, int intValue );
 
 /*
 ==============================================================
@@ -658,7 +658,7 @@ int     FS_FOpenFileByMode( const char *qpath, fileHandle_t *f, fsMode_t mode );
 int     FS_Seek( fileHandle_t f, long offset, int origin );
 // seek on a file (doesn't work for zip files!!!!!!!!)
 
-bool FS_FilenameCompare( const char *s1, const char *s2 );
+int FS_FilenameCompare( const char *s1, const char *s2 );
 
 const char *FS_GamePureChecksum( void );
 // Returns the checksum of the pk3 from which the server loaded the qagame.qvm

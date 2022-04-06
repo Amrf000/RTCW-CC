@@ -663,7 +663,7 @@ void ProjectPointOntoVector( vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vP
 
 //=============================================
 
-float Com_Clamp( float min, float max, float value );
+float Com_Clamp( float minv, float maxv, float value );
 
 char    *COM_SkipPath( char *pathname );
 void    COM_StripExtension( const char *in, char *out );

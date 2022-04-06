@@ -1711,3 +1711,33 @@ int BG_GetAnimScriptEvent( playerState_t *ps, scriptAnimEventTypes_t event );
 
 extern animStringItem_t animStateStr[];
 extern animStringItem_t animBodyPartsStr[];
+
+int VM_Call_GAME_INIT(int levelTime, int randomSeed, int restart);
+int  VM_Call_GAME_SHUTDOWN(int restart);
+char* VM_Call_GAME_CLIENT_CONNECT(int clientNum, bool firstTime, bool isBot);
+int VM_Call_GAME_CLIENT_THINK(int clientNum);
+int VM_Call_GAME_CLIENT_USERINFO_CHANGED(int clientNum);
+int VM_Call_GAME_CLIENT_DISCONNECT(int clientNum);
+int VM_Call_GAME_CLIENT_BEGIN(int clientNum);
+int VM_Call_GAME_CLIENT_COMMAND(int clientNum);
+int VM_Call_GAME_RUN_FRAME(int levelTime);
+bool VM_Call_GAME_CONSOLE_COMMAND();
+int VM_Call_BOTAI_START_FRAME(int time);
+bool VM_Call_AICAST_VISIBLEFROMPOS(vec3_t srcpos, int srcnum,
+	vec3_t destpos, int destnum, bool updateVisPos);
+bool VM_Call_AICAST_CHECKATTACKATPOS(int entnum, int enemy, vec3_t pos, bool ducking, bool allowHitWorld);
+int VM_Call_GAME_RETRIEVE_MOVESPEEDS_FROM_CLIENT(int entnum, char* text);
+
+
+int VM_Call_CG_INIT(int serverMessageNum, int serverCommandSequence, int clientNum);
+int VM_Call_CG_SHUTDOWN();
+int VM_Call_CG_CONSOLE_COMMAND();
+//int VM_Call_CG_DRAW_ACTIVE_FRAME(int serverTime, stereoFrame_t stereoView, bool demoPlayback);
+int VM_Call_CG_CROSSHAIR_PLAYER();
+int VM_Call_CG_LAST_ATTACKER();
+int VM_Call_CG_KEY_EVENT(int key, bool down);
+int VM_Call_CG_MOUSE_EVENT(int x, int y);
+int VM_Call_CG_EVENT_HANDLING(int type);
+int VM_Call_CG_GET_TAG(int clientNum, char* tagname, orientation_t* orx);
+int VM_Call_CG_CHECKCENTERVIEW();
+

@@ -188,43 +188,128 @@ typedef enum {
 #define SORT_PING           4
 #define SORT_PUNKBUSTER     5
 
-typedef enum {
-	UI_GETAPIVERSION = 0,   // system reserved
 
-	UI_INIT,
-//	void	UI_Init( void );
 
-	UI_SHUTDOWN,
-//	void	UI_Shutdown( void );
+int VM_Call_UI_GETAPIVERSION();
+int VM_Call_UI_INIT(bool inGameLoad);
+int VM_Call_UI_SHUTDOWN();
+int VM_Call_UI_KEY_EVENT(int key, bool down);
+int VM_Call_UI_MOUSE_EVENT(int dx, int dy);
+int VM_Call_UI_REFRESH(int time);
+bool VM_Call_UI_IS_FULLSCREEN();
+int VM_Call_UI_SET_ACTIVE_MENU(uiMenuCommand_t menu);
+int VM_Call_UI_GET_ACTIVE_MENU();
+bool VM_Call_UI_CONSOLE_COMMAND(int realTime);
+int VM_Call_UI_DRAW_CONNECT_SCREEN(bool overlay);
+bool VM_Call_UI_HASUNIQUECDKEY();
+bool VM_Call_UI_CHECKEXECKEY(int key);
 
-	UI_KEY_EVENT,
-//	void	UI_KeyEvent( int key );
 
-	UI_MOUSE_EVENT,
-//	void	UI_MouseEvent( int dx, int dy );
+int syscall_UI_ERROR(const char* fmt);
+int syscall_UI_PRINT(const char* fmt);
+int syscall_UI_MILLISECONDS();
+int syscall_UI_CVAR_REGISTER(vmCvar_t* vmCvar, const char* varName, const char* defaultValue, int flags);
+int syscall_UI_CVAR_UPDATE(vmCvar_t* vmCvar);
+int syscall_UI_CVAR_SET(const char* var_name, const char* value);
+int syscall_UI_CVAR_VARIABLEVALUE(const char* var_name);
+int syscall_UI_CVAR_VARIABLESTRINGBUFFER(const char* var_name, char* buffer, int bufsize);
+int syscall_UI_CVAR_SETVALUE(const char* var_name, float value);
+int syscall_UI_CVAR_RESET(const char* var_name);
+int syscall_UI_CVAR_CREATE(const char* var_name, const char* var_value, int flags);
+int syscall_UI_CVAR_INFOSTRINGBUFFER(int bit, char* buff, int buffsize);
+int syscall_UI_ARGC();
+int syscall_UI_ARGV(int arg, char* buffer, int bufferLength);
+int syscall_UI_CMD_EXECUTETEXT(int exec_when, const char* text);
+int syscall_UI_FS_FOPENFILE(const char* qpath, fileHandle_t* f, fsMode_t mode);
+int syscall_UI_FS_READ(void* buffer, int len, fileHandle_t f);
+int syscall_UI_FS_WRITE(const void* buffer, int len, fileHandle_t h);
+int syscall_UI_FS_FCLOSEFILE(fileHandle_t f);
+int syscall_UI_FS_DELETEFILE(const char* filename);
+int syscall_UI_FS_GETFILELIST(const char* path, const char* extension, char* listbuf, int bufsize);
+int syscall_UI_R_REGISTERMODEL(const char* name);
+int syscall_UI_R_REGISTERSKIN(const char* name);
+int syscall_UI_R_REGISTERSHADERNOMIP(const char* name);
+int syscall_UI_R_CLEARSCENE();
+int syscall_UI_R_ADDREFENTITYTOSCENE(const refEntity_t* re1);
+int syscall_UI_R_ADDPOLYTOSCENE(qhandle_t hShader, int numVerts, const polyVert_t* verts);
+int syscall_UI_R_ADDPOLYSTOSCENE(qhandle_t hShader, int numVerts, const polyVert_t* verts, int numPolys);
+int syscall_UI_R_ADDLIGHTTOSCENE(const vec3_t org, float intensity, float r, float g, float b, int overdraw);
+int syscall_UI_R_ADDCORONATOSCENE(const vec3_t org, float r, float g, float b, float scale, int id, bool visible);
+int syscall_UI_R_RENDERSCENE(const refdef_t* fd);
+int syscall_UI_R_SETCOLOR(const float* rgba);
+int syscall_UI_R_DRAWSTRETCHPIC(float x, float y, float w, float h,
+	float s1, float t1, float s2, float t2, qhandle_t hShader);
+int syscall_UI_R_MODELBOUNDS(qhandle_t model, vec3_t mins, vec3_t maxs);
+int syscall_UI_UPDATESCREEN();
+int syscall_UI_CM_LERPTAG(orientation_t* tag, const refEntity_t* refent, const char* tagName, int startIndex);
+int syscall_UI_S_REGISTERSOUND(const char* name);
+int syscall_UI_S_STARTLOCALSOUND(sfxHandle_t sfxHandle, int channelNum);
+int syscall_UI_KEY_KEYNUMTOSTRINGBUF(int keynum, char* buf, int bufle);
+int syscall_UI_KEY_GETBINDINGBUF(int keynum, char* buf, int buflen);
+int syscall_UI_KEY_SETBINDING(int keynum, const char* binding);
+int syscall_UI_KEY_ISDOWN(int keynum);
+int syscall_UI_KEY_GETOVERSTRIKEMODE();
+int syscall_UI_KEY_SETOVERSTRIKEMODE(bool state);
+int syscall_UI_KEY_CLEARSTATES();
+int syscall_UI_KEY_GETCATCHER();
+int syscall_UI_KEY_SETCATCHER(int catcher);
+int syscall_UI_GETCLIPBOARDDATA(char* buf, int buflen);
+int syscall_UI_GETCLIENTSTATE(uiClientState_t* state);
+int syscall_UI_GETGLCONFIG(glconfig_t* config);
+int syscall_UI_GETCONFIGSTRING(int index, char* buf, int size);
+int syscall_UI_LAN_LOADCACHEDSERVERS();
+int syscall_UI_LAN_SAVECACHEDSERVERS();
+int syscall_UI_LAN_ADDSERVER(int source, const char* name, const char* address);
+int syscall_UI_LAN_REMOVESERVER(int source, const char* addr);
+int syscall_UI_LAN_GETPINGQUEUECOUNT();
+int syscall_UI_LAN_CLEARPING(int n);
+int syscall_UI_LAN_GETPING(int n, char* buf, int buflen, int* pingtime);
+int syscall_UI_LAN_GETPINGINFO(int n, char* buf, int buflen);
+int syscall_UI_LAN_GETSERVERCOUNT(int source);
+int syscall_UI_LAN_GETSERVERADDRESSSTRING(int source, int n, char* buf, int buflen);
+int syscall_UI_LAN_GETSERVERINFO(int source, int n, char* buf, int buflen);
+int syscall_UI_LAN_GETSERVERPING(int source, int n);
+int syscall_UI_LAN_MARKSERVERVISIBLE(int source, int n, bool visible);
+int syscall_UI_LAN_SERVERISVISIBLE(int source, int n);
+int syscall_UI_LAN_UPDATEVISIBLEPINGS(int source);
+int syscall_UI_LAN_RESETPINGS(int source);
+int syscall_UI_LAN_SERVERSTATUS(const char* serverAddress, char* serverStatus, int maxLen);
+int syscall_UI_SET_PBCLSTATUS(int status);
+int syscall_UI_SET_PBSVSTATUS(int status);
+int syscall_UI_LAN_COMPARESERVERS(int source, int sortKey, int sortDir, int s1, int s2);
+int syscall_UI_MEMORY_REMAINING();
+int syscall_UI_GET_CDKEY(char* buf, int buflen);
+int syscall_UI_SET_CDKEY(char* buf);
+int syscall_UI_R_REGISTERFONT(const char* fontName, int pointSize, fontInfo_t* font);
+int syscall_UI_MEMSET(void* _Dst, int    _Val, size_t _Size);
+int syscall_UI_MEMCPY(void* _Dst, void const* _Src, size_t      _Size);
+int syscall_UI_STRNCPY(char* _Destination, char const* _Source, size_t _Count);
+int syscall_UI_SIN(double _X);
+int syscall_UI_COS(double _X);
+int syscall_UI_ATAN2(double _Y, double _X);
+int syscall_UI_SQRT(double _X);
+int syscall_UI_FLOOR(double _X);
+int syscall_UI_CEIL(double _X);
 
-	UI_REFRESH,
-//	void	UI_Refresh( int time );
-
-	UI_IS_FULLSCREEN,
-//	bool UI_IsFullscreen( void );
-
-	UI_SET_ACTIVE_MENU,
-//	void	UI_SetActiveMenu( uiMenuCommand_t menu );
-
-	UI_GET_ACTIVE_MENU,
-//	void	UI_GetActiveMenu( void );
-
-	UI_CONSOLE_COMMAND,
-//	bool UI_ConsoleCommand( void );
-
-	UI_DRAW_CONNECT_SCREEN,
-//	void	UI_DrawConnectScreen( bool overlay );
-	UI_HASUNIQUECDKEY,
-// if !overlay, the background will be drawn, otherwise it will be
-// overlayed over whatever the cgame has drawn.
-// a GetClientState syscall will be made to get the current strings
-	UI_CHECKEXECKEY     // NERVE - SMF
-} uiExport_t;
+int syscall_UI_PC_ADD_GLOBAL_DEFINE(char* string);
+int syscall_UI_PC_LOAD_SOURCE(const char* filename);
+int syscall_UI_PC_FREE_SOURCE(int handle);
+int syscall_UI_PC_READ_TOKEN(int handle, pc_token_t* pc_token);
+int syscall_UI_PC_SOURCE_FILE_AND_LINE(int handle, char* filename, int* line);
+int syscall_UI_S_STOPBACKGROUNDTRACK();
+int syscall_UI_S_STARTBACKGROUNDTRACK(const char* intro, const char* loop);
+int syscall_UI_REAL_TIME(qtime_t* qtime);
+int syscall_UI_CIN_PLAYCINEMATIC(const char* arg, int x, int y, int w, int h, int systemBits);
+int syscall_UI_CIN_STOPCINEMATIC(int handle);
+int syscall_UI_CIN_RUNCINEMATIC(int handle);
+int syscall_UI_CIN_DRAWCINEMATIC(int handle);
+int syscall_UI_CIN_SETEXTENTS(int handle, int x, int y, int w, int h);
+int syscall_UI_R_REMAP_SHADER(const char* oldShader, const char* newShader, const char* offsetTime);
+int syscall_UI_VERIFY_CDKEY(const char* key, const char* checksum);
+int syscall_UI_CL_GETLIMBOSTRING(int index, char* buf);
+int syscall_UI_CL_TRANSLATE_STRING(const char* string, char* dest_buffer);
+int syscall_UI_CHECKAUTOUPDATE();
+int syscall_UI_GET_AUTOUPDATE();
+int syscall_UI_OPENURL(const char* url);
 
 #endif

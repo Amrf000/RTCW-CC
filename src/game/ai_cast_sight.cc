@@ -225,7 +225,7 @@ bool AICast_CheckVisibility( gentity_t *srcent, gentity_t *destent ) {
 	float fov, dist;
 	int viewer, ent;
 	cast_visibility_t   *vis;
-	orientation_t       or;
+    orientation_t       orx;
 
 	if ( destent->flags & FL_NOTARGET ) {
 		return false;
@@ -263,11 +263,11 @@ bool AICast_CheckVisibility( gentity_t *srcent, gentity_t *destent ) {
 	VectorAdd( destent->client->ps.origin, middle, middle );
 	// calculate eye position
 	if ( srcent->r.svFlags & SVF_CASTAI ) {
-		if ( trap_GetTag( srcent->s.number, "tag_head", &or ) ) {
+        if ( trap_GetTag( srcent->s.number, "tag_head", &orx ) ) {
 			// use the actual direction the head is facing
-			vectoangles( or.axis[0], viewangles );
+            vectoangles( orx.axis[0], viewangles );
 			// and the actual position of the head
-			VectorCopy( or.origin, eye );
+            VectorCopy( orx.origin, eye );
 		} else {
 			VectorCopy( srcent->client->ps.origin, eye );
 			eye[2] += srcent->client->ps.viewheight;

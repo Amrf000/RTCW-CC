@@ -489,7 +489,7 @@ void BotUpdateInput( bot_state_t *bs, int time ) {
 	}
 	//
 	BotChangeViewAngles( bs, (float) time / 1000 );
-	trap_EA_GetInput( bs->client, (float) time / 1000, &bi );
+	trap_EA_GetInput( bs->client, (float) time / 1000, (struct bot_input_s*)&bi );
 	//respawn hack
 	if ( bi.actionflags & ACTION_RESPAWN ) {
 		if ( bs->lastucmd.buttons & BUTTON_ATTACK ) {
@@ -527,7 +527,7 @@ int BotAI( int client, float thinktime ) {
 	char buf[1024], *args;
 	int j;
 
-	trap_EA_ResetInput( client, NULL );
+	trap_EA_ResetInput( client, (bot_input_t*)NULL );
 	//
 	bs = botstates[client];
 	if ( !bs || !bs->inuse ) {

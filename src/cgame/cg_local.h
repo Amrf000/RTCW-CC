@@ -1,3 +1,4 @@
+#pragma once
 /*
 ===========================================================================
 
@@ -1799,8 +1800,8 @@ void CG_KeyEvent( int key, bool down );
 void CG_MouseEvent( int x, int y );
 void CG_EventHandling( int type );
 
-bool CG_GetTag( int clientNum, char *tagname, orientation_t * or );
-bool CG_GetWeaponTag( int clientNum, char *tagname, orientation_t * or );
+bool CG_GetTag( int clientNum, char *tagname, orientation_t * orx );
+bool CG_GetWeaponTag( int clientNum, char *tagname, orientation_t * orx );
 
 bool CG_CheckCenterView();
 
@@ -2467,3 +2468,139 @@ void        CG_StartCamera( const char *name, bool startBlack );
 int         CG_LoadCamera( const char *name );
 void        CG_FreeCamera( int camNum );
 //----(SA)	end
+
+
+int syscall_CG_PRINT(const char* fmt);
+int syscall_CG_ERROR(const char* fmt);
+int syscall_CG_MILLISECONDS();
+int syscall_CG_CVAR_REGISTER(vmCvar_t* vmCvar, const char* varName, const char* defaultValue, int flags);
+int syscall_CG_CVAR_UPDATE(vmCvar_t* vmCvar);
+int syscall_CG_CVAR_SET(const char* var_name, const char* value);
+int syscall_CG_CVAR_VARIABLESTRINGBUFFER(const char* var_name, char* buffer, int bufsize);
+int syscall_CG_ARGC();
+int syscall_CG_ARGV(int arg, char* buffer, int bufferLength);
+int syscall_CG_ARGS(char* buffer, int bufferLength);
+int syscall_CG_FS_FOPENFILE(const char* qpath, fileHandle_t* f, fsMode_t mode);
+int syscall_CG_FS_READ(void* buffer, int len, fileHandle_t f);
+int syscall_CG_FS_WRITE(const void* buffer, int len, fileHandle_t h);
+int syscall_CG_FS_FCLOSEFILE(fileHandle_t f);
+int syscall_CG_SENDCONSOLECOMMAND(const char* text);
+int syscall_CG_ADDCOMMAND(const char* cmdName);
+int syscall_CG_REMOVECOMMAND(const char* cmd_name);
+int syscall_CG_SENDCLIENTCOMMAND(const char* cmd);
+int syscall_CG_UPDATESCREEN();
+int syscall_CG_CM_LOADMAP(const char* mapname);
+int syscall_CG_CM_NUMINLINEMODELS();
+clipHandle_t syscall_CG_CM_INLINEMODEL(int index);
+clipHandle_t syscall_CG_CM_TEMPBOXMODEL(const vec3_t mins, const vec3_t maxs);
+int syscall_CG_CM_TEMPCAPSULEMODEL(const vec3_t mins, const vec3_t maxs);
+int syscall_CG_CM_POINTCONTENTS(const vec3_t p, clipHandle_t model);
+int syscall_CG_CM_TRANSFORMEDPOINTCONTENTS(const vec3_t p, clipHandle_t model, const vec3_t origin, const vec3_t angles);
+int syscall_CG_CM_BOXTRACE(trace_t* results, const vec3_t start, const vec3_t end,
+	const vec3_t mins, const vec3_t maxs,
+	clipHandle_t model, int brushmask);
+int syscall_CG_CM_TRANSFORMEDBOXTRACE(trace_t* results, const vec3_t start, const vec3_t end,
+	const vec3_t mins, const vec3_t maxs,
+	clipHandle_t model, int brushmask,
+	const vec3_t origin, const vec3_t angles);
+int syscall_CG_CM_CAPSULETRACE(trace_t* results, const vec3_t start, const vec3_t end,
+	const vec3_t mins, const vec3_t maxs,
+	clipHandle_t model, int brushmask);
+int syscall_CG_CM_TRANSFORMEDCAPSULETRACE(trace_t* results, const vec3_t start, const vec3_t end,
+	const vec3_t mins, const vec3_t maxs,
+	clipHandle_t model, int brushmask,
+	const vec3_t origin, const vec3_t angles);
+int syscall_CG_CM_MARKFRAGMENTS(int numPoints, const vec3_t* points, const vec3_t projection,
+	int maxPoints, vec3_t pointBuffer, int maxFragments, markFragment_t* fragmentBuffer);
+int syscall_CG_S_STARTSOUND(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfxHandle);
+int syscall_CG_S_STARTSOUNDEX(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfxHandle, int flags);
+int syscall_CG_S_STARTLOCALSOUND(sfxHandle_t sfxHandle, int channelNum);
+int syscall_CG_S_CLEARLOOPINGSOUNDS(bool killall);
+int syscall_CG_S_ADDLOOPINGSOUND(int entityNum, const vec3_t origin, const vec3_t velocity, const int range, sfxHandle_t sfxHandle, int volume);
+int syscall_CG_S_ADDREALLOOPINGSOUND(int entityNum, const vec3_t origin, const vec3_t velocity, const int range, sfxHandle_t sfxHandle, int volume);
+int syscall_CG_S_STOPLOOPINGSOUND(int entityNum);
+int syscall_CG_S_UPDATEENTITYPOSITION(int entityNum, const vec3_t origin);
+int syscall_CG_S_GETVOICEAMPLITUDE(int entityNum);
+int syscall_CG_S_RESPATIALIZE(int entityNum, const vec3_t head, vec3_t axis[3], int inwater);
+int syscall_CG_S_REGISTERSOUND(const char* name);
+int syscall_CG_S_STARTBACKGROUNDTRACK(const char* intro, const char* loop);
+int syscall_CG_S_STARTSTREAMINGSOUND(const char* intro, const char* loop, int entnum, int channel, int attenuation);
+int syscall_CG_R_LOADWORLDMAP(const char* name);
+int syscall_CG_R_REGISTERMODEL(const char* name);
+int syscall_CG_R_REGISTERSKIN(const char* name);
+int syscall_CG_R_GETSKINMODEL(qhandle_t skinid, const char* type, char* name);
+int syscall_CG_R_GETMODELSHADER(qhandle_t modelid, int surfnum, int withlightmap);
+int syscall_CG_R_REGISTERSHADER(const char* name);
+int syscall_CG_R_REGISTERFONT(const char* fontName, int pointSize, fontInfo_t* font);
+int syscall_CG_R_REGISTERSHADERNOMIP(const char* name);
+int syscall_CG_R_CLEARSCENE();
+int syscall_CG_R_ADDREFENTITYTOSCENE(const refEntity_t* re1);
+int syscall_CG_R_ADDPOLYTOSCENE(qhandle_t hShader, int numVerts, const polyVert_t* verts);
+int syscall_CG_R_ADDPOLYSTOSCENE(qhandle_t hShader, int numVerts, const polyVert_t* verts, int numPolys);
+int syscall_CG_R_LIGHTFORPOINT(vec3_t point, vec3_t ambientLight, vec3_t directedLight, vec3_t lightDir);
+int syscall_CG_R_ADDLIGHTTOSCENE(const vec3_t org, float intensity, float r, float g, float b, int overdraw);
+int syscall_CG_R_ADDADDITIVELIGHTTOSCENE();
+int syscall_CG_R_ADDCORONATOSCENE(const vec3_t org, float r, float g, float b, float scale, int id, bool visible);
+int syscall_CG_R_SETFOG(int fogvar, int var1, int var2, float r, float g, float b, float density);
+int syscall_CG_R_RENDERSCENE(const refdef_t* fd);
+int syscall_CG_R_SETCOLOR(const float* rgba);
+int syscall_CG_R_DRAWSTRETCHPIC(float x, float y, float w, float h,
+	float s1, float t1, float s2, float t2, qhandle_t hShader);
+int syscall_CG_R_DRAWROTATEDPIC(float x, float y, float w, float h,
+	float s1, float t1, float s2, float t2, qhandle_t hShader, float angle);
+int syscall_CG_R_DRAWSTRETCHPIC_GRADIENT(float x, float y, float w, float h,
+	float s1, float t1, float s2, float t2, qhandle_t hShader, const float* gradientColor, int gradientType);
+int syscall_CG_R_MODELBOUNDS(qhandle_t model, vec3_t mins, vec3_t maxs);
+int syscall_CG_R_LERPTAG(orientation_t* tag, const refEntity_t* refent, const char* tagName, int startIndex);
+int syscall_CG_GETGLCONFIG(glconfig_t* glconfig);
+int syscall_CG_GETGAMESTATE(gameState_t* gs);
+int syscall_CG_GETCURRENTSNAPSHOTNUMBER(int* snapshotNumber, int* serverTime);
+int syscall_CG_GETSNAPSHOT(int snapshotNumber, snapshot_t* snapshot);
+int syscall_CG_GETSERVERCOMMAND(int serverCommandNumber);
+int syscall_CG_GETCURRENTCMDNUMBER();
+int syscall_CG_GETUSERCMD(int cmdNumber, usercmd_t* ucmd);
+int syscall_CG_SETUSERCMDVALUE(int userCmdValue, int holdableValue, float sensitivityScale, int mpSetup, int mpIdentClient);
+int syscall_CG_SETCLIENTLERPORIGIN(float x, float y, float z);
+int syscall_CG_MEMORY_REMAINING();
+int syscall_CG_KEY_ISDOWN(int keynum);
+int syscall_CG_KEY_GETCATCHER();
+int syscall_CG_KEY_SETCATCHER(int catcher);
+int syscall_CG_KEY_GETKEY(const char* binding);
+int syscall_CG_MEMSET(void* _Dst, int    _Val, size_t _Size);
+int syscall_CG_MEMCPY(void* _Dst, void const* _Src, size_t      _Size);
+int syscall_CG_STRNCPY(char* _Destination, char const* _Source, size_t _Count);
+int syscall_CG_SIN(float f);
+int syscall_CG_COS(float f);
+int syscall_CG_ATAN2(double _Y, double _X);
+int syscall_CG_SQRT(float f);
+int syscall_CG_FLOOR(float f);
+int syscall_CG_CEIL(float f);
+int syscall_CG_ACOS(float f);
+int syscall_CG_PC_ADD_GLOBAL_DEFINE(char* string);
+int syscall_CG_PC_LOAD_SOURCE(const char* filename);
+int syscall_CG_PC_FREE_SOURCE(int handle);
+int syscall_CG_PC_READ_TOKEN(int handle, pc_token_t* pc_token);
+int syscall_CG_PC_SOURCE_FILE_AND_LINE(int handle, char* filename, int* line);
+int syscall_CG_S_STOPBACKGROUNDTRACK();
+int syscall_CG_REAL_TIME(qtime_t* qtime);
+int syscall_CG_SNAPVECTOR(float* v);
+int syscall_CG_SENDMOVESPEEDSTOGAME(int entnum, char* text);
+int syscall_CG_CIN_PLAYCINEMATIC(const char* arg, int x, int y, int w, int h, int systemBits);
+e_status syscall_CG_CIN_STOPCINEMATIC(int handle);
+e_status syscall_CG_CIN_RUNCINEMATIC(int handle);
+int syscall_CG_CIN_DRAWCINEMATIC(int handle);
+int syscall_CG_CIN_SETEXTENTS(int handle, int x, int y, int w, int h);
+int syscall_CG_R_REMAP_SHADER(const char* oldShader, const char* newShader, const char* offsetTim);
+int syscall_CG_TESTPRINTINT(char* string, int i);
+int syscall_CG_TESTPRINTFLOAT(char* string, float f);
+int syscall_CG_LOADCAMERA(int camNum, const char* name);
+int syscall_CG_STARTCAMERA(int camNum, int time);
+bool syscall_CG_GETCAMERAINFO(int camNum, int time, float* origin, float* angles, float* fov);
+int syscall_CG_GET_ENTITY_TOKEN(char* buffer, int size);
+int syscall_CG_INGAME_POPUP(const char* arg0);
+int syscall_CG_INGAME_CLOSEPOPUP(const char* arg0);
+int syscall_CG_LIMBOCHAT(const char* str);
+int syscall_CG_KEY_GETBINDINGBUF(int keynum, char* buf, int buflen);
+int syscall_CG_KEY_SETBINDING(int keynum, const char* binding);
+int syscall_CG_KEY_KEYNUMTOSTRINGBUF(int keynum, char* buf, int buflen);
+int syscall_CG_TRANSLATE_STRING(const char* string, char* dest_buffer);

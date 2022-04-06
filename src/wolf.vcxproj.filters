@@ -21,6 +21,15 @@
     <Filter Include="Misc">
       <UniqueIdentifier>{94e536c1-b3a8-4fc1-b577-c4aadfe678d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{61c07532-a348-40b5-a86f-e9c2a375bc6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{7c128770-c164-49ed-b5cf-513b85545542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cgame">
+      <UniqueIdentifier>{988789f5-26a2-4361-aa82-c617fa614b39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="client\cl_cgame.cc">
@@ -182,6 +191,252 @@
     <ClCompile Include="win32\win_wndproc.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game\bg_misc.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_util.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_syscalls.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_shared.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_players.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_main.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_gameinfo.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\ui_atoms.cc">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_characters.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_debug.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_events.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_fight.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_func_attack.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_func_boss1.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_funcs.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_script.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_script_actions.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_script_ents.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_sight.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ai_cast_think.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="botai\ai_chat.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="botai\ai_cmd.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="botai\ai_dmnet.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="botai\ai_dmq3.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="botai\ai_main.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="botai\ai_team.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\bg_animation.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_weapon.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_target.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_team.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_tramcar.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_trigger.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_utils.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_syscalls.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_svcmds.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_missile.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_mover.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_props.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_save.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_script.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_script_actions.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_session.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_spawn.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_active.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_alarm.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_antilag.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_bot.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_client.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_cmds.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_combat.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_items.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_main.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_mem.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\g_misc.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\bg_slidemove.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="game\bg_pmove.cc">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_weapons.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_predict.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_scoreboard.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_servercmds.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_snapshot.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_sound.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_spawn.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_syscalls.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_trails.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_view.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_newDraw.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_particles.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_players.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_playerstate.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_flamethrower.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_info.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_localents.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_main.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_marks.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_draw.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_drawtools.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_effects.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_ents.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_event.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
+    <ClCompile Include="cgame\cg_consolecmds.cc">
+      <Filter>cgame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="A3D\a3dWrapperdp.h">
@@ -279,6 +534,9 @@
     </ClInclude>
     <ClInclude Include="..\main\ui\menudef.h">
       <Filter>main\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="game\g_local.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

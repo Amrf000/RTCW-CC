@@ -323,58 +323,94 @@ This is the only way control passes into the module.
 This must be the very first function compiled into the .q3vm file
 ================
 */
-#if defined( __MACOS__ )
-#pragma export on
-#endif
-int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
-#if defined( __MACOS__ )
-#pragma export off
-#endif
-	switch ( command ) {
-	case GAME_INIT:
-		G_InitGame( arg0, arg1, arg2 );
+//#if defined( __MACOS__ )
+//#pragma export on
+//#endif
+//extern "C" __declspec(dllexport) int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6 ) {
+//#if defined( __MACOS__ )
+//#pragma export off
+//#endif
+//	switch ( command ) {
+//	}
+//
+//	return -1;
+//}
+	int VM_Call_GAME_INIT(int levelTime, int randomSeed, int restart){
+		G_InitGame(levelTime,randomSeed,restart);
 		return 0;
-	case GAME_SHUTDOWN:
-		G_ShutdownGame( arg0 );
-		return 0;
-	case GAME_CLIENT_CONNECT:
-		return (int)ClientConnect( arg0, arg1, arg2 );
-	case GAME_CLIENT_THINK:
-		ClientThink( arg0 );
-		return 0;
-	case GAME_CLIENT_USERINFO_CHANGED:
-		ClientUserinfoChanged( arg0 );
-		return 0;
-	case GAME_CLIENT_DISCONNECT:
-		ClientDisconnect( arg0 );
-		return 0;
-	case GAME_CLIENT_BEGIN:
-		ClientBegin( arg0 );
-		return 0;
-	case GAME_CLIENT_COMMAND:
-		ClientCommand( arg0 );
-		return 0;
-	case GAME_RUN_FRAME:
-		G_RunFrame( arg0 );
-		return 0;
-	case GAME_CONSOLE_COMMAND:
-		return ConsoleCommand();
-	case BOTAI_START_FRAME:
-		return BotAIStartFrame( arg0 );
-		// Ridah, Cast AI
-	case AICAST_VISIBLEFROMPOS:
-		return AICast_VisibleFromPos( (float *)arg0, arg1, (float *)arg2, arg3, arg4 );
-	case AICAST_CHECKATTACKATPOS:
-		return AICast_CheckAttackAtPos( arg0, arg1, (float *)arg2, arg3, arg4 );
-		// done.
-
-	case GAME_RETRIEVE_MOVESPEEDS_FROM_CLIENT:
-		G_RetrieveMoveSpeedsFromClient( arg0, (char *)arg1 );
+	}
+		
+	int  VM_Call_GAME_SHUTDOWN(int restart) {
+		G_ShutdownGame(restart);
 		return 0;
 	}
 
-	return -1;
-}
+
+		
+	char* VM_Call_GAME_CLIENT_CONNECT(int clientNum, bool firstTime, bool isBot) {
+		return ClientConnect(clientNum, firstTime, isBot);
+	}
+	int VM_Call_GAME_CLIENT_THINK(int clientNum) {
+		ClientThink(clientNum);
+		return 0;
+	}
+	
+	int VM_Call_GAME_CLIENT_USERINFO_CHANGED(int clientNum) {
+		ClientUserinfoChanged(clientNum);
+		return 0;
+	}
+		
+	int VM_Call_GAME_CLIENT_DISCONNECT(int clientNum) {
+		ClientDisconnect(clientNum);
+		return 0;
+	}
+		
+	int VM_Call_GAME_CLIENT_BEGIN(int clientNum) {
+		ClientBegin(clientNum);
+		return 0;
+	}
+
+	
+		
+	int VM_Call_GAME_CLIENT_COMMAND(int clientNum) {
+		ClientCommand(clientNum);
+		return 0;
+	}
+	
+	int VM_Call_GAME_RUN_FRAME(int levelTime) {
+		G_RunFrame(levelTime);
+		return 0;
+	}
+		
+	bool VM_Call_GAME_CONSOLE_COMMAND() {
+		return ConsoleCommand();
+	}
+		
+	int VM_Call_BOTAI_START_FRAME(int time) {
+		return BotAIStartFrame(time);
+		// Ridah, Cast AI
+	}
+
+
+		
+	bool VM_Call_AICAST_VISIBLEFROMPOS(vec3_t srcpos, int srcnum,
+		vec3_t destpos, int destnum, bool updateVisPos) {
+		return AICast_VisibleFromPos(srcpos, srcnum,
+			destpos, destnum, updateVisPos);
+	}
+		
+	bool VM_Call_AICAST_CHECKATTACKATPOS(int entnum, int enemy, vec3_t pos, bool ducking, bool allowHitWorld) {
+		return AICast_CheckAttackAtPos(entnum, enemy, pos, ducking, allowHitWorld);
+		// done.
+	}
+		
+
+	int VM_Call_GAME_RETRIEVE_MOVESPEEDS_FROM_CLIENT(int entnum, char* text) {
+		G_RetrieveMoveSpeedsFromClient(entnum, text);
+		return 0;
+	}
+		
+
 
 void QDECL G_Printf( const char *fmt, ... ) {
 	va_list argptr;
@@ -1298,27 +1334,27 @@ void G_ShutdownGame( int restart ) {
 #ifndef GAME_HARD_LINKED
 // this is only here so the functions in q_shared.c and bg_*.c can link
 
-void QDECL Com_Error( int level, const char *error, ... ) {
-	va_list argptr;
-	char text[1024];
+//void QDECL Com_Error( int level, const char *error, ... ) {
+//	va_list argptr;
+//	char text[1024];
+//
+//	va_start( argptr, error );
+//	Q_vsnprintf( text, sizeof( text ), error, argptr );
+//	va_end( argptr );
+//
+//	G_Error( "%s", text );
+//}
 
-	va_start( argptr, error );
-	Q_vsnprintf( text, sizeof( text ), error, argptr );
-	va_end( argptr );
-
-	G_Error( "%s", text );
-}
-
-void QDECL Com_Printf( const char *msg, ... ) {
-	va_list argptr;
-	char text[1024];
-
-	va_start( argptr, msg );
-	Q_vsnprintf( text, sizeof( text ), msg, argptr );
-	va_end( argptr );
-
-	G_Printf( "%s", text );
-}
+//void QDECL Com_Printf( const char *msg, ... ) {
+//	va_list argptr;
+//	char text[1024];
+//
+//	va_start( argptr, msg );
+//	Q_vsnprintf( text, sizeof( text ), msg, argptr );
+//	va_end( argptr );
+//
+//	G_Printf( "%s", text );
+//}
 
 #endif
 

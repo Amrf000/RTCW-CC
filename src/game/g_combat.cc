@@ -615,7 +615,7 @@ bool IsHeadShot( gentity_t *targ, bool isAICharacter, vec3_t dir, vec3_t point, 
 	trace_t tr;
 	vec3_t start, end;
 	gentity_t   *traceEnt;
-	orientation_t or;           // DHM - Nerve
+    orientation_t orx;           // DHM - Nerve
 
 	bool head_shot_weapon = false;
 
@@ -633,8 +633,8 @@ bool IsHeadShot( gentity_t *targ, bool isAICharacter, vec3_t dir, vec3_t point, 
 	if ( head_shot_weapon ) {
 		head = G_Spawn();
 
-		if ( trap_GetTag( targ->s.number, "tag_head", &or ) ) {
-			G_SetOrigin( head, or.origin );
+        if ( trap_GetTag( targ->s.number, "tag_head", &orx ) ) {
+            G_SetOrigin( head, orx.origin );
 		} else {
 			float height, dest;
 			vec3_t v, angles, forward, up, right;
@@ -719,12 +719,12 @@ bool IsHeadShot( gentity_t *targ, bool isAICharacter, vec3_t dir, vec3_t point, 
 
 gentity_t* G_BuildHead( gentity_t *ent ) {
 	gentity_t* head;
-	orientation_t or;           // DHM - Nerve
+    orientation_t orx;           // DHM - Nerve
 
 	head = G_Spawn();
 
-	if ( trap_GetTag( ent->s.number, "tag_head", &or ) ) {
-		G_SetOrigin( head, or.origin );
+    if ( trap_GetTag( ent->s.number, "tag_head", &orx ) ) {
+        G_SetOrigin( head, orx.origin );
 	} else {
 		float height, dest;
 		vec3_t v, angles, forward, up, right;

@@ -1,3 +1,4 @@
+#pragma once
 /*
 ===========================================================================
 
@@ -335,9 +336,9 @@ typedef struct ai_export_s
 	int ( *BotLoadCharacter )( char *charfile, int skill );
 	void ( *BotFreeCharacter )( int character );
 	float ( *Characteristic_Float )( int character, int index );
-	float ( *Characteristic_BFloat )( int character, int index, float min, float max );
+    float ( *Characteristic_BFloat )( int character, int index, float minv, float maxv );
 	int ( *Characteristic_Integer )( int character, int index );
-	int ( *Characteristic_BInteger )( int character, int index, int min, int max );
+    int ( *Characteristic_BInteger )( int character, int index, int minv, int maxv );
 	void ( *Characteristic_String )( int character, int index, char *buf, int size );
 	//-----------------------------------
 	// be_ai_chat.h

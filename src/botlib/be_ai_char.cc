@@ -637,7 +637,7 @@ float Characteristic_Float( int character, int index ) {
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-float Characteristic_BFloat( int character, int index, float min, float max ) {
+float Characteristic_BFloat( int character, int index, float minv, float maxv ) {
 	float value;
 	bot_character_t *ch;
 
@@ -645,16 +645,16 @@ float Characteristic_BFloat( int character, int index, float min, float max ) {
 	if ( !ch ) {
 		return 0;
 	}
-	if ( min > max ) {
-		botimport.Print( PRT_ERROR, "cannot bound characteristic %d between %f and %f\n", index, min, max );
+    if ( minv > maxv ) {
+        botimport.Print( PRT_ERROR, "cannot bound characteristic %d between %f and %f\n", index, minv, maxv );
 		return 0;
 	} //end if
 	value = Characteristic_Float( character, index );
-	if ( value < min ) {
-		return min;
+    if ( value < minv ) {
+        return minv;
 	}
-	if ( value > max ) {
-		return max;
+    if ( value > maxv ) {
+        return maxv;
 	}
 	return value;
 } //end of the function Characteristic_BFloat
@@ -696,7 +696,7 @@ int Characteristic_Integer( int character, int index ) {
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int Characteristic_BInteger( int character, int index, int min, int max ) {
+int Characteristic_BInteger( int character, int index, int minv, int maxv ) {
 	int value;
 	bot_character_t *ch;
 
@@ -704,16 +704,16 @@ int Characteristic_BInteger( int character, int index, int min, int max ) {
 	if ( !ch ) {
 		return 0;
 	}
-	if ( min > max ) {
-		botimport.Print( PRT_ERROR, "cannot bound characteristic %d between %d and %d\n", index, min, max );
+    if ( minv > maxv ) {
+        botimport.Print( PRT_ERROR, "cannot bound characteristic %d between %d and %d\n", index, minv, maxv );
 		return 0;
 	} //end if
 	value = Characteristic_Integer( character, index );
-	if ( value < min ) {
-		return min;
+    if ( value < minv ) {
+        return minv;
 	}
-	if ( value > max ) {
-		return max;
+    if ( value > maxv ) {
+        return maxv;
 	}
 	return value;
 } //end of the function Characteristic_BInteger

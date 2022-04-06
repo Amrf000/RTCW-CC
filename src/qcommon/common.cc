@@ -209,20 +209,20 @@ Com_DPrintf
 A Com_Printf that only shows up if the "developer" cvar is set
 ================
 */
-void QDECL Com_DPrintf( const char *fmt, ... ) {
-	va_list argptr;
-	char msg[MAXPRINTMSG];
-
-	if ( !com_developer || !com_developer->integer ) {
-		return;         // don't confuse non-developers with techie stuff...
-	}
-
-	va_start( argptr,fmt );
-	Q_vsnprintf( msg, sizeof( msg ), fmt, argptr );
-	va_end( argptr );
-
-	Com_Printf( "%s", msg );
-}
+//void QDECL Com_DPrintf( const char *fmt, ... ) {
+//	va_list argptr;
+//	char msg[MAXPRINTMSG];
+//
+//	if ( !com_developer || !com_developer->integer ) {
+//		return;         // don't confuse non-developers with techie stuff...
+//	}
+//
+//	va_start( argptr,fmt );
+//	Q_vsnprintf( msg, sizeof( msg ), fmt, argptr );
+//	va_end( argptr );
+//
+//	Com_Printf( "%s", msg );
+//}
 
 /*
 =============
@@ -1647,7 +1647,7 @@ void Hunk_Clear( void ) {
 
 	Cvar_Set( "com_hunkused", va( "%i", hunk_low.permanent + hunk_high.permanent ) );
 	Com_Printf( "Hunk_Clear: reset the hunk ok\n" );
-	VM_Clear(); // (SA) FIXME:TODO: was commented out in wolf
+	//VM_Clear(); // (SA) FIXME:TODO: was commented out in wolf
 #ifdef HUNK_DEBUG
 	hunkblocks = NULL;
 #endif
@@ -2534,7 +2534,7 @@ void Com_Init( char *commandLine ) {
 
 	Sys_Init();
 	Netchan_Init( Com_Milliseconds() & 0xffff );    // pick a port value that should be nice and random
-	VM_Init();
+	//VM_Init();
 	SV_Init();
 
 	com_dedicated->modified = false;

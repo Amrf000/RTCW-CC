@@ -54,50 +54,77 @@ This is the only way control passes into the module.
 This must be the very first function compiled into the .q3vm file
 ================
 */
-#if defined( __MACOS__ )
-#pragma export on
-#endif
-int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
-#if defined( __MACOS__ )
-#pragma export off
-#endif
-	switch ( command ) {
-	case CG_INIT:
-		CG_Init( arg0, arg1, arg2 );
+//#if defined( __MACOS__ )
+//#pragma export on
+//#endif
+//extern "C" __declspec(dllexport) int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
+//#if defined( __MACOS__ )
+//#pragma export off
+//#endif
+//	switch ( command ) {
+//	default:
+//		CG_Error("vmMain: unknown command %i", command);
+//		break;
+//	}
+//	return -1;
+//}
+
+
+
+
+	int VM_Call_CG_INIT(int serverMessageNum, int serverCommandSequence, int clientNum) {
+		CG_Init(serverMessageNum,serverCommandSequence, clientNum);
 		return 0;
-	case CG_SHUTDOWN:
+	}
+		
+	int VM_Call_CG_SHUTDOWN() {
 		CG_Shutdown();
 		return 0;
-	case CG_CONSOLE_COMMAND:
+	}
+		
+	int VM_Call_CG_CONSOLE_COMMAND() {
 		return CG_ConsoleCommand();
-	case CG_DRAW_ACTIVE_FRAME:
-		CG_DrawActiveFrame( arg0, (stereoFrame_t)arg1, arg2 );
+	}
+	
+	int VM_Call_CG_DRAW_ACTIVE_FRAME(int serverTime, stereoFrame_t stereoView, bool demoPlayback) {
+		CG_DrawActiveFrame(serverTime, stereoView, demoPlayback);
 		return 0;
-	case CG_CROSSHAIR_PLAYER:
+	}
+		
+	int VM_Call_CG_CROSSHAIR_PLAYER() {
 		return CG_CrosshairPlayer();
-	case CG_LAST_ATTACKER:
+	}
+
+	int VM_Call_CG_LAST_ATTACKER() {
 		return CG_LastAttacker();
-	case CG_KEY_EVENT:
-		CG_KeyEvent( arg0, arg1 );
+	}
+		
+	int VM_Call_CG_KEY_EVENT(int key, bool down) {
+		CG_KeyEvent(key, down);
 		return 0;
-	case CG_MOUSE_EVENT:
+	}
+
+	int VM_Call_CG_MOUSE_EVENT(int x, int y) {
 		cgDC.cursorx = cgs.cursorX;
 		cgDC.cursory = cgs.cursorY;
-		CG_MouseEvent( arg0, arg1 );
+		CG_MouseEvent(x, y);
 		return 0;
-	case CG_EVENT_HANDLING:
-		CG_EventHandling( arg0 );
-		return 0;
-	case CG_GET_TAG:
-		return CG_GetTag( arg0, (char *)arg1, (orientation_t *)arg2 );
-	case CG_CHECKCENTERVIEW:
-		return CG_CheckCenterView();
-	default:
-		CG_Error( "vmMain: unknown command %i", command );
-		break;
 	}
-	return -1;
-}
+		
+	int VM_Call_CG_EVENT_HANDLING(int type) {
+		CG_EventHandling(type);
+		return 0;
+	}
+		
+	int VM_Call_CG_GET_TAG(int clientNum, char* tagname, orientation_t* orx) {
+		return CG_GetTag(clientNum, tagname, orx);
+	}
+		
+	int VM_Call_CG_CHECKCENTERVIEW() {
+		return CG_CheckCenterView();
+	}
+		
+
 
 cg_t cg;
 cgs_t cgs;
@@ -207,8 +234,8 @@ vmCvar_t cg_autoactivate;
 vmCvar_t cg_blinktime;      //----(SA)	added
 
 vmCvar_t cg_smoothClients;
-vmCvar_t pmove_fixed;
-vmCvar_t pmove_msec;
+//vmCvar_t pmove_fixed;
+//vmCvar_t pmove_msec;
 
 // Rafael - particle switch
 vmCvar_t cg_wolfparticles;
@@ -293,7 +320,7 @@ typedef struct {
 	int cvarFlags;
 } cvarTable_t;
 
-cvarTable_t cvarTable[] = {
+static cvarTable_t cvarTable[] = {
 	{ &cg_ignore, "cg_ignore", "0", 0 },  // used for debugging
 	{ &cg_autoswitch, "cg_autoswitch", "2", CVAR_ARCHIVE },
 	{ &cg_drawGun, "cg_drawGun", "1", CVAR_ARCHIVE },
@@ -488,7 +515,7 @@ cvarTable_t cvarTable[] = {
 
 	{ &cg_antilag, "g_antilag", "0", 0 }
 };
-int cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
+static int cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );
 
 /*
 =================
@@ -621,27 +648,27 @@ void QDECL CG_Error( const char *msg, ... ) {
 #ifndef CGAME_HARD_LINKED
 // this is only here so the functions in q_shared.c and bg_*.c can link (FIXME)
 
-void QDECL Com_Error( int level, const char *error, ... ) {
-	va_list argptr;
-	char text[1024];
+//void QDECL Com_Error( int level, const char *error, ... ) {
+//	va_list argptr;
+//	char text[1024];
+//
+//	va_start( argptr, error );
+//	Q_vsnprintf( text, sizeof( text ), error, argptr );
+//	va_end( argptr );
+//
+//	CG_Error( "%s", text );
+//}
 
-	va_start( argptr, error );
-	Q_vsnprintf( text, sizeof( text ), error, argptr );
-	va_end( argptr );
-
-	CG_Error( "%s", text );
-}
-
-void QDECL Com_Printf( const char *msg, ... ) {
-	va_list argptr;
-	char text[1024];
-
-	va_start( argptr, msg );
-	Q_vsnprintf( text, sizeof( text ), msg, argptr );
-	va_end( argptr );
-
-	CG_Printf( "%s", text );
-}
+//void QDECL Com_Printf( const char *msg, ... ) {
+//	va_list argptr;
+//	char text[1024];
+//
+//	va_start( argptr, msg );
+//	Q_vsnprintf( text, sizeof( text ), msg, argptr );
+//	va_end( argptr );
+//
+//	CG_Printf( "%s", text );
+//}
 
 #endif
 

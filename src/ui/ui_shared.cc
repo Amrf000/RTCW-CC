@@ -4675,7 +4675,6 @@ void Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
 
 void Menu_Paint( menuDef_t *menu, bool forcePaint ) {
 	int i;
-
 	if ( menu == NULL ) {
 		return;
 	}

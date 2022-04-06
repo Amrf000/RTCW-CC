@@ -1136,12 +1136,12 @@ int AIChar_GetPainLocation( gentity_t *ent, vec3_t point ) {
 
 	int tagIndex, bestTag;
 	float bestDist, dist;
-	orientation_t or;
+    orientation_t orx;
 
 	// first make sure the client is able to retrieve tag information
 	// TTimo gcc: warning: comparison is always false due to limited range of data type
 	// initial line: if (trap_GetTag( ent->s.number, painTagNames[0], &or ) < 0)
-	if ( !trap_GetTag( ent->s.number, painTagNames[0], &or ) ) {
+    if ( !trap_GetTag( ent->s.number, painTagNames[0], &orx ) ) {
 		return 0;
 	}
 
@@ -1150,8 +1150,8 @@ int AIChar_GetPainLocation( gentity_t *ent, vec3_t point ) {
 		// grab the tag with this name
 		// TTimo gcc: warning: comparison is always true due to limited range of data type
 		// initial line: if (trap_GetTag( ent->s.number, painTagNames[tagIndex], &or ) >= 0)
-		if ( trap_GetTag( ent->s.number, painTagNames[tagIndex], &or ) ) {
-			dist = VectorDistance( or.origin, point );
+        if ( trap_GetTag( ent->s.number, painTagNames[tagIndex], &orx ) ) {
+            dist = VectorDistance( orx.origin, point );
 			if ( !bestDist || dist < bestDist ) {
 				bestTag = tagIndex;
 				bestDist = dist;
