@@ -2571,7 +2571,7 @@ void CG_MouseEvent( int x, int y ) {
 		cgs.cursorY = 480;
 	}
 
-	n = Display_CursorType( cgs.cursorX, cgs.cursorY );
+	n = cgDC.Display_CursorType( cgs.cursorX, cgs.cursorY );
 	cgs.activeCursor = 0;
 	if ( n == CURSOR_ARROW ) {
 		cgs.activeCursor = cgs.media.selectCursor;
@@ -2580,9 +2580,9 @@ void CG_MouseEvent( int x, int y ) {
 	}
 
 	if ( cgs.capturedItem ) {
-		Display_MouseMove( cgs.capturedItem, x, y );
+		cgDC.Display_MouseMove( cgs.capturedItem, x, y );
 	} else {
-		Display_MouseMove( NULL, cgs.cursorX, cgs.cursorY );
+		cgDC.Display_MouseMove( NULL, cgs.cursorX, cgs.cursorY );
 	}
 
 }
@@ -2594,8 +2594,8 @@ CG_HideTeamMenus
 
 */
 void CG_HideTeamMenu() {
-	Menus_CloseByName( "teamMenu" );
-	Menus_CloseByName( "getMenu" );
+	cgDC.Menus_CloseByName( "teamMenu" );
+	cgDC.Menus_CloseByName( "getMenu" );
 }
 
 /*
@@ -2605,7 +2605,7 @@ CG_ShowTeamMenus
 
 */
 void CG_ShowTeamMenu() {
-	Menus_OpenByName( "teamMenu" );
+	cgDC.Menus_OpenByName( "teamMenu" );
 }
 
 
@@ -2649,13 +2649,13 @@ void CG_KeyEvent( int key, bool down ) {
 	//  trap_Key_SetCatcher(0);
 	//}
 
-	Display_HandleKey( key, down, cgs.cursorX, cgs.cursorY );
+	cgDC.Display_HandleKey( key, down, cgs.cursorX, cgs.cursorY );
 
 	if ( cgs.capturedItem ) {
 		cgs.capturedItem = NULL;
 	}   else {
 		if ( key == K_MOUSE2 && down ) {
-			cgs.capturedItem = Display_CaptureItem( cgs.cursorX, cgs.cursorY );
+			cgs.capturedItem = cgDC.Display_CaptureItem( cgs.cursorX, cgs.cursorY );
 		}
 	}
 }
@@ -2679,12 +2679,12 @@ int CG_ClientNumFromName( const char *p ) {
 }
 
 void CG_ShowResponseHead() {
-	Menus_OpenByName( "voiceMenu" );
+	cgDC.Menus_OpenByName( "voiceMenu" );
 	trap_Cvar_Set( "cl_conXOffset", "72" );
 	cg.voiceTime = cg.time;
 }
 
-void CG_RunMenuScript( char **args ) {
+void displayContextDef_t::CG_RunMenuScript( char **args ) {
 }
 
 

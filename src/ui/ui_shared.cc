@@ -49,11 +49,11 @@ typedef struct scrollInfo_s {
 
 static scrollInfo_t scrollInfo;
 
-static void ( *captureFunc )( void *p ) = NULL;
+static void (displayContextDef_t::*captureFunc )( void *p ) = NULL;
 static void *captureData = NULL;
 static itemDef_t *itemCapture = NULL;   // item that has the mouse captured ( if any )
 
-displayContextDef_t *DC = NULL;
+//displayContextDef_t *DC = NULL;
 
 bool g_waitingForKey = false;
 bool g_editingField = false;
@@ -75,15 +75,6 @@ static bool debugMode = false;
 #define DOUBLE_CLICK_DELAY 300
 static int lastListBoxClickTime = 0;
 
-void Item_RunScript( itemDef_t *item, const char *s );
-void Item_SetupKeywordHash( void );
-void Menu_SetupKeywordHash( void );
-int BindingIDFromName( const char *name );
-bool Item_Bind_HandleKey( itemDef_t *item, int key, bool down );
-itemDef_t *Menu_SetPrevCursorItem( menuDef_t *menu );
-itemDef_t *Menu_SetNextCursorItem( menuDef_t *menu );
-static bool Menu_OverActiveItem( menuDef_t *menu, float x, float y );
-
 #ifdef CGAME
 #define MEM_POOL_SIZE  128 * 1024
 #else
@@ -99,7 +90,8 @@ static int allocPoint, outOfMemory;
 UI_Alloc
 ===============
 */
-void *UI_Alloc( int size ) {
+void* displayContextDef_t::UI_Alloc( int size ) {
+	auto&& DC = this;
 	char    *p;
 
 	if ( allocPoint + size > MEM_POOL_SIZE ) {
@@ -123,12 +115,12 @@ void *UI_Alloc( int size ) {
 UI_InitMemory
 ===============
 */
-void UI_InitMemory( void ) {
+void displayContextDef_t::UI_InitMemory( void ) {
 	allocPoint = 0;
 	outOfMemory = false;
 }
 
-bool UI_OutOfMemory() {
+bool displayContextDef_t::UI_OutOfMemory() {
 	return outOfMemory;
 }
 
@@ -170,7 +162,7 @@ static int strHandleCount = 0;
 static stringDef_t *strHandle[HASH_TABLE_SIZE];
 
 
-const char *String_Alloc( const char *p ) {
+const char * displayContextDef_t::String_Alloc( const char *p ) {
 	int len;
 	long hash;
 	stringDef_t *str, *last;
@@ -220,7 +212,7 @@ const char *String_Alloc( const char *p ) {
 	return NULL;
 }
 
-void String_Report() {
+void displayContextDef_t::String_Report() {
 	float f;
 	Com_Printf( "Memory/String Pool Info\n" );
 	Com_Printf( "----------------\n" );
@@ -239,7 +231,8 @@ void String_Report() {
 String_Init
 =================
 */
-void String_Init() {
+void displayContextDef_t::String_Init() {
+	auto&& DC = this;
 	int i;
 	for ( i = 0; i < HASH_TABLE_SIZE; i++ ) {
 		strHandle[i] = 0;
@@ -261,7 +254,7 @@ void String_Init() {
 PC_SourceWarning
 =================
 */
-void PC_SourceWarning( int handle, char *format, ... ) {
+void displayContextDef_t::PC_SourceWarning( int handle, char *format, ... ) {
 	int line;
 	char filename[128];
 	va_list argptr;
@@ -283,7 +276,7 @@ void PC_SourceWarning( int handle, char *format, ... ) {
 PC_SourceError
 =================
 */
-void PC_SourceError( int handle, char *format, ... ) {
+void displayContextDef_t::PC_SourceError( int handle, char *format, ... ) {
 	int line;
 	char filename[128];
 	va_list argptr;
@@ -306,7 +299,7 @@ LerpColor
 	lerp and clamp each component of <a> and <b> into <c> by the fraction <t>
 =================
 */
-void LerpColor( vec4_t a, vec4_t b, vec4_t c, float t ) {
+void displayContextDef_t::LerpColor( vec4_t a, vec4_t b, vec4_t c, float t ) {
 	int i;
 	for ( i = 0; i < 4; i++ )
 	{
@@ -324,7 +317,7 @@ void LerpColor( vec4_t a, vec4_t b, vec4_t c, float t ) {
 Float_Parse
 =================
 */
-bool Float_Parse( char **p, float *f ) {
+bool displayContextDef_t::Float_Parse( char **p, float *f ) {
 	char    *token;
 	token = COM_ParseExt( p, false );
 	if ( token && token[0] != 0 ) {
@@ -340,7 +333,7 @@ bool Float_Parse( char **p, float *f ) {
 PC_Float_Parse
 =================
 */
-bool PC_Float_Parse( int handle, float *f ) {
+bool displayContextDef_t::PC_Float_Parse( int handle, float *f ) {
 	pc_token_t token;
 	int negative = false;
 
@@ -370,7 +363,7 @@ bool PC_Float_Parse( int handle, float *f ) {
 Color_Parse
 =================
 */
-bool Color_Parse( char **p, vec4_t *c ) {
+bool displayContextDef_t::Color_Parse( char **p, vec4_t *c ) {
 	int i;
 	float f;
 
@@ -388,7 +381,7 @@ bool Color_Parse( char **p, vec4_t *c ) {
 PC_Color_Parse
 =================
 */
-bool PC_Color_Parse( int handle, vec4_t *c ) {
+bool displayContextDef_t::PC_Color_Parse( int handle, vec4_t *c ) {
 	int i;
 	float f;
 
@@ -406,7 +399,7 @@ bool PC_Color_Parse( int handle, vec4_t *c ) {
 Int_Parse
 =================
 */
-bool Int_Parse( char **p, int *i ) {
+bool displayContextDef_t::Int_Parse( char **p, int *i ) {
 	char    *token;
 	token = COM_ParseExt( p, false );
 
@@ -423,7 +416,7 @@ bool Int_Parse( char **p, int *i ) {
 PC_Int_Parse
 =================
 */
-bool PC_Int_Parse( int handle, int *i ) {
+bool displayContextDef_t::PC_Int_Parse( int handle, int *i ) {
 	pc_token_t token;
 	int negative = false;
 
@@ -452,7 +445,7 @@ bool PC_Int_Parse( int handle, int *i ) {
 Rect_Parse
 =================
 */
-bool Rect_Parse( char **p, rectDef_t *r ) {
+bool displayContextDef_t::Rect_Parse( char **p, rectDef_t *r ) {
 	if ( Float_Parse( p, &r->x ) ) {
 		if ( Float_Parse( p, &r->y ) ) {
 			if ( Float_Parse( p, &r->w ) ) {
@@ -470,7 +463,7 @@ bool Rect_Parse( char **p, rectDef_t *r ) {
 PC_Rect_Parse
 =================
 */
-bool PC_Rect_Parse( int handle, rectDef_t *r ) {
+bool displayContextDef_t::PC_Rect_Parse( int handle, rectDef_t *r ) {
 	if ( PC_Float_Parse( handle, &r->x ) ) {
 		if ( PC_Float_Parse( handle, &r->y ) ) {
 			if ( PC_Float_Parse( handle, &r->w ) ) {
@@ -488,7 +481,7 @@ bool PC_Rect_Parse( int handle, rectDef_t *r ) {
 String_Parse
 =================
 */
-bool String_Parse( char **p, const char **out ) {
+bool displayContextDef_t::String_Parse( char **p, const char **out ) {
 	char *token;
 
 	token = COM_ParseExt( p, false );
@@ -504,7 +497,7 @@ bool String_Parse( char **p, const char **out ) {
 PC_String_Parse
 =================
 */
-bool PC_String_Parse( int handle, const char **out ) {
+bool displayContextDef_t::PC_String_Parse( int handle, const char **out ) {
 	pc_token_t token;
 
 	if ( !trap_PC_ReadToken( handle, &token ) ) {
@@ -522,7 +515,8 @@ PC_String_Parse_Trans
 NERVE - SMF - translates string
 =================
 */
-bool PC_String_Parse_Trans( int handle, const char **out ) {
+bool displayContextDef_t::PC_String_Parse_Trans( int handle, const char **out ) {
+	auto&& DC = this;
 	pc_token_t token;
 
 	if ( !trap_PC_ReadToken( handle, &token ) ) {
@@ -539,7 +533,7 @@ bool PC_String_Parse_Trans( int handle, const char **out ) {
 PC_Char_Parse
 =================
 */
-bool PC_Char_Parse( int handle, char *out ) {
+bool displayContextDef_t::PC_Char_Parse( int handle, char *out ) {
 	pc_token_t token;
 
 	if ( !trap_PC_ReadToken( handle, &token ) ) {
@@ -556,7 +550,7 @@ bool PC_Char_Parse( int handle, char *out ) {
 PC_Script_Parse
 =================
 */
-bool PC_Script_Parse( int handle, const char **out ) {
+bool displayContextDef_t::PC_Script_Parse( int handle, const char **out ) {
 	char script[1024];
 	pc_token_t token;
 
@@ -601,15 +595,16 @@ Init_Display
 Initializes the display with a structure to all the drawing routines
  ==================
 */
-void Init_Display( displayContextDef_t *dc ) {
-	DC = dc;
+void displayContextDef_t::Init_Display( displayContextDef_t *dc ) {
+	//DC = dc;
 }
 
 
 
 // type and style painting
 
-void GradientBar_Paint( rectDef_t *rect, vec4_t color ) {
+void displayContextDef_t::GradientBar_Paint( rectDef_t *rect, vec4_t color ) {
+	auto&& DC = this;
 	// gradient bar takes two paints
 	DC->setColor( color );
 	DC->drawHandlePic( rect->x, rect->y, rect->w, rect->h, DC->Assets.gradientBar );
@@ -625,14 +620,15 @@ Initializes a window structure ( windowDef_t ) with defaults
 
 ==================
 */
-void Window_Init( Window *w ) {
+void displayContextDef_t::Window_Init( Window *w ) {
 	memset( w, 0, sizeof( windowDef_t ) );
 	w->borderSize = 1;
 	w->foreColor[0] = w->foreColor[1] = w->foreColor[2] = w->foreColor[3] = 1.0;
 	w->cinematic = -1;
 }
 
-void Fade( int *flags, float *f, float clamp, int *nextTime, int offsetTime, bool bFlags, float fadeAmount ) {
+void displayContextDef_t::Fade( int *flags, float *f, float clamp, int *nextTime, int offsetTime, bool bFlags, float fadeAmount ) {
+	auto&& DC = this;
 	if ( *flags & ( WINDOW_FADINGOUT | WINDOW_FADINGIN ) ) {
 		if ( DC->realTime > *nextTime ) {
 			*nextTime = DC->realTime + offsetTime;
@@ -656,7 +652,8 @@ void Fade( int *flags, float *f, float clamp, int *nextTime, int offsetTime, boo
 
 
 
-void Window_Paint( Window *w, float fadeAmount, float fadeClamp, float fadeCycle ) {
+void displayContextDef_t::Window_Paint( Window *w, float fadeAmount, float fadeClamp, float fadeCycle ) {
+	auto&& DC = this;
 	//float bordersize = 0;
 	vec4_t color;
 	rectDef_t fillRect = w->rect;
@@ -754,7 +751,7 @@ void Window_Paint( Window *w, float fadeAmount, float fadeClamp, float fadeCycle
 }
 
 
-void Item_SetScreenCoords( itemDef_t *item, float x, float y ) {
+void displayContextDef_t::Item_SetScreenCoords( itemDef_t *item, float x, float y ) {
 
 	if ( item == NULL ) {
 		return;
@@ -776,7 +773,7 @@ void Item_SetScreenCoords( itemDef_t *item, float x, float y ) {
 }
 
 // FIXME: consolidate this with nearby stuff
-void Item_UpdatePosition( itemDef_t *item ) {
+void displayContextDef_t::Item_UpdatePosition( itemDef_t *item ) {
 	float x, y;
 	menuDef_t *menu;
 
@@ -799,7 +796,7 @@ void Item_UpdatePosition( itemDef_t *item ) {
 }
 
 // menus
-void Menu_UpdatePosition( menuDef_t *menu ) {
+void displayContextDef_t::Menu_UpdatePosition( menuDef_t *menu ) {
 	int i;
 	float x, y;
 
@@ -819,7 +816,7 @@ void Menu_UpdatePosition( menuDef_t *menu ) {
 	}
 }
 
-void Menu_PostParse( menuDef_t *menu ) {
+void displayContextDef_t::Menu_PostParse( menuDef_t *menu ) {
 	if ( menu == NULL ) {
 		return;
 	}
@@ -832,7 +829,7 @@ void Menu_PostParse( menuDef_t *menu ) {
 	Menu_UpdatePosition( menu );
 }
 
-itemDef_t *Menu_ClearFocus( menuDef_t *menu ) {
+itemDef_t * displayContextDef_t::Menu_ClearFocus( menuDef_t *menu ) {
 	int i;
 	itemDef_t *ret = NULL;
 
@@ -853,11 +850,11 @@ itemDef_t *Menu_ClearFocus( menuDef_t *menu ) {
 	return ret;
 }
 
-bool IsVisible( int flags ) {
+bool displayContextDef_t::IsVisible( int flags ) {
 	return ( flags & WINDOW_VISIBLE && !( flags & WINDOW_FADINGOUT ) );
 }
 
-bool Rect_ContainsPoint( rectDef_t *rect, float x, float y ) {
+bool displayContextDef_t::Rect_ContainsPoint( rectDef_t *rect, float x, float y ) {
 	if ( rect ) {
 		if ( x > rect->x && x < rect->x + rect->w && y > rect->y && y < rect->y + rect->h ) {
 			return true;
@@ -866,7 +863,7 @@ bool Rect_ContainsPoint( rectDef_t *rect, float x, float y ) {
 	return false;
 }
 
-int Menu_ItemsMatchingGroup( menuDef_t *menu, const char *name ) {
+int displayContextDef_t::Menu_ItemsMatchingGroup( menuDef_t *menu, const char *name ) {
 	int i;
 	int count = 0;
 	char *pdest;
@@ -893,7 +890,7 @@ int Menu_ItemsMatchingGroup( menuDef_t *menu, const char *name ) {
 	return count;
 }
 
-itemDef_t *Menu_GetMatchingItemByNumber( menuDef_t *menu, int index, const char *name ) {
+itemDef_t * displayContextDef_t::Menu_GetMatchingItemByNumber( menuDef_t *menu, int index, const char *name ) {
 	int i;
 	int count = 0;
 	char *pdest;
@@ -926,7 +923,7 @@ itemDef_t *Menu_GetMatchingItemByNumber( menuDef_t *menu, int index, const char 
 
 
 
-void Script_SetColor( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetColor( itemDef_t *item, char **args ) {
 	const char *name;
 	int i;
 	float f;
@@ -955,7 +952,7 @@ void Script_SetColor( itemDef_t *item, char **args ) {
 	}
 }
 
-void Script_SetAsset( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetAsset( itemDef_t *item, char **args ) {
 	const char *name;
 	// expecting name to set asset to
 	if ( String_Parse( args, &name ) ) {
@@ -965,7 +962,8 @@ void Script_SetAsset( itemDef_t *item, char **args ) {
 	}
 }
 
-void Script_SetBackground( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetBackground( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *name;
 	// expecting name to set asset to
 	if ( String_Parse( args, &name ) ) {
@@ -976,7 +974,7 @@ void Script_SetBackground( itemDef_t *item, char **args ) {
 
 
 
-itemDef_t *Menu_FindItemByName( menuDef_t *menu, const char *p ) {
+itemDef_t * displayContextDef_t::Menu_FindItemByName( menuDef_t *menu, const char *p ) {
 	int i;
 
 	if ( menu == NULL || p == NULL ) {
@@ -992,7 +990,8 @@ itemDef_t *Menu_FindItemByName( menuDef_t *menu, const char *p ) {
 	return NULL;
 }
 
-void Script_SetTeamColor( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetTeamColor( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	if ( DC->getTeamColor ) {
 		int i;
 		vec4_t color;
@@ -1003,7 +1002,7 @@ void Script_SetTeamColor( itemDef_t *item, char **args ) {
 	}
 }
 
-void Script_SetItemColor( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetItemColor( itemDef_t *item, char **args ) {
 	const char *itemname;
 	const char *name;
 	vec4_t color;
@@ -1043,7 +1042,8 @@ void Script_SetItemColor( itemDef_t *item, char **args ) {
 }
 
 
-void Menu_ShowItemByName( menuDef_t *menu, const char *p, bool bShow ) {
+void displayContextDef_t::Menu_ShowItemByName( menuDef_t *menu, const char *p, bool bShow ) {
+	auto&& DC = this;
 	itemDef_t *item;
 	int i;
 	int count = Menu_ItemsMatchingGroup( menu, p );
@@ -1064,7 +1064,7 @@ void Menu_ShowItemByName( menuDef_t *menu, const char *p, bool bShow ) {
 	}
 }
 
-void Menu_FadeItemByName( menuDef_t *menu, const char *p, bool fadeOut ) {
+void displayContextDef_t::Menu_FadeItemByName( menuDef_t *menu, const char *p, bool fadeOut ) {
 	itemDef_t *item;
 	int i;
 	int count = Menu_ItemsMatchingGroup( menu, p );
@@ -1082,7 +1082,7 @@ void Menu_FadeItemByName( menuDef_t *menu, const char *p, bool fadeOut ) {
 	}
 }
 
-menuDef_t *Menus_FindByName( const char *p ) {
+menuDef_t * displayContextDef_t::Menus_FindByName( const char *p ) {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
 		if ( Q_stricmp( Menus[i].window.name, p ) == 0 ) {
@@ -1092,18 +1092,18 @@ menuDef_t *Menus_FindByName( const char *p ) {
 	return NULL;
 }
 
-void Menus_ShowByName( const char *p ) {
+void displayContextDef_t::Menus_ShowByName( const char *p ) {
 	menuDef_t *menu = Menus_FindByName( p );
 	if ( menu ) {
 		Menus_Activate( menu );
 	}
 }
 
-void Menus_OpenByName( const char *p ) {
+void displayContextDef_t::Menus_OpenByName( const char *p ) {
 	Menus_ActivateByName( p, true );
 }
 
-static void Menu_RunCloseScript( menuDef_t *menu ) {
+ void displayContextDef_t::Menu_RunCloseScript( menuDef_t *menu ) {
 	if ( menu && menu->window.flags & WINDOW_VISIBLE && menu->onClose ) {
 		itemDef_t item;
 		item.parent = menu;
@@ -1111,7 +1111,7 @@ static void Menu_RunCloseScript( menuDef_t *menu ) {
 	}
 }
 
-void Menus_CloseByName( const char *p ) {
+void displayContextDef_t::Menus_CloseByName( const char *p ) {
 	menuDef_t *menu = Menus_FindByName( p );
 	if ( menu != NULL ) {
 		Menu_RunCloseScript( menu );
@@ -1131,7 +1131,7 @@ void Menus_CloseByName( const char *p ) {
 	}
 }
 
-void Menus_CloseAll() {
+void displayContextDef_t::Menus_CloseAll() {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
 		Menu_RunCloseScript( &Menus[i] );
@@ -1140,28 +1140,28 @@ void Menus_CloseAll() {
 }
 
 
-void Script_Show( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Show( itemDef_t *item, char **args ) {
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		Menu_ShowItemByName((menuDef_t*)item->parent, name, true );
 	}
 }
 
-void Script_Hide( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Hide( itemDef_t *item, char **args ) {
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		Menu_ShowItemByName( (menuDef_t*)item->parent, name, false );
 	}
 }
 
-void Script_FadeIn( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_FadeIn( itemDef_t *item, char **args ) {
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		Menu_FadeItemByName( (menuDef_t*)item->parent, name, false );
 	}
 }
 
-void Script_FadeOut( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_FadeOut( itemDef_t *item, char **args ) {
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		Menu_FadeItemByName((menuDef_t*)item->parent, name, true );
@@ -1170,7 +1170,7 @@ void Script_FadeOut( itemDef_t *item, char **args ) {
 
 
 
-void Script_Open( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Open( itemDef_t *item, char **args ) {
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		Menus_OpenByName( name );
@@ -1179,7 +1179,8 @@ void Script_Open( itemDef_t *item, char **args ) {
 
 // DHM - Nerve
 
-void Script_ConditionalOpen( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_ConditionalOpen( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *cvar;
 	const char *name1;
 	const char *name2;
@@ -1198,7 +1199,7 @@ void Script_ConditionalOpen( itemDef_t *item, char **args ) {
 
 // DHM - Nerve
 
-void Script_Close( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Close( itemDef_t *item, char **args ) {
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		Menus_CloseByName( name );
@@ -1213,7 +1214,8 @@ void Script_Close( itemDef_t *item, char **args ) {
 Script_Clipboard
 ==============
 */
-void Script_Clipboard( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Clipboard( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	char curscript[64];
 	DC->getCVarString( "cg_clipboardName", curscript, sizeof( curscript ) ); // grab the string the client set
 	Menu_ShowItemByName( (menuDef_t*)item->parent, curscript, true );
@@ -1235,7 +1237,8 @@ Script_NotebookShowpage
 	inc == 999	- key number.  +999 is jump to last page, -999 is jump to cover page
 ==============
 */
-void Script_NotebookShowpage( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_NotebookShowpage( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	int i, inc, curpage, newpage = 0, pages;
 
 	pages = DC->getCVarValue( "cg_notebookpages" );
@@ -1330,7 +1333,7 @@ void Script_NotebookShowpage( itemDef_t *item, char **args ) {
 
 
 
-void Menu_TransitionItemByName( menuDef_t *menu, const char *p, rectDef_t rectFrom, rectDef_t rectTo, int time, float amt ) {
+void displayContextDef_t::Menu_TransitionItemByName( menuDef_t *menu, const char *p, rectDef_t rectFrom, rectDef_t rectTo, int time, float amt ) {
 	itemDef_t *item;
 	int i;
 	int count = Menu_ItemsMatchingGroup( menu, p );
@@ -1351,7 +1354,7 @@ void Menu_TransitionItemByName( menuDef_t *menu, const char *p, rectDef_t rectFr
 }
 
 
-void Script_Transition( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Transition( itemDef_t *item, char **args ) {
 	const char *name;
 	rectDef_t rectFrom, rectTo;
 	int time;
@@ -1365,7 +1368,7 @@ void Script_Transition( itemDef_t *item, char **args ) {
 }
 
 
-void Menu_OrbitItemByName( menuDef_t *menu, const char *p, float x, float y, float cx, float cy, int time ) {
+void displayContextDef_t::Menu_OrbitItemByName( menuDef_t *menu, const char *p, float x, float y, float cx, float cy, int time ) {
 	itemDef_t *item;
 	int i;
 	int count = Menu_ItemsMatchingGroup( menu, p );
@@ -1384,7 +1387,7 @@ void Menu_OrbitItemByName( menuDef_t *menu, const char *p, float x, float y, flo
 }
 
 
-void Script_Orbit( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Orbit( itemDef_t *item, char **args ) {
 	const char *name;
 	float cx, cy, x, y;
 	int time;
@@ -1398,7 +1401,8 @@ void Script_Orbit( itemDef_t *item, char **args ) {
 
 
 
-void Script_SetFocus( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetFocus( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *name;
 	itemDef_t *focusItem;
 
@@ -1417,14 +1421,16 @@ void Script_SetFocus( itemDef_t *item, char **args ) {
 	}
 }
 
-void Script_SetPlayerModel( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetPlayerModel( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		DC->setCVar( "team_model", name );
 	}
 }
 
-void Script_SetPlayerHead( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetPlayerHead( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *name;
 	if ( String_Parse( args, &name ) ) {
 		DC->setCVar( "team_headmodel", name );
@@ -1434,35 +1440,40 @@ void Script_SetPlayerHead( itemDef_t *item, char **args ) {
 // ATVI Wolfenstein Misc #304
 // the parser misreads setCvar "bleh" ""
 // you have to use clearCvar "bleh"
-void Script_ClearCvar( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_ClearCvar( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *cvar;
 	if ( String_Parse( args, &cvar ) ) {
 		DC->setCVar( cvar, "" );
 	}
 }
 
-void Script_SetCvar( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_SetCvar( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *cvar, *val;
 	if ( String_Parse( args, &cvar ) && String_Parse( args, &val ) ) {
 		DC->setCVar( cvar, val );
 	}
 }
 
-void Script_Exec( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Exec( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *val;
 	if ( String_Parse( args, &val ) ) {
 		DC->executeText( EXEC_APPEND, va( "%s ; ", val ) );
 	}
 }
 
-void Script_Play( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_Play( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *val;
 	if ( String_Parse( args, &val ) ) {
 		DC->startLocalSound( DC->registerSound( val ), CHAN_LOCAL_SOUND );      // all sounds are not 3d
 	}
 }
 
-void Script_playLooped( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_playLooped( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *val;
 	if ( String_Parse( args, &val ) ) {
 		DC->stopBackgroundTrack();
@@ -1471,7 +1482,8 @@ void Script_playLooped( itemDef_t *item, char **args ) {
 }
 
 // NERVE - SMF
-void Script_AddListItem( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_AddListItem( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	const char *itemname, *val, *name;
 	itemDef_t *t;
 
@@ -1484,53 +1496,56 @@ void Script_AddListItem( itemDef_t *item, char **args ) {
 }
 // -NERVE - SMF
 // DHM - Nerve
-void Script_CheckAutoUpdate( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_CheckAutoUpdate( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	DC->checkAutoUpdate();
 }
 
-void Script_GetAutoUpdate( itemDef_t *item, char **args ) {
+void displayContextDef_t::Script_GetAutoUpdate( itemDef_t *item, char **args ) {
+	auto&& DC = this;
 	DC->getAutoUpdate();
 }
 // DHM - Nerve
 
 commandDef_t commandList[] =
 {
-	{"fadein", &Script_FadeIn},                  // group/name
-	{"fadeout", &Script_FadeOut},                // group/name
-	{"show", &Script_Show},                      // group/name
-	{"hide", &Script_Hide},                      // group/name
-	{"setcolor", &Script_SetColor},              // works on this
-	{"open", &Script_Open},                      // menu
+	{"fadein", &displayContextDef_t::Script_FadeIn},                  // group/name
+	{"fadeout", &displayContextDef_t::Script_FadeOut},                // group/name
+	{"show", &displayContextDef_t::Script_Show},                      // group/name
+	{"hide", &displayContextDef_t::Script_Hide},                      // group/name
+	{"setcolor", &displayContextDef_t::Script_SetColor},              // works on this
+	{"open", &displayContextDef_t::Script_Open},                      // menu
 
-	{"conditionalopen", &Script_ConditionalOpen},    // DHM - Nerve:: cvar menu menu
+	{"conditionalopen", &displayContextDef_t::Script_ConditionalOpen},    // DHM - Nerve:: cvar menu menu
 													 // opens first menu if cvar is true[non-zero], second if false
 
-	{"close", &Script_Close},                    // menu
-	{"clipboard", &Script_Clipboard},            // show the current clipboard group by name
-	{"showpage", &Script_NotebookShowpage},          //
-	{"setasset", &Script_SetAsset},              // works on this
-	{"setbackground", &Script_SetBackground},    // works on this
-	{"setitemcolor", &Script_SetItemColor},      // group/name
-	{"setteamcolor", &Script_SetTeamColor},      // sets this background color to team color
-	{"setfocus", &Script_SetFocus},              // sets this background color to team color
-	{"setplayermodel", &Script_SetPlayerModel},  // sets this background color to team color
-	{"setplayerhead", &Script_SetPlayerHead},    // sets this background color to team color
-	{"transition", &Script_Transition},          // group/name
-	{"setcvar", &Script_SetCvar},                // group/name
-	{"clearcvar", &Script_ClearCvar},
-	{"exec", &Script_Exec},                      // group/name
-	{"play", &Script_Play},                      // group/name
-	{"playlooped", &Script_playLooped},          // group/name
-	{"orbit", &Script_Orbit},                    // group/name
-	{"addlistitem", &Script_AddListItem},        // NERVE - SMF - special command to add text items to list box
-	{"checkautoupdate", &Script_CheckAutoUpdate},    // DHM - Nerve
-	{"getautoupdate", &Script_GetAutoUpdate} // DHM - Nerve
+	{"close", &displayContextDef_t::Script_Close},                    // menu
+	{"clipboard", &displayContextDef_t::Script_Clipboard},            // show the current clipboard group by name
+	{"showpage", &displayContextDef_t::Script_NotebookShowpage},          //
+	{"setasset", &displayContextDef_t::Script_SetAsset},              // works on this
+	{"setbackground", &displayContextDef_t::Script_SetBackground},    // works on this
+	{"setitemcolor", &displayContextDef_t::Script_SetItemColor},      // group/name
+	{"setteamcolor", &displayContextDef_t::Script_SetTeamColor},      // sets this background color to team color
+	{"setfocus", &displayContextDef_t::Script_SetFocus},              // sets this background color to team color
+	{"setplayermodel", &displayContextDef_t::Script_SetPlayerModel},  // sets this background color to team color
+	{"setplayerhead", &displayContextDef_t::Script_SetPlayerHead},    // sets this background color to team color
+	{"transition", &displayContextDef_t::Script_Transition},          // group/name
+	{"setcvar", &displayContextDef_t::Script_SetCvar},                // group/name
+	{"clearcvar", &displayContextDef_t::Script_ClearCvar},
+	{"exec", &displayContextDef_t::Script_Exec},                      // group/name
+	{"play", &displayContextDef_t::Script_Play},                      // group/name
+	{"playlooped", &displayContextDef_t::Script_playLooped},          // group/name
+	{"orbit", &displayContextDef_t::Script_Orbit},                    // group/name
+	{"addlistitem", &displayContextDef_t::Script_AddListItem},        // NERVE - SMF - special command to add text items to list box
+	{"checkautoupdate", &displayContextDef_t::Script_CheckAutoUpdate},    // DHM - Nerve
+	{"getautoupdate", &displayContextDef_t::Script_GetAutoUpdate} // DHM - Nerve
 };
 
 int scriptCommandCount = sizeof( commandList ) / sizeof( commandDef_t );
 
 
-void Item_RunScript( itemDef_t *item, const char *s ) {
+void displayContextDef_t::Item_RunScript( itemDef_t *item, const char *s ) {
+	auto&& DC = this;
 	char script[1024], *p;
 	int i;
 	bool bRan;
@@ -1552,21 +1567,22 @@ void Item_RunScript( itemDef_t *item, const char *s ) {
 			bRan = false;
 			for ( i = 0; i < scriptCommandCount; i++ ) {
 				if ( Q_stricmp( command, commandList[i].name ) == 0 ) {
-					( commandList[i].handler( item, &p ) );
+					((this->*commandList[i].handler)(item, &p));
 					bRan = true;
 					break;
 				}
 			}
 			// not in our auto list, pass to handler
 			if ( !bRan ) {
-				DC->runScript( &p );
+				(this->*(DC->runScript))(&p);
 			}
 		}
 	}
 }
 
 
-bool Item_EnableShowViaCvar( itemDef_t *item, int flag ) {
+bool displayContextDef_t::Item_EnableShowViaCvar( itemDef_t *item, int flag ) {
+	auto&& DC = this;
 	char script[1024], *p;
 	memset( script, 0, sizeof( script ) );
 	if ( item && item->enableCvar && *item->enableCvar && item->cvarTest && *item->cvarTest ) {
@@ -1606,7 +1622,8 @@ bool Item_EnableShowViaCvar( itemDef_t *item, int flag ) {
 
 
 // will optionaly set focus to this item
-bool Item_SetFocus( itemDef_t *item, float x, float y ) {
+bool displayContextDef_t::Item_SetFocus( itemDef_t *item, float x, float y ) {
+	auto&& DC = this;
 	int i;
 	itemDef_t *oldFocus;
 	sfxHandle_t *sfx = &DC->Assets.itemFocusSound;
@@ -1674,7 +1691,8 @@ bool Item_SetFocus( itemDef_t *item, float x, float y ) {
 	return true;
 }
 
-int Item_ListBox_MaxScroll( itemDef_t *item ) {
+int displayContextDef_t::Item_ListBox_MaxScroll( itemDef_t *item ) {
+	auto&& DC = this;
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 	int count = DC->feederCount( item->special );
 	int max;
@@ -1690,7 +1708,7 @@ int Item_ListBox_MaxScroll( itemDef_t *item ) {
 	return max;
 }
 
-int Item_ListBox_ThumbPosition( itemDef_t *item ) {
+int displayContextDef_t::Item_ListBox_ThumbPosition( itemDef_t *item ) {
 	float max, pos, size;
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 
@@ -1716,7 +1734,8 @@ int Item_ListBox_ThumbPosition( itemDef_t *item ) {
 	}
 }
 
-int Item_ListBox_ThumbDrawPosition( itemDef_t *item ) {
+int displayContextDef_t::Item_ListBox_ThumbDrawPosition( itemDef_t *item ) {
+	auto&& DC = this;
 	int min, max;
 
 	if ( itemCapture == item ) {
@@ -1742,7 +1761,8 @@ int Item_ListBox_ThumbDrawPosition( itemDef_t *item ) {
 	}
 }
 
-float Item_Slider_ThumbPosition( itemDef_t *item ) {
+float displayContextDef_t::Item_Slider_ThumbPosition( itemDef_t *item ) {
+	auto&& DC = this;
 	float value, range, x;
 	editFieldDef_t *editDef = (editFieldDef_t*)item->typeData;
 
@@ -1775,7 +1795,7 @@ float Item_Slider_ThumbPosition( itemDef_t *item ) {
 	return x;
 }
 
-int Item_Slider_OverSlider( itemDef_t *item, float x, float y ) {
+int displayContextDef_t::Item_Slider_OverSlider( itemDef_t *item, float x, float y ) {
 	rectDef_t r;
 
 	r.x = Item_Slider_ThumbPosition( item ) - ( SLIDER_THUMB_WIDTH / 2 );
@@ -1789,7 +1809,8 @@ int Item_Slider_OverSlider( itemDef_t *item, float x, float y ) {
 	return 0;
 }
 
-int Item_ListBox_OverLB( itemDef_t *item, float x, float y ) {
+int displayContextDef_t::Item_ListBox_OverLB( itemDef_t *item, float x, float y ) {
+	auto&& DC = this;
 	rectDef_t r;
 	listBoxDef_t *listPtr;
 	int thumbstart;
@@ -1857,7 +1878,7 @@ int Item_ListBox_OverLB( itemDef_t *item, float x, float y ) {
 }
 
 
-void Item_ListBox_MouseEnter( itemDef_t *item, float x, float y ) {
+void displayContextDef_t::Item_ListBox_MouseEnter( itemDef_t *item, float x, float y ) {
 	rectDef_t r;
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 
@@ -1896,7 +1917,7 @@ void Item_ListBox_MouseEnter( itemDef_t *item, float x, float y ) {
 	}
 }
 
-void Item_MouseEnter( itemDef_t *item, float x, float y ) {
+void displayContextDef_t::Item_MouseEnter( itemDef_t *item, float x, float y ) {
 	rectDef_t r;
 	if ( item ) {
 		r = item->textRect;
@@ -1941,7 +1962,7 @@ void Item_MouseEnter( itemDef_t *item, float x, float y ) {
 	}
 }
 
-void Item_MouseLeave( itemDef_t *item ) {
+void displayContextDef_t::Item_MouseLeave( itemDef_t *item ) {
 	if ( item ) {
 		if ( item->window.flags & WINDOW_MOUSEOVERTEXT ) {
 			Item_RunScript( item, item->mouseExitText );
@@ -1952,7 +1973,7 @@ void Item_MouseLeave( itemDef_t *item ) {
 	}
 }
 
-itemDef_t *Menu_HitTest( menuDef_t *menu, float x, float y ) {
+itemDef_t * displayContextDef_t::Menu_HitTest( menuDef_t *menu, float x, float y ) {
 	int i;
 	for ( i = 0; i < menu->itemCount; i++ ) {
 		if ( Rect_ContainsPoint( &menu->items[i]->window.rect, x, y ) ) {
@@ -1962,7 +1983,7 @@ itemDef_t *Menu_HitTest( menuDef_t *menu, float x, float y ) {
 	return NULL;
 }
 
-void Item_SetMouseOver( itemDef_t *item, bool focus ) {
+void displayContextDef_t::Item_SetMouseOver( itemDef_t *item, bool focus ) {
 	if ( item ) {
 		if ( focus ) {
 			item->window.flags |= WINDOW_MOUSEOVER;
@@ -1973,14 +1994,16 @@ void Item_SetMouseOver( itemDef_t *item, bool focus ) {
 }
 
 
-bool Item_OwnerDraw_HandleKey( itemDef_t *item, int key ) {
+bool displayContextDef_t::Item_OwnerDraw_HandleKey( itemDef_t *item, int key ) {
+	auto&& DC = this;
 	if ( item && DC->ownerDrawHandleKey ) {
 		return DC->ownerDrawHandleKey( item->window.ownerDraw, item->window.ownerDrawFlags, &item->special, key );
 	}
 	return false;
 }
 
-bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
+bool displayContextDef_t::Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
+	auto&& DC = this;
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 	int count = DC->feederCount( item->special );
 	int max, viewmax;
@@ -2002,7 +2025,7 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection( item->special, item->cursorPos );
+					(this->*(DC->feederSelection))(item->special, item->cursorPos);
 				} else {
 					listPtr->startPos--;
 					if ( listPtr->startPos < 0 ) {
@@ -2024,7 +2047,7 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection( item->special, item->cursorPos );
+					(this->*(DC->feederSelection))( item->special, item->cursorPos );
 				} else {
 					listPtr->startPos++;
 					if ( listPtr->startPos >= count ) {
@@ -2048,7 +2071,7 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection( item->special, item->cursorPos );
+					(this->*(DC->feederSelection))( item->special, item->cursorPos );
 				} else {
 					listPtr->startPos--;
 					if ( listPtr->startPos < 0 ) {
@@ -2070,7 +2093,7 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 					}
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection( item->special, item->cursorPos );
+					(this->*(DC->feederSelection))( item->special, item->cursorPos );
 				} else {
 					listPtr->startPos++;
 					if ( listPtr->startPos > max ) {
@@ -2115,7 +2138,7 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 				lastListBoxClickTime = DC->realTime + DOUBLE_CLICK_DELAY;
 				if ( item->cursorPos != listPtr->cursorPos ) {
 					item->cursorPos = listPtr->cursorPos;
-					DC->feederSelection( item->special, item->cursorPos );
+					(this->*(DC->feederSelection))( item->special, item->cursorPos );
 				}
 			}
 			return true;
@@ -2144,7 +2167,7 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 					listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 				}
 				item->cursorPos = listPtr->cursorPos;
-				DC->feederSelection( item->special, item->cursorPos );
+				(this->*(DC->feederSelection))( item->special, item->cursorPos );
 			} else {
 				listPtr->startPos -= viewmax;
 				if ( listPtr->startPos < 0 ) {
@@ -2167,7 +2190,7 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 					listPtr->startPos = listPtr->cursorPos - viewmax + 1;
 				}
 				item->cursorPos = listPtr->cursorPos;
-				DC->feederSelection( item->special, item->cursorPos );
+				(this->*(DC->feederSelection))( item->special, item->cursorPos );
 			} else {
 				listPtr->startPos += viewmax;
 				if ( listPtr->startPos > max ) {
@@ -2180,7 +2203,8 @@ bool Item_ListBox_HandleKey( itemDef_t *item, int key, bool down, bool force ) {
 	return false;
 }
 
-bool Item_YesNo_HandleKey( itemDef_t *item, int key ) {
+bool displayContextDef_t::Item_YesNo_HandleKey( itemDef_t *item, int key ) {
+	auto&& DC = this;
 	if ( Rect_ContainsPoint( &item->window.rect, DC->cursorx, DC->cursory ) && item->window.flags & WINDOW_HASFOCUS && item->cvar ) {
 		if ( key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3 ) {
 			// ATVI Wolfenstein Misc #462
@@ -2194,7 +2218,7 @@ bool Item_YesNo_HandleKey( itemDef_t *item, int key ) {
 	return false;
 }
 
-int Item_Multi_CountSettings( itemDef_t *item ) {
+int displayContextDef_t::Item_Multi_CountSettings( itemDef_t *item ) {
 	multiDef_t *multiPtr = (multiDef_t*)item->typeData;
 	if ( multiPtr == NULL ) {
 		return 0;
@@ -2202,7 +2226,8 @@ int Item_Multi_CountSettings( itemDef_t *item ) {
 	return multiPtr->count;
 }
 
-int Item_Multi_FindCvarByValue( itemDef_t *item ) {
+int displayContextDef_t::Item_Multi_FindCvarByValue( itemDef_t *item ) {
+	auto&& DC = this;
 	char buff[1024];
 	float value = 0;
 	int i;
@@ -2228,7 +2253,8 @@ int Item_Multi_FindCvarByValue( itemDef_t *item ) {
 	return 0;
 }
 
-const char *Item_Multi_Setting( itemDef_t *item ) {
+const char * displayContextDef_t::Item_Multi_Setting( itemDef_t *item ) {
+	auto&& DC = this;
 	char buff[1024];
 	float value = 0;
 	int i;
@@ -2254,7 +2280,8 @@ const char *Item_Multi_Setting( itemDef_t *item ) {
 	return "";
 }
 
-bool Item_Multi_HandleKey( itemDef_t *item, int key ) {
+bool displayContextDef_t::Item_Multi_HandleKey( itemDef_t *item, int key ) {
+	auto&& DC = this;
 	multiDef_t *multiPtr = (multiDef_t*)item->typeData;
 	if ( multiPtr ) {
 		if ( Rect_ContainsPoint( &item->window.rect, DC->cursorx, DC->cursory ) && item->window.flags & WINDOW_HASFOCUS && item->cvar ) {
@@ -2281,7 +2308,8 @@ bool Item_Multi_HandleKey( itemDef_t *item, int key ) {
 	return false;
 }
 
-bool Item_TextField_HandleKey( itemDef_t *item, int key ) {
+bool displayContextDef_t::Item_TextField_HandleKey( itemDef_t *item, int key ) {
+	auto&& DC = this;
 	char buff[1024];
 	int len;
 	itemDef_t *newItem = NULL;
@@ -2431,7 +2459,8 @@ bool Item_TextField_HandleKey( itemDef_t *item, int key ) {
 
 }
 
-static void Scroll_ListBox_AutoFunc( void *p ) {
+void displayContextDef_t::Scroll_ListBox_AutoFunc( void *p ) {
+	auto&& DC = this;
 	scrollInfo_t *si = (scrollInfo_t*)p;
 	if ( DC->realTime > si->nextScrollTime ) {
 		// need to scroll which is done by simulating a click to the item
@@ -2449,7 +2478,8 @@ static void Scroll_ListBox_AutoFunc( void *p ) {
 	}
 }
 
-static void Scroll_ListBox_ThumbFunc( void *p ) {
+void displayContextDef_t::Scroll_ListBox_ThumbFunc( void *p ) {
+	auto&& DC = this;
 	scrollInfo_t *si = (scrollInfo_t*)p;
 	rectDef_t r;
 	int pos, max;
@@ -2507,7 +2537,8 @@ static void Scroll_ListBox_ThumbFunc( void *p ) {
 	}
 }
 
-static void Scroll_Slider_ThumbFunc( void *p ) {
+void displayContextDef_t::Scroll_Slider_ThumbFunc( void *p ) {
+	auto&& DC = this;
 	float x, value, cursorx;
 	scrollInfo_t *si = (scrollInfo_t*)p;
 	editFieldDef_t *editDef = (editFieldDef_t*)si->item->typeData;
@@ -2532,7 +2563,8 @@ static void Scroll_Slider_ThumbFunc( void *p ) {
 	DC->setCVar( si->item->cvar, va( "%f", value ) );
 }
 
-void Item_StartCapture( itemDef_t *item, int key ) {
+void displayContextDef_t::Item_StartCapture( itemDef_t *item, int key ) {
+	auto&& DC = this;
 	int flags;
 	switch ( item->type ) {
 	case ITEM_TYPE_EDITFIELD:
@@ -2549,7 +2581,7 @@ void Item_StartCapture( itemDef_t *item, int key ) {
 			scrollInfo.scrollDir = ( flags & WINDOW_LB_LEFTARROW ) ? true : false;
 			scrollInfo.item = item;
 			captureData = &scrollInfo;
-			captureFunc = &Scroll_ListBox_AutoFunc;
+			captureFunc = &displayContextDef_t::Scroll_ListBox_AutoFunc;
 			itemCapture = item;
 		} else if ( flags & WINDOW_LB_THUMB ) {
 			scrollInfo.scrollKey = key;
@@ -2557,7 +2589,7 @@ void Item_StartCapture( itemDef_t *item, int key ) {
 			scrollInfo.xStart = DC->cursorx;
 			scrollInfo.yStart = DC->cursory;
 			captureData = &scrollInfo;
-			captureFunc = &Scroll_ListBox_ThumbFunc;
+			captureFunc = &displayContextDef_t::Scroll_ListBox_ThumbFunc;
 			itemCapture = item;
 		}
 		break;
@@ -2571,7 +2603,7 @@ void Item_StartCapture( itemDef_t *item, int key ) {
 			scrollInfo.xStart = DC->cursorx;
 			scrollInfo.yStart = DC->cursory;
 			captureData = &scrollInfo;
-			captureFunc = &Scroll_Slider_ThumbFunc;
+			captureFunc = &displayContextDef_t::Scroll_Slider_ThumbFunc;
 			itemCapture = item;
 		}
 		break;
@@ -2579,11 +2611,12 @@ void Item_StartCapture( itemDef_t *item, int key ) {
 	}
 }
 
-void Item_StopCapture( itemDef_t *item ) {
+void displayContextDef_t::Item_StopCapture( itemDef_t *item ) {
 
 }
 
-bool Item_Slider_HandleKey( itemDef_t *item, int key, bool down ) {
+bool displayContextDef_t::Item_Slider_HandleKey( itemDef_t *item, int key, bool down ) {
+	auto&& DC = this;
 	float x, value, width, work;
 
 	//DC->Print("slider handle key\n");
@@ -2624,7 +2657,7 @@ bool Item_Slider_HandleKey( itemDef_t *item, int key, bool down ) {
 }
 
 
-bool Item_HandleKey( itemDef_t *item, int key, bool down ) {
+bool displayContextDef_t::Item_HandleKey( itemDef_t *item, int key, bool down ) {
 
 	if ( itemCapture ) {
 		Item_StopCapture( itemCapture );
@@ -2689,13 +2722,14 @@ bool Item_HandleKey( itemDef_t *item, int key, bool down ) {
 	//return false;
 }
 
-void Item_Action( itemDef_t *item ) {
+void displayContextDef_t::Item_Action( itemDef_t *item ) {
 	if ( item ) {
 		Item_RunScript( item, item->action );
 	}
 }
 
-itemDef_t *Menu_SetPrevCursorItem( menuDef_t *menu ) {
+itemDef_t * displayContextDef_t::Menu_SetPrevCursorItem( menuDef_t *menu ) {
+	auto&& DC = this;
 	bool wrapped = false;
 	int oldCursor = menu->cursorItem;
 
@@ -2728,8 +2762,8 @@ itemDef_t *Menu_SetPrevCursorItem( menuDef_t *menu ) {
 
 }
 
-itemDef_t *Menu_SetNextCursorItem( menuDef_t *menu ) {
-
+itemDef_t * displayContextDef_t::Menu_SetNextCursorItem( menuDef_t *menu ) {
+	auto&& DC = this;
 	bool wrapped = false;
 	int oldCursor = menu->cursorItem;
 
@@ -2762,14 +2796,16 @@ itemDef_t *Menu_SetNextCursorItem( menuDef_t *menu ) {
 }
 
 
-static void Window_CloseCinematic( windowDef_t *window ) {
+void displayContextDef_t::Window_CloseCinematic( windowDef_t *window ) {
+	auto&& DC = this;
 	if ( window->style == WINDOW_STYLE_CINEMATIC && window->cinematic >= 0 ) {
 		DC->stopCinematic( window->cinematic );
 		window->cinematic = -1;
 	}
 }
 
-static void Menu_CloseCinematics( menuDef_t *menu ) {
+void displayContextDef_t::Menu_CloseCinematics( menuDef_t *menu ) {
+	auto&& DC = this;
 	if ( menu ) {
 		int i;
 		Window_CloseCinematic( &menu->window );
@@ -2782,14 +2818,15 @@ static void Menu_CloseCinematics( menuDef_t *menu ) {
 	}
 }
 
-static void Display_CloseCinematics() {
+void displayContextDef_t::Display_CloseCinematics() {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
 		Menu_CloseCinematics( &Menus[i] );
 	}
 }
 
-void  Menus_Activate( menuDef_t *menu ) {
+void  displayContextDef_t::Menus_Activate( menuDef_t *menu ) {
+	auto&& DC = this;
 	menu->window.flags |= ( WINDOW_HASFOCUS | WINDOW_VISIBLE );
 	if ( menu->onOpen ) {
 		itemDef_t item;
@@ -2806,7 +2843,7 @@ void  Menus_Activate( menuDef_t *menu ) {
 
 }
 
-int Display_VisibleMenuCount() {
+int displayContextDef_t::Display_VisibleMenuCount() {
 	int i, count;
 	count = 0;
 	for ( i = 0; i < menuCount; i++ ) {
@@ -2817,7 +2854,8 @@ int Display_VisibleMenuCount() {
 	return count;
 }
 
-void Menus_HandleOOBClick( menuDef_t *menu, int key, bool down ) {
+void displayContextDef_t::Menus_HandleOOBClick( menuDef_t *menu, int key, bool down ) {
+	auto&& DC = this;
 	if ( menu ) {
 		int i;
 		// basically the behaviour we are looking for is if there are windows in the stack.. see if
@@ -2848,7 +2886,7 @@ void Menus_HandleOOBClick( menuDef_t *menu, int key, bool down ) {
 	}
 }
 
-static rectDef_t *Item_CorrectedTextRect( itemDef_t *item ) {
+rectDef_t * displayContextDef_t::Item_CorrectedTextRect( itemDef_t *item ) {
 	static rectDef_t rect;
 	memset( &rect, 0, sizeof( rectDef_t ) );
 	if ( item ) {
@@ -2860,7 +2898,8 @@ static rectDef_t *Item_CorrectedTextRect( itemDef_t *item ) {
 	return &rect;
 }
 
-void Menu_HandleKey( menuDef_t *menu, int key, bool down ) {
+void displayContextDef_t::Menu_HandleKey( menuDef_t *menu, int key, bool down ) {
+	auto&& DC = this;
 	int i;
 	itemDef_t *item = NULL;
 	bool inHandler = false;
@@ -3042,7 +3081,7 @@ void Menu_HandleKey( menuDef_t *menu, int key, bool down ) {
 	inHandler = false;
 }
 
-void ToWindowCoords( float *x, float *y, windowDef_t *window ) {
+void displayContextDef_t::ToWindowCoords( float *x, float *y, windowDef_t *window ) {
 	if ( window->border != 0 ) {
 		*x += window->borderSize;
 		*y += window->borderSize;
@@ -3051,11 +3090,12 @@ void ToWindowCoords( float *x, float *y, windowDef_t *window ) {
 	*y += window->rect.y;
 }
 
-void Rect_ToWindowCoords( rectDef_t *rect, windowDef_t *window ) {
+void displayContextDef_t::Rect_ToWindowCoords( rectDef_t *rect, windowDef_t *window ) {
 	ToWindowCoords( &rect->x, &rect->y, window );
 }
 
-void Item_SetTextExtents( itemDef_t *item, int *width, int *height, const char *text ) {
+void displayContextDef_t::Item_SetTextExtents( itemDef_t *item, int *width, int *height, const char *text ) {
+	auto&& DC = this;
 	const char *textPtr = ( text ) ? text : item->text;
 
 	if ( textPtr == NULL ) {
@@ -3097,7 +3137,8 @@ void Item_SetTextExtents( itemDef_t *item, int *width, int *height, const char *
 	}
 }
 
-void Item_TextColor( itemDef_t *item, vec4_t *newColor ) {
+void displayContextDef_t::Item_TextColor( itemDef_t *item, vec4_t *newColor ) {
+	auto&& DC = this;
 	vec4_t lowLight;
 	menuDef_t *parent = (menuDef_t*)item->parent;
 
@@ -3127,7 +3168,8 @@ void Item_TextColor( itemDef_t *item, vec4_t *newColor ) {
 	}
 }
 
-void Item_Text_AutoWrapped_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Text_AutoWrapped_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	char text[1024];
 	const char *p, *textPtr, *newLinePtr;
 	char buff[1024];
@@ -3203,7 +3245,8 @@ void Item_Text_AutoWrapped_Paint( itemDef_t *item ) {
 	}
 }
 
-void Item_Text_Wrapped_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Text_Wrapped_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	char text[1024];
 	const char *p, *start, *textPtr;
 	char buff[1024];
@@ -3246,7 +3289,8 @@ void Item_Text_Wrapped_Paint( itemDef_t *item ) {
 	DC->drawText( x, y, item->textscale, color, start, 0, 0, item->textStyle );
 }
 
-void Item_Text_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Text_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	char text[1024];
 	const char *textPtr;
 	int height, width;
@@ -3319,7 +3363,8 @@ void Item_Text_Paint( itemDef_t *item ) {
 
 
 
-void Item_TextField_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_TextField_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	char buff[1024];
 	vec4_t newColor, lowLight;
 	int offset;
@@ -3384,7 +3429,8 @@ void Item_TextField_Paint( itemDef_t *item ) {
 
 }
 
-void Item_YesNo_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_YesNo_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	vec4_t newColor, lowLight;
 	float value;
 	menuDef_t *parent = (menuDef_t*)item->parent;
@@ -3410,7 +3456,8 @@ void Item_YesNo_Paint( itemDef_t *item ) {
 	}
 }
 
-void Item_Multi_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Multi_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	vec4_t newColor, lowLight;
 	const char *text = "";
 	menuDef_t *parent = (menuDef_t*)item->parent;
@@ -3601,7 +3648,8 @@ static configcvar_t g_configcvars[] =
 Controls_GetKeyAssignment
 =================
 */
-void Controls_GetKeyAssignment( char *command, int *twokeys ) {
+void displayContextDef_t::Controls_GetKeyAssignment( char *command, int *twokeys ) {
+	auto&& DC = this;
 	int count;
 	int j;
 	char b[256];
@@ -3630,7 +3678,7 @@ void Controls_GetKeyAssignment( char *command, int *twokeys ) {
 Controls_GetConfig
 =================
 */
-void Controls_GetConfig( void ) {
+void displayContextDef_t::Controls_GetConfig( void ) {
 	int i;
 	int twokeys[2];
 
@@ -3659,7 +3707,8 @@ void Controls_GetConfig( void ) {
 Controls_SetConfig
 =================
 */
-void Controls_SetConfig( bool restart ) {
+void displayContextDef_t::Controls_SetConfig( bool restart ) {
+	auto&& DC = this;
 	int i;
 
 	// iterate each command, get its numeric binding
@@ -3698,7 +3747,7 @@ void Controls_SetConfig( bool restart ) {
 Controls_SetDefaults
 =================
 */
-void Controls_SetDefaults( void ) {
+void displayContextDef_t::Controls_SetDefaults( void ) {
 	int i;
 
 	// iterate each command, set its default binding
@@ -3718,7 +3767,7 @@ void Controls_SetDefaults( void ) {
 	//s_controls.freelook.curvalue     = Controls_GetCvarDefault( "cl_freelook" );
 }
 
-int BindingIDFromName( const char *name ) {
+int displayContextDef_t::BindingIDFromName( const char *name ) {
 	int i;
 	for ( i = 0; i < g_bindCount; i++ )
 	{
@@ -3732,7 +3781,8 @@ int BindingIDFromName( const char *name ) {
 char g_nameBind1[32];
 char g_nameBind2[32];
 
-char* BindingFromName( const char *cvar ) {
+char* displayContextDef_t::BindingFromName( const char *cvar ) {
+	auto&& DC = this;
 	int i, b1, b2;
 
 	// iterate each command, set its default binding
@@ -3760,7 +3810,8 @@ char* BindingFromName( const char *cvar ) {
 	return g_nameBind1;         // NERVE - SMF
 }
 
-void Item_Slider_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Slider_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	vec4_t newColor, lowLight;
 	float x, y, value;
 	menuDef_t *parent = (menuDef_t*)item->parent;
@@ -3791,7 +3842,8 @@ void Item_Slider_Paint( itemDef_t *item ) {
 	DC->drawHandlePic( x - ( SLIDER_THUMB_WIDTH / 2 ), y - 2, SLIDER_THUMB_WIDTH, SLIDER_THUMB_HEIGHT, DC->Assets.sliderThumb );
 }
 
-void Item_Bind_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Bind_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	vec4_t newColor, lowLight;
 	float value;
 	int maxChars = 0;
@@ -3829,11 +3881,12 @@ void Item_Bind_Paint( itemDef_t *item ) {
 	}
 }
 
-bool Display_KeyBindPending() {
+bool displayContextDef_t::Display_KeyBindPending() {
 	return g_waitingForKey;
 }
 
-bool Item_Bind_HandleKey( itemDef_t *item, int key, bool down ) {
+bool displayContextDef_t::Item_Bind_HandleKey( itemDef_t *item, int key, bool down ) {
+	auto&& DC = this;
 	int id;
 	int i;
 
@@ -3924,7 +3977,8 @@ bool Item_Bind_HandleKey( itemDef_t *item, int key, bool down ) {
 
 
 
-void AdjustFrom640( float *x, float *y, float *w, float *h ) {
+void displayContextDef_t::AdjustFrom640( float *x, float *y, float *w, float *h ) {
+	auto&& DC = this;
 	//*x = *x * DC->scale + DC->bias;
 	*x *= DC->xscale;
 	*y *= DC->yscale;
@@ -3932,7 +3986,8 @@ void AdjustFrom640( float *x, float *y, float *w, float *h ) {
 	*h *= DC->yscale;
 }
 
-void Item_Model_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Model_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	float x, y, w, h;   //,xx;
 	refdef_t refdef;
 	qhandle_t hModel;
@@ -4054,14 +4109,16 @@ void Item_Model_Paint( itemDef_t *item ) {
 }
 
 
-void Item_Image_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Image_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	if ( item == NULL ) {
 		return;
 	}
 	DC->drawHandlePic( item->window.rect.x + 1, item->window.rect.y + 1, item->window.rect.w - 2, item->window.rect.h - 2, item->asset );
 }
 
-void Item_ListBox_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_ListBox_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	float x, y, size, count, i, thumb;
 	qhandle_t image;
 	qhandle_t optionalImage;
@@ -4215,7 +4272,8 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 }
 
 
-void Item_OwnerDraw_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_OwnerDraw_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	menuDef_t *parent;
 
 	if ( item == NULL ) {
@@ -4280,7 +4338,8 @@ void Item_OwnerDraw_Paint( itemDef_t *item ) {
 }
 
 
-void Item_Paint( itemDef_t *item ) {
+void displayContextDef_t::Item_Paint( itemDef_t *item ) {
+	auto&& DC = this;
 	vec4_t red;
 	menuDef_t *parent = (menuDef_t*)item->parent;
 	red[0] = red[3] = 1;
@@ -4480,7 +4539,8 @@ void Item_Paint( itemDef_t *item ) {
 	}
 }
 
-void Menu_Init( menuDef_t *menu ) {
+void displayContextDef_t::Menu_Init( menuDef_t *menu ) {
+	auto&& DC = this;
 	memset( menu, 0, sizeof( menuDef_t ) );
 	menu->cursorItem = -1;
 	menu->fadeAmount = DC->Assets.fadeAmount;
@@ -4489,7 +4549,7 @@ void Menu_Init( menuDef_t *menu ) {
 	Window_Init( &menu->window );
 }
 
-itemDef_t *Menu_GetFocusedItem( menuDef_t *menu ) {
+itemDef_t * displayContextDef_t::Menu_GetFocusedItem( menuDef_t *menu ) {
 	int i;
 	if ( menu ) {
 		for ( i = 0; i < menu->itemCount; i++ ) {
@@ -4501,7 +4561,7 @@ itemDef_t *Menu_GetFocusedItem( menuDef_t *menu ) {
 	return NULL;
 }
 
-menuDef_t *Menu_GetFocused() {
+menuDef_t * displayContextDef_t::Menu_GetFocused() {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
 		if ( Menus[i].window.flags & WINDOW_HASFOCUS && Menus[i].window.flags & WINDOW_VISIBLE ) {
@@ -4511,7 +4571,7 @@ menuDef_t *Menu_GetFocused() {
 	return NULL;
 }
 
-void Menu_ScrollFeeder( menuDef_t *menu, int feeder, bool down ) {
+void displayContextDef_t::Menu_ScrollFeeder( menuDef_t *menu, int feeder, bool down ) {
 	if ( menu ) {
 		int i;
 		for ( i = 0; i < menu->itemCount; i++ ) {
@@ -4525,7 +4585,8 @@ void Menu_ScrollFeeder( menuDef_t *menu, int feeder, bool down ) {
 
 
 
-void Menu_SetFeederSelection( menuDef_t *menu, int feeder, int index, const char *name ) {
+void displayContextDef_t::Menu_SetFeederSelection( menuDef_t *menu, int feeder, int index, const char *name ) {
+	auto&& DC = this;
 	if ( menu == NULL ) {
 		if ( name == NULL ) {
 			menu = Menu_GetFocused();
@@ -4544,14 +4605,14 @@ void Menu_SetFeederSelection( menuDef_t *menu, int feeder, int index, const char
 					listPtr->startPos = 0;
 				}
 				menu->items[i]->cursorPos = index;
-				DC->feederSelection( menu->items[i]->special, menu->items[i]->cursorPos );
+				(this->*(DC->feederSelection))( menu->items[i]->special, menu->items[i]->cursorPos );
 				return;
 			}
 		}
 	}
 }
 
-bool Menus_AnyFullScreenVisible() {
+bool displayContextDef_t::Menus_AnyFullScreenVisible() {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
 		if ( Menus[i].window.flags & WINDOW_VISIBLE && Menus[i].fullScreen ) {
@@ -4561,7 +4622,7 @@ bool Menus_AnyFullScreenVisible() {
 	return false;
 }
 
-menuDef_t *Menus_ActivateByName( const char *p, bool modalStack ) {
+menuDef_t * displayContextDef_t::Menus_ActivateByName( const char *p, bool modalStack ) {
 	int i;
 	menuDef_t *m = NULL;
 	menuDef_t *focus = Menu_GetFocused();
@@ -4584,13 +4645,13 @@ menuDef_t *Menus_ActivateByName( const char *p, bool modalStack ) {
 }
 
 
-void Item_Init( itemDef_t *item ) {
+void displayContextDef_t::Item_Init( itemDef_t *item ) {
 	memset( item, 0, sizeof( itemDef_t ) );
 	item->textscale = 0.55f;
 	Window_Init( &item->window );
 }
 
-void Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
+void displayContextDef_t::Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
 	int i, pass;
 	bool focusSet = false;
 
@@ -4673,8 +4734,10 @@ void Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
 
 }
 
-void Menu_Paint( menuDef_t *menu, bool forcePaint ) {
+void displayContextDef_t::Menu_Paint( menuDef_t *menu, bool forcePaint ) {
+	auto&& DC = this;
 	int i;
+
 	if ( menu == NULL ) {
 		return;
 	}
@@ -4721,7 +4784,7 @@ void Menu_Paint( menuDef_t *menu, bool forcePaint ) {
 Item_ValidateTypeData
 ===============
 */
-void Item_ValidateTypeData( itemDef_t *item ) {
+void displayContextDef_t::Item_ValidateTypeData( itemDef_t *item ) {
 	if ( item->typeData ) {
 		return;
 	}
@@ -4757,7 +4820,7 @@ Keyword Hash
 typedef struct keywordHash_s
 {
 	char *keyword;
-	bool ( *func )( itemDef_t *item, int handle );
+	bool (displayContextDef_t::*func )( itemDef_t *item, int handle );
 	struct keywordHash_s *next;
 } keywordHash_t;
 
@@ -4809,7 +4872,7 @@ Item Keyword Parse functions
 */
 
 // name <string>
-bool ItemParse_name( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_name( itemDef_t *item, int handle ) {
 	if ( !PC_String_Parse( handle, &item->window.name ) ) {
 		return false;
 	}
@@ -4817,7 +4880,8 @@ bool ItemParse_name( itemDef_t *item, int handle ) {
 }
 
 // name <string>
-bool ItemParse_focusSound( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_focusSound( itemDef_t *item, int handle ) {
+	auto&& DC = this;
 	const char *temp;
 	if ( !PC_String_Parse( handle, &temp ) ) {
 		return false;
@@ -4828,7 +4892,7 @@ bool ItemParse_focusSound( itemDef_t *item, int handle ) {
 
 
 // text <string>
-bool ItemParse_text( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_text( itemDef_t *item, int handle ) {
 	if ( !PC_String_Parse( handle, &item->text ) ) {
 		return false;
 	}
@@ -4839,7 +4903,8 @@ bool ItemParse_text( itemDef_t *item, int handle ) {
 
 // textfile <string>
 // read an external textfile into item->text
-bool ItemParse_textfile( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_textfile( itemDef_t *item, int handle ) {
+	auto&& DC = this;
 	const char  *newtext;
 	pc_token_t token;
 
@@ -4855,7 +4920,7 @@ bool ItemParse_textfile( itemDef_t *item, int handle ) {
 //----(SA)
 
 // group <string>
-bool ItemParse_group( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_group( itemDef_t *item, int handle ) {
 	if ( !PC_String_Parse( handle, &item->window.group ) ) {
 		return false;
 	}
@@ -4864,7 +4929,8 @@ bool ItemParse_group( itemDef_t *item, int handle ) {
 
 
 // asset_model <string>
-bool ItemParse_asset_model( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_asset_model( itemDef_t *item, int handle ) {
+	auto&& DC = this;
 	const char *temp;
 	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
@@ -4881,7 +4947,8 @@ bool ItemParse_asset_model( itemDef_t *item, int handle ) {
 }
 
 // asset_shader <string>
-bool ItemParse_asset_shader( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_asset_shader( itemDef_t *item, int handle ) {
+	auto&& DC = this;
 	const char *temp;
 
 	if ( !PC_String_Parse( handle, &temp ) ) {
@@ -4892,7 +4959,7 @@ bool ItemParse_asset_shader( itemDef_t *item, int handle ) {
 }
 
 // model_origin <number> <number> <number>
-bool ItemParse_model_origin( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_model_origin( itemDef_t *item, int handle ) {
 	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
 	modelPtr = (modelDef_t*)item->typeData;
@@ -4908,7 +4975,7 @@ bool ItemParse_model_origin( itemDef_t *item, int handle ) {
 }
 
 // model_fovx <number>
-bool ItemParse_model_fovx( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_model_fovx( itemDef_t *item, int handle ) {
 	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
 	modelPtr = (modelDef_t*)item->typeData;
@@ -4920,7 +4987,7 @@ bool ItemParse_model_fovx( itemDef_t *item, int handle ) {
 }
 
 // model_fovy <number>
-bool ItemParse_model_fovy( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_model_fovy( itemDef_t *item, int handle ) {
 	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
 	modelPtr = (modelDef_t*)item->typeData;
@@ -4932,7 +4999,7 @@ bool ItemParse_model_fovy( itemDef_t *item, int handle ) {
 }
 
 // model_rotation <integer>
-bool ItemParse_model_rotation( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_model_rotation( itemDef_t *item, int handle ) {
 	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
 	modelPtr = (modelDef_t*)item->typeData;
@@ -4944,7 +5011,7 @@ bool ItemParse_model_rotation( itemDef_t *item, int handle ) {
 }
 
 // model_angle <integer>
-bool ItemParse_model_angle( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_model_angle( itemDef_t *item, int handle ) {
 	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
 	modelPtr = (modelDef_t*)item->typeData;
@@ -4956,7 +5023,8 @@ bool ItemParse_model_angle( itemDef_t *item, int handle ) {
 }
 
 // model_animplay <int(startframe)> <int(numframes)> <int(loopframes)> <int(fps)>
-bool ItemParse_model_animplay( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_model_animplay( itemDef_t *item, int handle ) {
+	auto&& DC = this;
 	modelDef_t *modelPtr;
 	Item_ValidateTypeData( item );
 	modelPtr = (modelDef_t*)item->typeData;
@@ -4985,7 +5053,7 @@ bool ItemParse_model_animplay( itemDef_t *item, int handle ) {
 
 
 // rect <rectangle>
-bool ItemParse_rect( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_rect( itemDef_t *item, int handle ) {
 	if ( !PC_Rect_Parse( handle, &item->window.rectClient ) ) {
 		return false;
 	}
@@ -4994,7 +5062,7 @@ bool ItemParse_rect( itemDef_t *item, int handle ) {
 
 // NERVE - SMF
 // origin <integer, integer>
-bool ItemParse_origin( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_origin( itemDef_t *item, int handle ) {
 	int x, y;
 
 	if ( !PC_Int_Parse( handle, &x ) ) {
@@ -5012,7 +5080,7 @@ bool ItemParse_origin( itemDef_t *item, int handle ) {
 // -NERVE - SMF
 
 // style <integer>
-bool ItemParse_style( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_style( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->window.style ) ) {
 		return false;
 	}
@@ -5020,13 +5088,13 @@ bool ItemParse_style( itemDef_t *item, int handle ) {
 }
 
 // decoration
-bool ItemParse_decoration( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_decoration( itemDef_t *item, int handle ) {
 	item->window.flags |= WINDOW_DECORATION;
 	return true;
 }
 
 // notselectable
-bool ItemParse_notselectable( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_notselectable( itemDef_t *item, int handle ) {
 	listBoxDef_t *listPtr;
 	Item_ValidateTypeData( item );
 	listPtr = (listBoxDef_t*)item->typeData;
@@ -5037,26 +5105,26 @@ bool ItemParse_notselectable( itemDef_t *item, int handle ) {
 }
 
 // manually wrapped
-bool ItemParse_wrapped( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_wrapped( itemDef_t *item, int handle ) {
 	item->window.flags |= WINDOW_WRAPPED;
 	return true;
 }
 
 // auto wrapped
-bool ItemParse_autowrapped( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_autowrapped( itemDef_t *item, int handle ) {
 	item->window.flags |= WINDOW_AUTOWRAPPED;
 	return true;
 }
 
 
 // horizontalscroll
-bool ItemParse_horizontalscroll( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_horizontalscroll( itemDef_t *item, int handle ) {
 	item->window.flags |= WINDOW_HORIZONTAL;
 	return true;
 }
 
 // type <integer>
-bool ItemParse_type( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_type( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->type ) ) {
 		return false;
 	}
@@ -5066,7 +5134,7 @@ bool ItemParse_type( itemDef_t *item, int handle ) {
 
 // elementwidth, used for listbox image elements
 // uses textalignx for storage
-bool ItemParse_elementwidth( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_elementwidth( itemDef_t *item, int handle ) {
 	listBoxDef_t *listPtr;
 
 	Item_ValidateTypeData( item );
@@ -5079,7 +5147,7 @@ bool ItemParse_elementwidth( itemDef_t *item, int handle ) {
 
 // elementheight, used for listbox image elements
 // uses textaligny for storage
-bool ItemParse_elementheight( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_elementheight( itemDef_t *item, int handle ) {
 	listBoxDef_t *listPtr;
 
 	Item_ValidateTypeData( item );
@@ -5091,7 +5159,7 @@ bool ItemParse_elementheight( itemDef_t *item, int handle ) {
 }
 
 // feeder <float>
-bool ItemParse_feeder( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_feeder( itemDef_t *item, int handle ) {
 	if ( !PC_Float_Parse( handle, &item->special ) ) {
 		return false;
 	}
@@ -5100,7 +5168,7 @@ bool ItemParse_feeder( itemDef_t *item, int handle ) {
 
 // elementtype, used to specify what type of elements a listbox contains
 // uses textstyle for storage
-bool ItemParse_elementtype( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_elementtype( itemDef_t *item, int handle ) {
 	listBoxDef_t *listPtr;
 
 	Item_ValidateTypeData( item );
@@ -5115,7 +5183,7 @@ bool ItemParse_elementtype( itemDef_t *item, int handle ) {
 }
 
 // columns sets a number of columns and an x pos and width per..
-bool ItemParse_columns( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_columns( itemDef_t *item, int handle ) {
 	int num, i;
 	listBoxDef_t *listPtr;
 
@@ -5146,21 +5214,21 @@ bool ItemParse_columns( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_border( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_border( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->window.border ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_bordersize( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_bordersize( itemDef_t *item, int handle ) {
 	if ( !PC_Float_Parse( handle, &item->window.borderSize ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_visible( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_visible( itemDef_t *item, int handle ) {
 	int i;
 
 	if ( !PC_Int_Parse( handle, &i ) ) {
@@ -5172,7 +5240,7 @@ bool ItemParse_visible( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_ownerdraw( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_ownerdraw( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->window.ownerDraw ) ) {
 		return false;
 	}
@@ -5180,42 +5248,42 @@ bool ItemParse_ownerdraw( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_align( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_align( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->alignment ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_textalign( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_textalign( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->textalignment ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_textalignx( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_textalignx( itemDef_t *item, int handle ) {
 	if ( !PC_Float_Parse( handle, &item->textalignx ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_textaligny( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_textaligny( itemDef_t *item, int handle ) {
 	if ( !PC_Float_Parse( handle, &item->textaligny ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_textscale( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_textscale( itemDef_t *item, int handle ) {
 	if ( !PC_Float_Parse( handle, &item->textscale ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_textstyle( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_textstyle( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->textStyle ) ) {
 		return false;
 	}
@@ -5223,7 +5291,7 @@ bool ItemParse_textstyle( itemDef_t *item, int handle ) {
 }
 
 //----(SA)	added for forcing a font for a given item
-bool ItemParse_textfont( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_textfont( itemDef_t *item, int handle ) {
 	if ( !PC_Int_Parse( handle, &item->font ) ) {
 		return false;
 	}
@@ -5231,7 +5299,7 @@ bool ItemParse_textfont( itemDef_t *item, int handle ) {
 }
 //----(SA)	end
 
-bool ItemParse_backcolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_backcolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 
@@ -5244,7 +5312,7 @@ bool ItemParse_backcolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_forecolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_forecolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 
@@ -5258,7 +5326,7 @@ bool ItemParse_forecolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_bordercolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_bordercolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 
@@ -5271,14 +5339,15 @@ bool ItemParse_bordercolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_outlinecolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_outlinecolor( itemDef_t *item, int handle ) {
 	if ( !PC_Color_Parse( handle, &item->window.outlineColor ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_background( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_background( itemDef_t *item, int handle ) {
+	auto&& DC = this;
 	const char *temp;
 
 	if ( !PC_String_Parse( handle, &temp ) ) {
@@ -5288,14 +5357,14 @@ bool ItemParse_background( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_cinematic( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_cinematic( itemDef_t *item, int handle ) {
 	if ( !PC_String_Parse( handle, &item->window.cinematicName ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_doubleClick( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_doubleClick( itemDef_t *item, int handle ) {
 	listBoxDef_t *listPtr;
 
 	Item_ValidateTypeData( item );
@@ -5311,49 +5380,49 @@ bool ItemParse_doubleClick( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_onFocus( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_onFocus( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->onFocus ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_leaveFocus( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_leaveFocus( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->leaveFocus ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_mouseEnter( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_mouseEnter( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->mouseEnter ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_mouseExit( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_mouseExit( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->mouseExit ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_mouseEnterText( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_mouseEnterText( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->mouseEnterText ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_mouseExitText( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_mouseExitText( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->mouseExitText ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_action( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_action( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->action ) ) {
 		return false;
 	}
@@ -5361,7 +5430,7 @@ bool ItemParse_action( itemDef_t *item, int handle ) {
 }
 
 // NERVE - SMF
-bool ItemParse_accept( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_accept( itemDef_t *item, int handle ) {
 	if ( !PC_Script_Parse( handle, &item->onAccept ) ) {
 		return false;
 	}
@@ -5369,21 +5438,21 @@ bool ItemParse_accept( itemDef_t *item, int handle ) {
 }
 // -NERVE - SMF
 
-bool ItemParse_special( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_special( itemDef_t *item, int handle ) {
 	if ( !PC_Float_Parse( handle, &item->special ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_cvarTest( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_cvarTest( itemDef_t *item, int handle ) {
 	if ( !PC_String_Parse( handle, &item->cvarTest ) ) {
 		return false;
 	}
 	return true;
 }
 
-bool ItemParse_cvar( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_cvar( itemDef_t *item, int handle ) {
 	editFieldDef_t *editPtr;
 
 	Item_ValidateTypeData( item );
@@ -5399,7 +5468,7 @@ bool ItemParse_cvar( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_maxChars( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_maxChars( itemDef_t *item, int handle ) {
 	editFieldDef_t *editPtr;
 	int maxChars;
 
@@ -5416,7 +5485,7 @@ bool ItemParse_maxChars( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_maxPaintChars( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_maxPaintChars( itemDef_t *item, int handle ) {
 	editFieldDef_t *editPtr;
 	int maxChars;
 
@@ -5435,7 +5504,7 @@ bool ItemParse_maxPaintChars( itemDef_t *item, int handle ) {
 
 
 
-bool ItemParse_cvarFloat( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_cvarFloat( itemDef_t *item, int handle ) {
 	editFieldDef_t *editPtr;
 
 	Item_ValidateTypeData( item );
@@ -5452,7 +5521,7 @@ bool ItemParse_cvarFloat( itemDef_t *item, int handle ) {
 	return false;
 }
 
-bool ItemParse_cvarStrList( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_cvarStrList( itemDef_t *item, int handle ) {
 	pc_token_t token;
 	multiDef_t *multiPtr;
 	int pass;
@@ -5503,7 +5572,7 @@ bool ItemParse_cvarStrList( itemDef_t *item, int handle ) {
 	return false;  // bk001205 - LCC missing return value
 }
 
-bool ItemParse_cvarFloatList( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_cvarFloatList( itemDef_t *item, int handle ) {
 	pc_token_t token;
 	multiDef_t *multiPtr;
 
@@ -5551,7 +5620,7 @@ bool ItemParse_cvarFloatList( itemDef_t *item, int handle ) {
 }
 
 
-bool ParseColorRange( itemDef_t *item, int handle, int type ) {
+bool displayContextDef_t::ParseColorRange( itemDef_t *item, int handle, int type ) {
 	colorRangeDef_t color;
 
 	if ( item->numColors && type != item->colorRangeType ) {
@@ -5573,17 +5642,17 @@ bool ParseColorRange( itemDef_t *item, int handle, int type ) {
 	return false;
 }
 
-bool ItemParse_addColorRangeRel( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_addColorRangeRel( itemDef_t *item, int handle ) {
 	return ParseColorRange( item, handle, RANGETYPE_RELATIVE );
 }
 
-bool ItemParse_addColorRange( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_addColorRange( itemDef_t *item, int handle ) {
 	return ParseColorRange( item, handle, RANGETYPE_ABSOLUTE );
 }
 
 
 
-bool ItemParse_ownerdrawFlag( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_ownerdrawFlag( itemDef_t *item, int handle ) {
 	int i;
 	if ( !PC_Int_Parse( handle, &i ) ) {
 		return false;
@@ -5592,7 +5661,7 @@ bool ItemParse_ownerdrawFlag( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool ItemParse_enableCvar( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_enableCvar( itemDef_t *item, int handle ) {
 	if ( PC_Script_Parse( handle, &item->enableCvar ) ) {
 		item->cvarFlags = CVAR_ENABLE;
 		return true;
@@ -5600,7 +5669,7 @@ bool ItemParse_enableCvar( itemDef_t *item, int handle ) {
 	return false;
 }
 
-bool ItemParse_disableCvar( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_disableCvar( itemDef_t *item, int handle ) {
 	if ( PC_Script_Parse( handle, &item->enableCvar ) ) {
 		item->cvarFlags = CVAR_DISABLE;
 		return true;
@@ -5608,12 +5677,12 @@ bool ItemParse_disableCvar( itemDef_t *item, int handle ) {
 	return false;
 }
 
-bool ItemParse_noToggle( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_noToggle( itemDef_t *item, int handle ) {
 	item->cvarFlags |= CVAR_NOTOGGLE;
 	return true;
 }
 
-bool ItemParse_showCvar( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_showCvar( itemDef_t *item, int handle ) {
 	if ( PC_Script_Parse( handle, &item->enableCvar ) ) {
 		item->cvarFlags = CVAR_SHOW;
 		return true;
@@ -5621,7 +5690,7 @@ bool ItemParse_showCvar( itemDef_t *item, int handle ) {
 	return false;
 }
 
-bool ItemParse_hideCvar( itemDef_t *item, int handle ) {
+bool displayContextDef_t::ItemParse_hideCvar( itemDef_t *item, int handle ) {
 	if ( PC_Script_Parse( handle, &item->enableCvar ) ) {
 		item->cvarFlags = CVAR_HIDE;
 		return true;
@@ -5631,75 +5700,75 @@ bool ItemParse_hideCvar( itemDef_t *item, int handle ) {
 
 
 keywordHash_t itemParseKeywords[] = {
-	{"name", ItemParse_name, NULL},
-	{"text", ItemParse_text, NULL},
-	{"textfile", ItemParse_textfile, NULL},  //----(SA)	added
-	{"group", ItemParse_group, NULL},
-	{"asset_model", ItemParse_asset_model, NULL},
-	{"asset_shader", ItemParse_asset_shader, NULL},
-	{"model_origin", ItemParse_model_origin, NULL},
-	{"model_fovx", ItemParse_model_fovx, NULL},
-	{"model_fovy", ItemParse_model_fovy, NULL},
-	{"model_rotation", ItemParse_model_rotation, NULL},
-	{"model_angle", ItemParse_model_angle, NULL},
-	{"model_animplay", ItemParse_model_animplay, NULL},
-	{"rect", ItemParse_rect, NULL},
-	{"origin", ItemParse_origin, NULL},              // NERVE - SMF
-	{"style", ItemParse_style, NULL},
-	{"decoration", ItemParse_decoration, NULL},
-	{"notselectable", ItemParse_notselectable, NULL},
-	{"wrapped", ItemParse_wrapped, NULL},
-	{"autowrapped", ItemParse_autowrapped, NULL},
-	{"horizontalscroll", ItemParse_horizontalscroll, NULL},
-	{"type", ItemParse_type, NULL},
-	{"elementwidth", ItemParse_elementwidth, NULL},
-	{"elementheight", ItemParse_elementheight, NULL},
-	{"feeder", ItemParse_feeder, NULL},
-	{"elementtype", ItemParse_elementtype, NULL},
-	{"columns", ItemParse_columns, NULL},
-	{"border", ItemParse_border, NULL},
-	{"bordersize", ItemParse_bordersize, NULL},
-	{"visible", ItemParse_visible, NULL},
-	{"ownerdraw", ItemParse_ownerdraw, NULL},
-	{"align", ItemParse_align, NULL},
-	{"textalign", ItemParse_textalign, NULL},
-	{"textalignx", ItemParse_textalignx, NULL},
-	{"textaligny", ItemParse_textaligny, NULL},
-	{"textscale", ItemParse_textscale, NULL},
-	{"textstyle", ItemParse_textstyle, NULL},
-	{"textfont", ItemParse_textfont, NULL},              // (SA)
-	{"backcolor", ItemParse_backcolor, NULL},
-	{"forecolor", ItemParse_forecolor, NULL},
-	{"bordercolor", ItemParse_bordercolor, NULL},
-	{"outlinecolor", ItemParse_outlinecolor, NULL},
-	{"background", ItemParse_background, NULL},
-	{"onFocus", ItemParse_onFocus, NULL},
-	{"leaveFocus", ItemParse_leaveFocus, NULL},
-	{"mouseEnter", ItemParse_mouseEnter, NULL},
-	{"mouseExit", ItemParse_mouseExit, NULL},
-	{"mouseEnterText", ItemParse_mouseEnterText, NULL},
-	{"mouseExitText", ItemParse_mouseExitText, NULL},
-	{"action", ItemParse_action, NULL},
-	{"accept", ItemParse_accept, NULL},              // NERVE - SMF
-	{"special", ItemParse_special, NULL},
-	{"cvar", ItemParse_cvar, NULL},
-	{"maxChars", ItemParse_maxChars, NULL},
-	{"maxPaintChars", ItemParse_maxPaintChars, NULL},
-	{"focusSound", ItemParse_focusSound, NULL},
-	{"cvarFloat", ItemParse_cvarFloat, NULL},
-	{"cvarStrList", ItemParse_cvarStrList, NULL},
-	{"cvarFloatList", ItemParse_cvarFloatList, NULL},
-	{"addColorRange", ItemParse_addColorRange, NULL},
-	{"addColorRangeRel", ItemParse_addColorRangeRel, NULL},
-	{"ownerdrawFlag", ItemParse_ownerdrawFlag, NULL},
-	{"enableCvar", ItemParse_enableCvar, NULL},
-	{"cvarTest", ItemParse_cvarTest, NULL},
-	{"disableCvar", ItemParse_disableCvar, NULL},
-	{"showCvar", ItemParse_showCvar, NULL},
-	{"hideCvar", ItemParse_hideCvar, NULL},
-	{"cinematic", ItemParse_cinematic, NULL},
-	{"doubleclick", ItemParse_doubleClick, NULL},
-	{"noToggle", ItemParse_noToggle, NULL}, // TTimo: use with ITEM_TYPE_YESNO and an action script (see sv_punkbuster)
+	{"name", &displayContextDef_t::ItemParse_name, NULL},
+	{"text", &displayContextDef_t::ItemParse_text, NULL},
+	{"textfile", &displayContextDef_t::ItemParse_textfile, NULL},  //----(SA)	added
+	{"group", &displayContextDef_t::ItemParse_group, NULL},
+	{"asset_model", &displayContextDef_t::ItemParse_asset_model, NULL},
+	{"asset_shader", &displayContextDef_t::ItemParse_asset_shader, NULL},
+	{"model_origin", &displayContextDef_t::ItemParse_model_origin, NULL},
+	{"model_fovx", &displayContextDef_t::ItemParse_model_fovx, NULL},
+	{"model_fovy", &displayContextDef_t::ItemParse_model_fovy, NULL},
+	{"model_rotation", &displayContextDef_t::ItemParse_model_rotation, NULL},
+	{"model_angle", &displayContextDef_t::ItemParse_model_angle, NULL},
+	{"model_animplay", &displayContextDef_t::ItemParse_model_animplay, NULL},
+	{"rect", &displayContextDef_t::ItemParse_rect, NULL},
+	{"origin", &displayContextDef_t::ItemParse_origin, NULL},              // NERVE - SMF
+	{"style", &displayContextDef_t::ItemParse_style, NULL},
+	{"decoration", &displayContextDef_t::ItemParse_decoration, NULL},
+	{"notselectable", &displayContextDef_t::ItemParse_notselectable, NULL},
+	{"wrapped", &displayContextDef_t::ItemParse_wrapped, NULL},
+	{"autowrapped", &displayContextDef_t::ItemParse_autowrapped, NULL},
+	{"horizontalscroll", &displayContextDef_t::ItemParse_horizontalscroll, NULL},
+	{"type", &displayContextDef_t::ItemParse_type, NULL},
+	{"elementwidth", &displayContextDef_t::ItemParse_elementwidth, NULL},
+	{"elementheight", &displayContextDef_t::ItemParse_elementheight, NULL},
+	{"feeder", &displayContextDef_t::ItemParse_feeder, NULL},
+	{"elementtype",&displayContextDef_t::ItemParse_elementtype, NULL},
+	{"columns", &displayContextDef_t::ItemParse_columns, NULL},
+	{"border", &displayContextDef_t::ItemParse_border, NULL},
+	{"bordersize", &displayContextDef_t::ItemParse_bordersize, NULL},
+	{"visible", &displayContextDef_t::ItemParse_visible, NULL},
+	{"ownerdraw", &displayContextDef_t::ItemParse_ownerdraw, NULL},
+	{"align", &displayContextDef_t::ItemParse_align, NULL},
+	{"textalign", &displayContextDef_t::ItemParse_textalign, NULL},
+	{"textalignx", &displayContextDef_t::ItemParse_textalignx, NULL},
+	{"textaligny", &displayContextDef_t::ItemParse_textaligny, NULL},
+	{"textscale", &displayContextDef_t::ItemParse_textscale, NULL},
+	{"textstyle", &displayContextDef_t::ItemParse_textstyle, NULL},
+	{"textfont", &displayContextDef_t::ItemParse_textfont, NULL},              // (SA)
+	{"backcolor", &displayContextDef_t::ItemParse_backcolor, NULL},
+	{"forecolor", &displayContextDef_t::ItemParse_forecolor, NULL},
+	{"bordercolor", &displayContextDef_t::ItemParse_bordercolor, NULL},
+	{"outlinecolor", &displayContextDef_t::ItemParse_outlinecolor, NULL},
+	{"background", &displayContextDef_t::ItemParse_background, NULL},
+	{"onFocus", &displayContextDef_t::ItemParse_onFocus, NULL},
+	{"leaveFocus", &displayContextDef_t::ItemParse_leaveFocus, NULL},
+	{"mouseEnter", &displayContextDef_t::ItemParse_mouseEnter, NULL},
+	{"mouseExit", &displayContextDef_t::ItemParse_mouseExit, NULL},
+	{"mouseEnterText", &displayContextDef_t::ItemParse_mouseEnterText, NULL},
+	{"mouseExitText", &displayContextDef_t::ItemParse_mouseExitText, NULL},
+	{"action", &displayContextDef_t::ItemParse_action, NULL},
+	{"accept", &displayContextDef_t::ItemParse_accept, NULL},              // NERVE - SMF
+	{"special", &displayContextDef_t::ItemParse_special, NULL},
+	{"cvar", &displayContextDef_t::ItemParse_cvar, NULL},
+	{"maxChars", &displayContextDef_t::ItemParse_maxChars, NULL},
+	{"maxPaintChars", &displayContextDef_t::ItemParse_maxPaintChars, NULL},
+	{"focusSound", &displayContextDef_t::ItemParse_focusSound, NULL},
+	{"cvarFloat", &displayContextDef_t::ItemParse_cvarFloat, NULL},
+	{"cvarStrList", &displayContextDef_t::ItemParse_cvarStrList, NULL},
+	{"cvarFloatList", &displayContextDef_t::ItemParse_cvarFloatList, NULL},
+	{"addColorRange", &displayContextDef_t::ItemParse_addColorRange, NULL},
+	{"addColorRangeRel", &displayContextDef_t::ItemParse_addColorRangeRel, NULL},
+	{"ownerdrawFlag", &displayContextDef_t::ItemParse_ownerdrawFlag, NULL},
+	{"enableCvar", &displayContextDef_t::ItemParse_enableCvar, NULL},
+	{"cvarTest", &displayContextDef_t::ItemParse_cvarTest, NULL},
+	{"disableCvar", &displayContextDef_t::ItemParse_disableCvar, NULL},
+	{"showCvar", &displayContextDef_t::ItemParse_showCvar, NULL},
+	{"hideCvar", &displayContextDef_t::ItemParse_hideCvar, NULL},
+	{"cinematic", &displayContextDef_t::ItemParse_cinematic, NULL},
+	{"doubleclick", &displayContextDef_t::ItemParse_doubleClick, NULL},
+	{"noToggle", &displayContextDef_t::ItemParse_noToggle, NULL}, // TTimo: use with ITEM_TYPE_YESNO and an action script (see sv_punkbuster)
 	{NULL, NULL, NULL}
 };
 
@@ -5710,7 +5779,7 @@ keywordHash_t *itemParseKeywordHash[KEYWORDHASH_SIZE];
 Item_SetupKeywordHash
 ===============
 */
-void Item_SetupKeywordHash( void ) {
+void displayContextDef_t::Item_SetupKeywordHash( void ) {
 	int i;
 
 	memset( itemParseKeywordHash, 0, sizeof( itemParseKeywordHash ) );
@@ -5724,7 +5793,7 @@ void Item_SetupKeywordHash( void ) {
 Item_Parse
 ===============
 */
-bool Item_Parse( int handle, itemDef_t *item ) {
+bool displayContextDef_t::Item_Parse(int handle, itemDef_t * item) {
 	pc_token_t token;
 	keywordHash_t *key;
 
@@ -5750,7 +5819,7 @@ bool Item_Parse( int handle, itemDef_t *item ) {
 			PC_SourceError( handle, "unknown menu item keyword %s", token.string );
 			continue;
 		}
-		if ( !key->func( item, handle ) ) {
+		if (!(this->*(key->func))(item, handle)) {
 			PC_SourceError( handle, "couldn't parse menu item keyword %s", token.string );
 			return false;
 		}
@@ -5761,7 +5830,7 @@ bool Item_Parse( int handle, itemDef_t *item ) {
 
 // Item_InitControls
 // init's special control types
-void Item_InitControls( itemDef_t *item ) {
+void displayContextDef_t::Item_InitControls( itemDef_t *item ) {
 	if ( item == NULL ) {
 		return;
 	}
@@ -5783,7 +5852,8 @@ Menu Keyword Parse functions
 ===============
 */
 
-bool MenuParse_font( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_font(itemDef_t* item, int handle) {
+	auto&& DC = this;
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_String_Parse( handle, &menu->font ) ) {
 		return false;
@@ -5795,7 +5865,7 @@ bool MenuParse_font( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_name( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_name( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_String_Parse( handle, &menu->window.name ) ) {
 		return false;
@@ -5807,7 +5877,7 @@ bool MenuParse_name( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_fullscreen( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_fullscreen( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Int_Parse( handle, (int*)&menu->fullScreen ) ) {
 		return false;
@@ -5815,7 +5885,7 @@ bool MenuParse_fullscreen( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_rect( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_rect( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Rect_Parse( handle, &menu->window.rect ) ) {
 		return false;
@@ -5823,7 +5893,7 @@ bool MenuParse_rect( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_style( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_style( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Int_Parse( handle, &menu->window.style ) ) {
 		return false;
@@ -5831,7 +5901,7 @@ bool MenuParse_style( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_visible( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_visible( itemDef_t *item, int handle ) {
 	int i;
 	menuDef_t *menu = (menuDef_t*)item;
 
@@ -5844,7 +5914,7 @@ bool MenuParse_visible( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_onOpen( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_onOpen( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Script_Parse( handle, &menu->onOpen ) ) {
 		return false;
@@ -5852,7 +5922,7 @@ bool MenuParse_onOpen( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_onClose( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_onClose( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Script_Parse( handle, &menu->onClose ) ) {
 		return false;
@@ -5860,7 +5930,7 @@ bool MenuParse_onClose( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_onESC( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_onESC( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Script_Parse( handle, &menu->onESC ) ) {
 		return false;
@@ -5870,7 +5940,7 @@ bool MenuParse_onESC( itemDef_t *item, int handle ) {
 
 
 
-bool MenuParse_border( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_border( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Int_Parse( handle, &menu->window.border ) ) {
 		return false;
@@ -5878,7 +5948,7 @@ bool MenuParse_border( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_borderSize( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_borderSize( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Float_Parse( handle, &menu->window.borderSize ) ) {
 		return false;
@@ -5886,7 +5956,7 @@ bool MenuParse_borderSize( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_backcolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_backcolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 	menuDef_t *menu = (menuDef_t*)item;
@@ -5900,7 +5970,7 @@ bool MenuParse_backcolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_forecolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_forecolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 	menuDef_t *menu = (menuDef_t*)item;
@@ -5915,7 +5985,7 @@ bool MenuParse_forecolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_bordercolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_bordercolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 	menuDef_t *menu = (menuDef_t*)item;
@@ -5929,7 +5999,7 @@ bool MenuParse_bordercolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_focuscolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_focuscolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 	menuDef_t *menu = (menuDef_t*)item;
@@ -5943,7 +6013,7 @@ bool MenuParse_focuscolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_disablecolor( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_disablecolor( itemDef_t *item, int handle ) {
 	int i;
 	float f;
 	menuDef_t *menu = (menuDef_t*)item;
@@ -5957,7 +6027,7 @@ bool MenuParse_disablecolor( itemDef_t *item, int handle ) {
 }
 
 
-bool MenuParse_outlinecolor( itemDef_t *item, int handle ) {
+bool  displayContextDef_t::MenuParse_outlinecolor( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( !PC_Color_Parse( handle, &menu->window.outlineColor ) ) {
 		return false;
@@ -5965,7 +6035,8 @@ bool MenuParse_outlinecolor( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_background( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_background( itemDef_t *item, int handle ) {
+	auto&& DC = this;
 	const char *buff;
 	menuDef_t *menu = (menuDef_t*)item;
 
@@ -5976,7 +6047,7 @@ bool MenuParse_background( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_cinematic( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_cinematic( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 
 	if ( !PC_String_Parse( handle, &menu->window.cinematicName ) ) {
@@ -5985,7 +6056,7 @@ bool MenuParse_cinematic( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_ownerdrawFlag( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_ownerdrawFlag( itemDef_t *item, int handle ) {
 	int i;
 	menuDef_t *menu = (menuDef_t*)item;
 
@@ -5996,7 +6067,7 @@ bool MenuParse_ownerdrawFlag( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_ownerdraw( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_ownerdraw( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 
 	if ( !PC_Int_Parse( handle, &menu->window.ownerDraw ) ) {
@@ -6007,21 +6078,21 @@ bool MenuParse_ownerdraw( itemDef_t *item, int handle ) {
 
 
 // decoration
-bool MenuParse_popup( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_popup( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	menu->window.flags |= WINDOW_POPUP;
 	return true;
 }
 
 
-bool MenuParse_outOfBounds( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_outOfBounds( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 
 	menu->window.flags |= WINDOW_OOB_CLICK;
 	return true;
 }
 
-bool MenuParse_soundLoop( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_soundLoop( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 
 	if ( !PC_String_Parse( handle, &menu->soundName ) ) {
@@ -6030,7 +6101,7 @@ bool MenuParse_soundLoop( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_fadeClamp( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_fadeClamp( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 
 	if ( !PC_Float_Parse( handle, &menu->fadeClamp ) ) {
@@ -6039,7 +6110,7 @@ bool MenuParse_fadeClamp( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_fadeAmount( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_fadeAmount( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 
 	if ( !PC_Float_Parse( handle, &menu->fadeAmount ) ) {
@@ -6049,7 +6120,7 @@ bool MenuParse_fadeAmount( itemDef_t *item, int handle ) {
 }
 
 
-bool MenuParse_fadeCycle( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_fadeCycle( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 
 	if ( !PC_Int_Parse( handle, &menu->fadeCycle ) ) {
@@ -6059,7 +6130,7 @@ bool MenuParse_fadeCycle( itemDef_t *item, int handle ) {
 }
 
 
-bool MenuParse_itemDef( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_itemDef( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	if ( menu->itemCount < MAX_MENUITEMS ) {
 		menu->items[menu->itemCount] = (itemDef_t*)UI_Alloc( sizeof( itemDef_t ) );
@@ -6074,7 +6145,7 @@ bool MenuParse_itemDef( itemDef_t *item, int handle ) {
 }
 
 // NERVE - SMF
-bool MenuParse_execKey( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_execKey( itemDef_t *item, int handle ) {
 	menuDef_t *menu = ( menuDef_t* )item;
 	char keyname;
 	short int keyindex;
@@ -6090,7 +6161,7 @@ bool MenuParse_execKey( itemDef_t *item, int handle ) {
 	return true;
 }
 
-bool MenuParse_execKeyInt( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_execKeyInt( itemDef_t *item, int handle ) {
 	menuDef_t *menu = ( menuDef_t* )item;
 	int keyname;
 
@@ -6106,7 +6177,7 @@ bool MenuParse_execKeyInt( itemDef_t *item, int handle ) {
 // -NERVE - SMF
 
 // TTimo
-bool MenuParse_modal( itemDef_t *item, int handle ) {
+bool displayContextDef_t::MenuParse_modal( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
 	menu->window.flags |= WINDOW_MODAL;
 	return true;
@@ -6114,37 +6185,37 @@ bool MenuParse_modal( itemDef_t *item, int handle ) {
 
 
 keywordHash_t menuParseKeywords[] = {
-	{"font", MenuParse_font, NULL},
-	{"name", MenuParse_name, NULL},
-	{"fullscreen", MenuParse_fullscreen, NULL},
-	{"rect", MenuParse_rect, NULL},
-	{"style", MenuParse_style, NULL},
-	{"visible", MenuParse_visible, NULL},
-	{"onOpen", MenuParse_onOpen, NULL},
-	{"onClose", MenuParse_onClose, NULL},
-	{"onESC", MenuParse_onESC, NULL},
-	{"border", MenuParse_border, NULL},
-	{"borderSize", MenuParse_borderSize, NULL},
-	{"backcolor", MenuParse_backcolor, NULL},
-	{"forecolor", MenuParse_forecolor, NULL},
-	{"bordercolor", MenuParse_bordercolor, NULL},
-	{"focuscolor", MenuParse_focuscolor, NULL},
-	{"disablecolor", MenuParse_disablecolor, NULL},
-	{"outlinecolor", MenuParse_outlinecolor, NULL},
-	{"background", MenuParse_background, NULL},
-	{"ownerdraw", MenuParse_ownerdraw, NULL},
-	{"ownerdrawFlag", MenuParse_ownerdrawFlag, NULL},
-	{"outOfBoundsClick", MenuParse_outOfBounds, NULL},
-	{"soundLoop", MenuParse_soundLoop, NULL},
-	{"itemDef", MenuParse_itemDef, NULL},
-	{"cinematic", MenuParse_cinematic, NULL},
-	{"popup", MenuParse_popup, NULL},
-	{"fadeClamp", MenuParse_fadeClamp, NULL},
-	{"fadeCycle", MenuParse_fadeCycle, NULL},
-	{"fadeAmount", MenuParse_fadeAmount, NULL},
-	{"execKey", MenuParse_execKey, NULL},                // NERVE - SMF
-	{"execKeyInt", MenuParse_execKeyInt, NULL},          // NERVE - SMF
-	{"modal", MenuParse_modal, NULL },
+	{"font", &displayContextDef_t::MenuParse_font, NULL},
+	{"name", &displayContextDef_t::MenuParse_name, NULL},
+	{"fullscreen", &displayContextDef_t::MenuParse_fullscreen, NULL},
+	{"rect", &displayContextDef_t::MenuParse_rect, NULL},
+	{"style", &displayContextDef_t::MenuParse_style, NULL},
+	{"visible", &displayContextDef_t::MenuParse_visible, NULL},
+	{"onOpen",&displayContextDef_t::MenuParse_onOpen, NULL},
+	{"onClose", &displayContextDef_t::MenuParse_onClose, NULL},
+	{"onESC", &displayContextDef_t::MenuParse_onESC, NULL},
+	{"border", &displayContextDef_t::MenuParse_border, NULL},
+	{"borderSize", &displayContextDef_t::MenuParse_borderSize, NULL},
+	{"backcolor", &displayContextDef_t::MenuParse_backcolor, NULL},
+	{"forecolor", &displayContextDef_t::MenuParse_forecolor, NULL},
+	{"bordercolor", &displayContextDef_t::MenuParse_bordercolor, NULL},
+	{"focuscolor", &displayContextDef_t::MenuParse_focuscolor, NULL},
+	{"disablecolor", &displayContextDef_t::MenuParse_disablecolor, NULL},
+	{"outlinecolor", &displayContextDef_t::MenuParse_outlinecolor, NULL},
+	{"background", &displayContextDef_t::MenuParse_background, NULL},
+	{"ownerdraw", &displayContextDef_t::MenuParse_ownerdraw, NULL},
+	{"ownerdrawFlag",&displayContextDef_t::MenuParse_ownerdrawFlag, NULL},
+	{"outOfBoundsClick", &displayContextDef_t::MenuParse_outOfBounds, NULL},
+	{"soundLoop", &displayContextDef_t::MenuParse_soundLoop, NULL},
+	{"itemDef", &displayContextDef_t::MenuParse_itemDef, NULL},
+	{"cinematic", &displayContextDef_t::MenuParse_cinematic, NULL},
+	{"popup", &displayContextDef_t::MenuParse_popup, NULL},
+	{"fadeClamp", &displayContextDef_t::MenuParse_fadeClamp, NULL},
+	{"fadeCycle", &displayContextDef_t::MenuParse_fadeCycle, NULL},
+	{"fadeAmount", &displayContextDef_t::MenuParse_fadeAmount, NULL},
+	{"execKey", &displayContextDef_t::MenuParse_execKey, NULL},                // NERVE - SMF
+	{"execKeyInt", &displayContextDef_t::MenuParse_execKeyInt, NULL},          // NERVE - SMF
+	{"modal", &displayContextDef_t::MenuParse_modal, NULL },
 	{NULL, NULL, NULL}
 };
 
@@ -6155,7 +6226,7 @@ keywordHash_t *menuParseKeywordHash[KEYWORDHASH_SIZE];
 Menu_SetupKeywordHash
 ===============
 */
-void Menu_SetupKeywordHash( void ) {
+void displayContextDef_t::Menu_SetupKeywordHash( void ) {
 	int i;
 
 	memset( menuParseKeywordHash, 0, sizeof( menuParseKeywordHash ) );
@@ -6169,7 +6240,7 @@ void Menu_SetupKeywordHash( void ) {
 Menu_Parse
 ===============
 */
-bool Menu_Parse( int handle, menuDef_t *menu ) {
+bool displayContextDef_t::Menu_Parse( int handle, menuDef_t *menu ) {
 	pc_token_t token;
 	keywordHash_t *key;
 
@@ -6197,7 +6268,7 @@ bool Menu_Parse( int handle, menuDef_t *menu ) {
 			PC_SourceError( handle, "unknown menu keyword %s", token.string );
 			continue;
 		}
-		if ( !key->func( (itemDef_t*)menu, handle ) ) {
+		if ( !(this->*(key->func))( (itemDef_t*)menu, handle ) ) {
 			PC_SourceError( handle, "couldn't parse menu keyword %s", token.string );
 			return false;
 		}
@@ -6210,7 +6281,7 @@ bool Menu_Parse( int handle, menuDef_t *menu ) {
 Menu_New
 ===============
 */
-void Menu_New( int handle ) {
+void displayContextDef_t::Menu_New( int handle ) {
 	menuDef_t *menu = &Menus[menuCount];
 
 	if ( menuCount < MAX_MENUS ) {
@@ -6222,14 +6293,15 @@ void Menu_New( int handle ) {
 	}
 }
 
-int Menu_Count() {
+int displayContextDef_t::Menu_Count() {
 	return menuCount;
 }
 
-void Menu_PaintAll() {
+void displayContextDef_t::Menu_PaintAll() {
+	auto&& DC = this;
 	int i;
 	if ( captureFunc ) {
-		captureFunc( captureData );
+		(this->*captureFunc)( captureData );
 	}
 
 	for ( i = 0; i < Menu_Count(); i++ ) {
@@ -6242,18 +6314,19 @@ void Menu_PaintAll() {
 	}
 }
 
-void Menu_Reset() {
+void displayContextDef_t::Menu_Reset() {
 	menuCount = 0;
 }
 
-displayContextDef_t *Display_GetContext() {
+displayContextDef_t * displayContextDef_t::Display_GetContext() {
+	auto&& DC = this;
 	return DC;
 }
 
 //static float captureX; // TTimo: unused
 //static float captureY; // TTimo: unused
 
-void *Display_CaptureItem( int x, int y ) {
+void * displayContextDef_t::Display_CaptureItem( int x, int y ) {
 	int i;
 
 	for ( i = 0; i < menuCount; i++ ) {
@@ -6268,7 +6341,7 @@ void *Display_CaptureItem( int x, int y ) {
 
 
 // FIXME:
-bool Display_MouseMove( void *p, int x, int y ) {
+bool displayContextDef_t::Display_MouseMove( void *p, int x, int y ) {
 	int i;
 	menuDef_t *menu = (menuDef_t*)p;
 
@@ -6292,7 +6365,7 @@ bool Display_MouseMove( void *p, int x, int y ) {
 
 }
 
-int Display_CursorType( int x, int y ) {
+int displayContextDef_t::Display_CursorType( int x, int y ) {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
 		rectDef_t r2;
@@ -6307,7 +6380,7 @@ int Display_CursorType( int x, int y ) {
 }
 
 
-void Display_HandleKey( int key, bool down, int x, int y ) {
+void displayContextDef_t::Display_HandleKey( int key, bool down, int x, int y ) {
 	menuDef_t *menu = (menuDef_t*)Display_CaptureItem( x, y );
 	if ( menu == NULL ) {
 		menu = Menu_GetFocused();
@@ -6317,7 +6390,8 @@ void Display_HandleKey( int key, bool down, int x, int y ) {
 	}
 }
 
-static void Window_CacheContents( windowDef_t *window ) {
+void displayContextDef_t::Window_CacheContents( windowDef_t *window ) {//static 
+	auto&& DC = this;
 	if ( window ) {
 		if ( window->cinematicName ) {
 			int cin = DC->playCinematic( window->cinematicName, 0, 0, 0, 0 );
@@ -6327,14 +6401,15 @@ static void Window_CacheContents( windowDef_t *window ) {
 }
 
 
-static void Item_CacheContents( itemDef_t *item ) {
+void  displayContextDef_t::Item_CacheContents( itemDef_t *item ) {//
 	if ( item ) {
 		Window_CacheContents( &item->window );
 	}
 
 }
 
-static void Menu_CacheContents( menuDef_t *menu ) {
+void displayContextDef_t::Menu_CacheContents( menuDef_t *menu ) {//static 
+	auto&& DC = this;
 	if ( menu ) {
 		int i;
 		Window_CacheContents( &menu->window );
@@ -6349,7 +6424,7 @@ static void Menu_CacheContents( menuDef_t *menu ) {
 
 }
 
-void Display_CacheAll() {
+void displayContextDef_t::Display_CacheAll() {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
 		Menu_CacheContents( &Menus[i] );
@@ -6357,7 +6432,7 @@ void Display_CacheAll() {
 }
 
 
-static bool Menu_OverActiveItem( menuDef_t *menu, float x, float y ) {
+bool displayContextDef_t::Menu_OverActiveItem( menuDef_t *menu, float x, float y ) {
 	if ( menu && menu->window.flags & ( WINDOW_VISIBLE | WINDOW_FORCED ) ) {
 		if ( Rect_ContainsPoint( &menu->window.rect, x, y ) ) {
 			int i;

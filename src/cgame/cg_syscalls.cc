@@ -496,9 +496,9 @@ void trap_SendMoveSpeedsToGame( int entnum, char *movespeeds ) {
 //	syscall_CG_CIN_SETEXTENTS( handle, x, y, w, h );
 //}
 
-//bool trap_GetEntityToken( char *buffer, int bufferSize ) {
-//	return syscall_CG_GET_ENTITY_TOKEN( buffer, bufferSize );
-//}
+bool trap_CG_GetEntityToken( char *buffer, int bufferSize ) {
+	return syscall_CG_GET_ENTITY_TOKEN( buffer, bufferSize );
+}
 
 //----(SA)	added
 // bring up a popup menu

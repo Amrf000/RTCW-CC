@@ -96,7 +96,7 @@ int UI_ParseInfos( char *buf, int max, char *infos[] ) {
 			Info_SetValueForKey( info, key, token );
 		}
 		//NOTE: extra space for arena number
-		infos[count] = (char*)UI_Alloc( strlen( info ) + strlen( "\\num\\" ) + strlen( va( "%d", MAX_ARENAS ) ) + 1 );
+		infos[count] = (char*)uiInfo.uiDC.UI_Alloc( strlen( info ) + strlen( "\\num\\" ) + strlen( va( "%d", MAX_ARENAS ) ) + 1 );
 		if ( infos[count] ) {
 			strcpy( infos[count], info );
 			count++;
@@ -170,7 +170,7 @@ void UI_LoadArenas( void ) {
 		UI_LoadArenasFromFile( filename );
 	}
 //	trap_DPrint( va( "%i arenas parsed\n", ui_numArenas ) ); // JPW NERVE pulled per atvi req
-	if ( UI_OutOfMemory() ) {
+	if (uiInfo.uiDC.UI_OutOfMemory() ) {
 		trap_Print( S_COLOR_YELLOW "WARNING: not anough memory in pool to load all arenas\n" );
 	}
 
@@ -178,10 +178,10 @@ void UI_LoadArenas( void ) {
 		// determine type
 
 		uiInfo.mapList[uiInfo.mapCount].cinematic = -1;
-		uiInfo.mapList[uiInfo.mapCount].mapLoadName = String_Alloc( Info_ValueForKey( ui_arenaInfos[n], "map" ) );
-		uiInfo.mapList[uiInfo.mapCount].mapName = String_Alloc( Info_ValueForKey( ui_arenaInfos[n], "longname" ) );
+		uiInfo.mapList[uiInfo.mapCount].mapLoadName = uiInfo.uiDC.String_Alloc( Info_ValueForKey( ui_arenaInfos[n], "map" ) );
+		uiInfo.mapList[uiInfo.mapCount].mapName = uiInfo.uiDC.String_Alloc( Info_ValueForKey( ui_arenaInfos[n], "longname" ) );
 		uiInfo.mapList[uiInfo.mapCount].levelShot = -1;
-		uiInfo.mapList[uiInfo.mapCount].imageName = String_Alloc( va( "levelshots/%s", uiInfo.mapList[uiInfo.mapCount].mapLoadName ) );
+		uiInfo.mapList[uiInfo.mapCount].imageName = uiInfo.uiDC.String_Alloc( va( "levelshots/%s", uiInfo.mapList[uiInfo.mapCount].mapLoadName ) );
 		uiInfo.mapList[uiInfo.mapCount].typeBits = 0;
 
 		// NERVE - SMF

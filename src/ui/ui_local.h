@@ -372,9 +372,7 @@ extern sfxHandle_t  MenuField_Key( menufield_s* m, int* key );
 void            UI_Report();
 void            UI_Load();
 void            UI_LoadMenus( const char *menuFile, bool reset );
-void            _UI_SetActiveMenu( uiMenuCommand_t menu );
 uiMenuCommand_t _UI_GetActiveMenu( void );
-int             UI_AdjustTimeByGame( int time );
 void            UI_ShowPostGame( bool newHigh );
 void            UI_ClearScores();
 void            UI_LoadArenas( void );
@@ -382,8 +380,6 @@ void            UI_LoadArenas( void );
 //
 // ui_menu.c
 //
-extern void MainMenu_Cache( void );
-extern void UI_MainMenu( void );
 extern void UI_RegisterCvars( void );
 extern void UI_UpdateCvars( void );
 
@@ -419,7 +415,7 @@ extern void TeamMain_Cache( void );
 //
 // ui_connect.c
 //
-extern void UI_DrawConnectScreen( bool overlay );
+
 
 //
 // ui_controls2.c

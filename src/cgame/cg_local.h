@@ -1778,6 +1778,8 @@ extern vmCvar_t cg_descriptiveText;
 extern vmCvar_t cg_autoReload;
 extern vmCvar_t cg_antilag;
 
+struct displayContextDef_t;
+extern displayContextDef_t cgDC;
 //
 // cg_main.c
 //
@@ -1906,7 +1908,7 @@ void CG_SelectPrevPlayer();
 void CG_SelectNextPlayer();
 float CG_GetValue( int ownerDraw, int type ); // 'type' is relative or absolute (fractional-'0.5' or absolute- '50' health)
 bool CG_OwnerDrawVisible( int flags );
-void CG_RunMenuScript( char **args );
+
 void CG_ShowResponseHead();
 void CG_SetPrintString( int type, const char *p );
 void CG_InitTeamChat();
@@ -2604,3 +2606,6 @@ int syscall_CG_KEY_GETBINDINGBUF(int keynum, char* buf, int buflen);
 int syscall_CG_KEY_SETBINDING(int keynum, const char* binding);
 int syscall_CG_KEY_KEYNUMTOSTRINGBUF(int keynum, char* buf, int buflen);
 int syscall_CG_TRANSLATE_STRING(const char* string, char* dest_buffer);
+
+
+bool trap_CG_GetEntityToken(char* buffer, int bufferSize);

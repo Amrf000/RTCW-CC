@@ -976,7 +976,7 @@ Every map should have exactly one worldspawn.
 "_color"    Ambient light color (must be used with 'ambient')
 "sun"        Shader to use for 'sun' image
 */
-void SP_worldspawn( void ) {
+static void SP_worldspawn( void ) {
 	char    *s;
 	gitem_t *item; // JPW NERVE
 

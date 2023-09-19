@@ -46,11 +46,6 @@ char systemChat[256];
 char teamChat1[256];
 char teamChat2[256];
 
-// NERVE - SMF
-void Controls_GetKeyAssignment( char *command, int *twokeys );
-char* BindingFromName( const char *cvar );
-void Controls_GetConfig( void );
-// -NERVE - SMF
 
 ////////////////////////
 ////////////////////////
@@ -2144,11 +2139,11 @@ static void CG_DrawVote( void ) {
 			return;
 		}
 
-		Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
+		Q_strncpyz( str1, cgDC.BindingFromName( "vote yes" ), 32 );
 		if ( !Q_stricmp( str1, "???" ) ) {
 			Q_strncpyz( str1, "vote yes", 32 );
 		}
-		Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
+		Q_strncpyz( str2, cgDC.BindingFromName( "vote no" ), 32 );
 		if ( !Q_stricmp( str2, "???" ) ) {
 			Q_strncpyz( str2, "vote no", 32 );
 		}
@@ -2165,11 +2160,11 @@ static void CG_DrawVote( void ) {
 		return;
 	}
 
-	Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
+	Q_strncpyz( str1, cgDC.BindingFromName( "vote yes" ), 32 );
 	if ( !Q_stricmp( str1, "???" ) ) {
 		Q_strncpyz( str1, "vote yes", 32 );
 	}
-	Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
+	Q_strncpyz( str2, cgDC.BindingFromName( "vote no" ), 32 );
 	if ( !Q_stricmp( str2, "???" ) ) {
 		Q_strncpyz( str2, "vote no", 32 );
 	}
@@ -2302,12 +2297,12 @@ static void CG_DrawSpectatorMessage( void ) {
 		return;
 	}
 
-	Controls_GetConfig();
+	cgDC.Controls_GetConfig();
 
 	x = 80;
 	y = 408;
 
-	str2 = BindingFromName( "OpenLimboMenu" );
+	str2 = cgDC.BindingFromName( "OpenLimboMenu" );
 	if ( !Q_stricmp( str2, "???" ) ) {
 		str2 = "ESCAPE";
 	}
@@ -2315,12 +2310,12 @@ static void CG_DrawSpectatorMessage( void ) {
 	CG_DrawStringExt( x, y, str, color, true, 0, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 	y += TINYCHAR_HEIGHT;
 
-	str2 = BindingFromName( "mp_QuickMessage" );
+	str2 = cgDC.BindingFromName( "mp_QuickMessage" );
 	str = va( CG_TranslateString( "- Press %s to open quick message menu" ), str2 );
 	CG_DrawStringExt( x, y, str, color, true, 0, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 	y += TINYCHAR_HEIGHT;
 
-	str2 = BindingFromName( "+attack" );
+	str2 = cgDC.BindingFromName( "+attack" );
 	str = va( CG_TranslateString( "- Press %s to follow next player" ), str2 );
 	CG_DrawStringExt( x, y, str, color, true, 0, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 	y += TINYCHAR_HEIGHT;
@@ -3154,7 +3149,7 @@ void CG_DrawTimedMenus() {
 	if ( cg.voiceTime ) {
 		int t = cg.time - cg.voiceTime;
 		if ( t > 2500 ) {
-			Menus_CloseByName( "voiceMenu" );
+			cgDC.Menus_CloseByName( "voiceMenu" );
 			trap_Cvar_Set( "cl_conXOffset", "0" );
 			cg.voiceTime = 0;
 		}
@@ -3470,7 +3465,7 @@ static void CG_Draw2D( void ) {
 			CG_DrawTeamInfo();
 		}
 		if ( cg_drawStatus.integer ) {
-			Menu_PaintAll();
+			cgDC.Menu_PaintAll();
 			CG_DrawTimedMenus();
 		}
 	}

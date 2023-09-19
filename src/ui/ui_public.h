@@ -159,7 +159,7 @@ typedef enum {
 
 } uiImport_t;
 
-typedef enum {
+enum uiMenuCommand_t {
 	UIMENU_NONE,
 	UIMENU_MAIN,
 	UIMENU_INGAME,
@@ -179,7 +179,7 @@ typedef enum {
 	UIMENU_WM_QUICKMESSAGEALT,  // NERVE - SMF
 	UIMENU_WM_LIMBO,            // NERVE - SMF
 	UIMENU_WM_AUTOUPDATE        // NERVE - DHM
-} uiMenuCommand_t;
+} ;
 
 #define SORT_HOST           0
 #define SORT_MAP            1

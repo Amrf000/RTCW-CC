@@ -248,7 +248,7 @@ void UI_ClearScores() {
 
 
 static void UI_Cache_f() {
-	Display_CacheAll();
+	uiInfo.uiDC.Display_CacheAll();
 }
 
 /*

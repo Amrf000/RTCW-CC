@@ -121,15 +121,14 @@ static void CG_ScoresUp_f( void ) {
 
 
 extern menuDef_t *menuScoreboard;
-void Menu_Reset();          // FIXME: add to right include file
 
 static void CG_LoadHud_f( void ) {
 	char buff[1024];
 	const char *hudSet;
 	memset( buff, 0, sizeof( buff ) );
 
-	String_Init();
-	Menu_Reset();
+	cgDC.String_Init();
+	cgDC.Menu_Reset();
 
 //	trap_Cvar_VariableStringBuffer("cg_hudFiles", buff, sizeof(buff));
 //	hudSet = buff;
