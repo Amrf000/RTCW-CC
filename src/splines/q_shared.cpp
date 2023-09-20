@@ -38,52 +38,52 @@ GROWLISTS
 */
 
 // malloc / free all in one place for debugging
-/*extern "C"*/ void* Com_Allocate(int bytes);
-/*extern "C" */  void Com_Dealloc( void *ptr );
+///*extern "C"*/ void* Com_Allocate(int bytes);
+///*extern "C" */  void Com_Dealloc( void *ptr );
 
-void Com_InitGrowList( growList_t *list, int maxElements ) {
-	list->maxElements = maxElements;
-	list->currentElements = 0;
-	list->elements = (void **)Com_Allocate( list->maxElements * sizeof( void * ) );
-}
+//void Com_InitGrowList( growList_t *list, int maxElements ) {
+//	list->maxElements = maxElements;
+//	list->currentElements = 0;
+//	list->elements = (void **)Com_Allocate( list->maxElements * sizeof( void * ) );
+//}
 
-int Com_AddToGrowList( growList_t *list, void *data ) {
-	void    **old;
-
-	if ( list->currentElements != list->maxElements ) {
-		list->elements[list->currentElements] = data;
-		return list->currentElements++;
-	}
-
-	// grow, reallocate and move
-	old = list->elements;
-
-	if ( list->maxElements < 0 ) {
-		Com_Error( ERR_FATAL, "Com_AddToGrowList: maxElements = %i", list->maxElements );
-	}
-
-	if ( list->maxElements == 0 ) {
-		// initialize the list to hold 100 elements
-		Com_InitGrowList( list, 100 );
-		return Com_AddToGrowList( list, data );
-	}
-
-	list->maxElements *= 2;
-
-	Com_DPrintf( "Resizing growlist to %i maxElements\n", list->maxElements );
-
-	list->elements = (void **)Com_Allocate( list->maxElements * sizeof( void * ) );
-
-	if ( !list->elements ) {
-		Com_Error( ERR_DROP, "Growlist alloc failed" );
-	}
-
-	memcpy( list->elements, old, list->currentElements * sizeof( void * ) );
-
-	Com_Dealloc( old );
-
-	return Com_AddToGrowList( list, data );
-}
+//int Com_AddToGrowList( growList_t *list, void *data ) {
+//	void    **old;
+//
+//	if ( list->currentElements != list->maxElements ) {
+//		list->elements[list->currentElements] = data;
+//		return list->currentElements++;
+//	}
+//
+//	// grow, reallocate and move
+//	old = list->elements;
+//
+//	if ( list->maxElements < 0 ) {
+//		Com_Error( ERR_FATAL, "Com_AddToGrowList: maxElements = %i", list->maxElements );
+//	}
+//
+//	if ( list->maxElements == 0 ) {
+//		// initialize the list to hold 100 elements
+//		Com_InitGrowList( list, 100 );
+//		return Com_AddToGrowList( list, data );
+//	}
+//
+//	list->maxElements *= 2;
+//
+//	Com_DPrintf( "Resizing growlist to %i maxElements\n", list->maxElements );
+//
+//	list->elements = (void **)Com_Allocate( list->maxElements * sizeof( void * ) );
+//
+//	if ( !list->elements ) {
+//		Com_Error( ERR_DROP, "Growlist alloc failed" );
+//	}
+//
+//	memcpy( list->elements, old, list->currentElements * sizeof( void * ) );
+//
+//	Com_Dealloc( old );
+//
+//	return Com_AddToGrowList( list, data );
+//}
 
 void *Com_GrowListElement( const growList_t *list, int index ) {
 	if ( index < 0 || index >= list->currentElements ) {
@@ -555,32 +555,32 @@ void Q_strncpyz( char *dest, const char *src, int destsize ) {
 	dest[destsize - 1] = 0;
 }
 
-int Q_stricmpn( const char *s1, const char *s2, int n ) {
-	int c1, c2;
-
-	do {
-		c1 = *s1++;
-		c2 = *s2++;
-
-		if ( !n-- ) {
-			return 0;       // strings are equal until end point
-		}
-
-		if ( c1 != c2 ) {
-			if ( c1 >= 'a' && c1 <= 'z' ) {
-				c1 -= ( 'a' - 'A' );
-			}
-			if ( c2 >= 'a' && c2 <= 'z' ) {
-				c2 -= ( 'a' - 'A' );
-			}
-			if ( c1 != c2 ) {
-				return c1 < c2 ? -1 : 1;
-			}
-		}
-	} while ( c1 );
-
-	return 0;       // strings are equal
-}
+//int Q_stricmpn( const char *s1, const char *s2, int n ) {
+//	int c1, c2;
+//
+//	do {
+//		c1 = *s1++;
+//		c2 = *s2++;
+//
+//		if ( !n-- ) {
+//			return 0;       // strings are equal until end point
+//		}
+//
+//		if ( c1 != c2 ) {
+//			if ( c1 >= 'a' && c1 <= 'z' ) {
+//				c1 -= ( 'a' - 'A' );
+//			}
+//			if ( c2 >= 'a' && c2 <= 'z' ) {
+//				c2 -= ( 'a' - 'A' );
+//			}
+//			if ( c1 != c2 ) {
+//				return c1 < c2 ? -1 : 1;
+//			}
+//		}
+//	} while ( c1 );
+//
+//	return 0;       // strings are equal
+//}
 
 int Q_strncmp( const char *s1, const char *s2, int n ) {
 	int c1, c2;
@@ -601,9 +601,9 @@ int Q_strncmp( const char *s1, const char *s2, int n ) {
 	return 0;       // strings are equal
 }
 
-int Q_stricmp( const char *s1, const char *s2 ) {
-	return Q_stricmpn( s1, s2, 99999 );
-}
+//int Q_stricmp( const char *s1, const char *s2 ) {
+//	return Q_stricmpn( s1, s2, 99999 );
+//}
 
 
 char *Q_strlwr( char *s1 ) {

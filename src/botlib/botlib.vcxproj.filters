@@ -1,154 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{48dc67ef-7bcc-4916-b42c-c4399cece405}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{309960cb-51fe-442b-a688-ad3f118ae159}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="be_aas_bspq3.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_cluster.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_debug.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_entity.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_file.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_main.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_move.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_optimize.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_reach.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_route.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_routealt.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_routetable.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_aas_sample.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ai_char.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ai_chat.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ai_gen.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ai_goal.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ai_move.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ai_weap.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ai_weight.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_ea.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="be_interface.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="l_crc.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="l_libvar.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="l_log.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="l_memory.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="l_precomp.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="l_script.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="l_struct.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="aasfile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\be_aas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_bsp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_cluster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_def.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_file.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_funcs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_move.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_optimize.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_reach.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_route.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_routealt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_routetable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="be_aas_sample.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\game\be_ai_char.h">
@@ -169,40 +28,10 @@
     <ClInclude Include="..\game\be_ai_weap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="be_ai_weight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\be_ea.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="be_interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\botlib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_crc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_libvar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_precomp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_script.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_struct.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="l_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\game\q_shared.h">

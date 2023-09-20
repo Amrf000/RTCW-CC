@@ -692,54 +692,54 @@ void Parse3DMatrix( char **buf_p, int z, int y, int x, float *m ) {
 ============================================================================
 */
 
-int Q_isprint( int c ) {
-	if ( c >= 0x20 && c <= 0x7E ) {
-		return ( 1 );
-	}
-	return ( 0 );
-}
+//int Q_isprint( int c ) {
+//	if ( c >= 0x20 && c <= 0x7E ) {
+//		return ( 1 );
+//	}
+//	return ( 0 );
+//}
 
-int Q_islower( int c ) {
-	if ( c >= 'a' && c <= 'z' ) {
-		return ( 1 );
-	}
-	return ( 0 );
-}
+//int Q_islower( int c ) {
+//	if ( c >= 'a' && c <= 'z' ) {
+//		return ( 1 );
+//	}
+//	return ( 0 );
+//}
 
-int Q_isupper( int c ) {
-	if ( c >= 'A' && c <= 'Z' ) {
-		return ( 1 );
-	}
-	return ( 0 );
-}
+//int Q_isupper( int c ) {
+//	if ( c >= 'A' && c <= 'Z' ) {
+//		return ( 1 );
+//	}
+//	return ( 0 );
+//}
 
-int Q_isalpha( int c ) {
-	if ( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) ) {
-		return ( 1 );
-	}
-	return ( 0 );
-}
+//int Q_isalpha( int c ) {
+//	if ( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) ) {
+//		return ( 1 );
+//	}
+//	return ( 0 );
+//}
 
-char* Q_strrchr( const char* string, int c ) {
-	char cc = c;
-	char *s;
-	char *sp = (char *)0;
-
-	s = (char*)string;
-
-	while ( *s )
-	{
-		if ( *s == cc ) {
-			sp = s;
-		}
-		s++;
-	}
-	if ( cc == 0 ) {
-		sp = s;
-	}
-
-	return sp;
-}
+//char* Q_strrchr( const char* string, int c ) {
+//	char cc = c;
+//	char *s;
+//	char *sp = (char *)0;
+//
+//	s = (char*)string;
+//
+//	while ( *s )
+//	{
+//		if ( *s == cc ) {
+//			sp = s;
+//		}
+//		s++;
+//	}
+//	if ( cc == 0 ) {
+//		sp = s;
+//	}
+//
+//	return sp;
+//}
 
 /*
 =============
@@ -748,17 +748,17 @@ Q_strncpyz
 Safe strncpy that ensures a trailing zero
 =============
 */
-void Q_strncpyz( char *dest, const char *src, int destsize ) {
-	if ( !src ) {
-		Com_Error( ERR_FATAL, "Q_strncpyz: NULL src" );
-	}
-	if ( destsize < 1 ) {
-		Com_Error( ERR_FATAL,"Q_strncpyz: destsize < 1" );
-	}
-
-	strncpy( dest, src, destsize - 1 );
-	dest[destsize - 1] = 0;
-}
+//void Q_strncpyz( char *dest, const char *src, int destsize ) {
+//	if ( !src ) {
+//		Com_Error( ERR_FATAL, "Q_strncpyz: NULL src" );
+//	}
+//	if ( destsize < 1 ) {
+//		Com_Error( ERR_FATAL,"Q_strncpyz: destsize < 1" );
+//	}
+//
+//	strncpy( dest, src, destsize - 1 );
+//	dest[destsize - 1] = 0;
+//}
 
 int Q_stricmpn( const char *s1, const char *s2, int n ) {
 	int c1, c2;
@@ -787,125 +787,125 @@ int Q_stricmpn( const char *s1, const char *s2, int n ) {
 	return 0;       // strings are equal
 }
 
-int Q_strncmp( const char *s1, const char *s2, int n ) {
-	int c1, c2;
-
-	do {
-		c1 = *s1++;
-		c2 = *s2++;
-
-		if ( !n-- ) {
-			return 0;       // strings are equal until end point
-		}
-
-		if ( c1 != c2 ) {
-			return c1 < c2 ? -1 : 1;
-		}
-	} while ( c1 );
-
-	return 0;       // strings are equal
-}
+//int Q_strncmp( const char *s1, const char *s2, int n ) {
+//	int c1, c2;
+//
+//	do {
+//		c1 = *s1++;
+//		c2 = *s2++;
+//
+//		if ( !n-- ) {
+//			return 0;       // strings are equal until end point
+//		}
+//
+//		if ( c1 != c2 ) {
+//			return c1 < c2 ? -1 : 1;
+//		}
+//	} while ( c1 );
+//
+//	return 0;       // strings are equal
+//}
 
 int Q_stricmp( const char *s1, const char *s2 ) {
 	return ( s1 && s2 ) ? Q_stricmpn( s1, s2, 99999 ) : -1;
 }
 
 
-char *Q_strlwr( char *s1 ) {
-	char    *s;
+//char *Q_strlwr( char *s1 ) {
+//	char    *s;
+//
+//	s = s1;
+//	while ( *s ) {
+//		*s = tolower( *s );
+//		s++;
+//	}
+//	return s1;
+//}
 
-	s = s1;
-	while ( *s ) {
-		*s = tolower( *s );
-		s++;
-	}
-	return s1;
-}
-
-char *Q_strupr( char *s1 ) {
-	char    *s;
-
-	s = s1;
-	while ( *s ) {
-		*s = toupper( *s );
-		s++;
-	}
-	return s1;
-}
+//char *Q_strupr( char *s1 ) {
+//	char    *s;
+//
+//	s = s1;
+//	while ( *s ) {
+//		*s = toupper( *s );
+//		s++;
+//	}
+//	return s1;
+//}
 
 
 // never goes past bounds or leaves without a terminating 0
-void Q_strcat( char *dest, int size, const char *src ) {
-	int l1;
-
-	l1 = strlen( dest );
-	if ( l1 >= size ) {
-		Com_Error( ERR_FATAL, "Q_strcat: already overflowed" );
-	}
-	Q_strncpyz( dest + l1, src, size - l1 );
-}
-
-
-int Q_PrintStrlen( const char *string ) {
-	int len;
-	const char  *p;
-
-	if ( !string ) {
-		return 0;
-	}
-
-	len = 0;
-	p = string;
-	while ( *p ) {
-		if ( Q_IsColorString( p ) ) {
-			p += 2;
-			continue;
-		}
-		p++;
-		len++;
-	}
-
-	return len;
-}
+//void Q_strcat( char *dest, int size, const char *src ) {
+//	int l1;
+//
+//	l1 = strlen( dest );
+//	if ( l1 >= size ) {
+//		Com_Error( ERR_FATAL, "Q_strcat: already overflowed" );
+//	}
+//	Q_strncpyz( dest + l1, src, size - l1 );
+//}
 
 
-char *Q_CleanStr( char *string ) {
-	char*   d;
-	char*   s;
-	int c;
+//int Q_PrintStrlen( const char *string ) {
+//	int len;
+//	const char  *p;
+//
+//	if ( !string ) {
+//		return 0;
+//	}
+//
+//	len = 0;
+//	p = string;
+//	while ( *p ) {
+//		if ( Q_IsColorString( p ) ) {
+//			p += 2;
+//			continue;
+//		}
+//		p++;
+//		len++;
+//	}
+//
+//	return len;
+//}
 
-	s = string;
-	d = string;
-	while ( ( c = *s ) != 0 ) {
-		if ( Q_IsColorString( s ) ) {
-			s++;
-		} else if ( c >= 0x20 && c <= 0x7E )   {
-			*d++ = c;
-		}
-		s++;
-	}
-	*d = '\0';
 
-	return string;
-}
+//char *Q_CleanStr( char *string ) {
+//	char*   d;
+//	char*   s;
+//	int c;
+//
+//	s = string;
+//	d = string;
+//	while ( ( c = *s ) != 0 ) {
+//		if ( Q_IsColorString( s ) ) {
+//			s++;
+//		} else if ( c >= 0x20 && c <= 0x7E )   {
+//			*d++ = c;
+//		}
+//		s++;
+//	}
+//	*d = '\0';
+//
+//	return string;
+//}
 
-void QDECL Com_sprintf( char *dest, int size, const char *fmt, ... ) {
-	int len;
-	va_list argptr;
-
-	/*
-	C99 for vsnprintf:
-	return the number of characters  (excluding  the  trailing  '\0')
-	which would have been written to the final string if enough space had been available.
-	*/
-	va_start( argptr,fmt );
-	len = Q_vsnprintf( dest, size, fmt, argptr );
-	va_end( argptr );
-
-	if ( len >= size ) {
-		Com_Printf( "Com_sprintf: overflow of %i in %i\n", len, size );
-	}
-}
+//void QDECL Com_sprintf( char *dest, int size, const char *fmt, ... ) {
+//	int len;
+//	va_list argptr;
+//
+//	/*
+//	C99 for vsnprintf:
+//	return the number of characters  (excluding  the  trailing  '\0')
+//	which would have been written to the final string if enough space had been available.
+//	*/
+//	va_start( argptr,fmt );
+//	len = Q_vsnprintf( dest, size, fmt, argptr );
+//	va_end( argptr );
+//
+//	if ( len >= size ) {
+//		Com_Printf( "Com_sprintf: overflow of %i in %i\n", len, size );
+//	}
+//}
 
 // Ridah, ripped from l_bsp.c
 int Q_strncasecmp( char *s1, char *s2, int n ) {
@@ -953,35 +953,35 @@ Ridah, modified this into a circular list, to further prevent stepping on
 previous strings
 ============
 */
-char    * QDECL va( char *format, ... ) {
-	va_list argptr;
-	#define MAX_VA_STRING   32000
-	static char temp_buffer[MAX_VA_STRING];
-	static char string[MAX_VA_STRING];      // in case va is called by nested functions
-	static int index = 0;
-	char    *buf;
-	int len;
-
-
-	va_start( argptr, format );
-	vsprintf( temp_buffer, format,argptr );
-	va_end( argptr );
-
-	if ( ( len = strlen( temp_buffer ) ) >= MAX_VA_STRING ) {
-		Com_Error( ERR_DROP, "Attempted to overrun string in call to va()\n" );
-	}
-
-	if ( len + index >= MAX_VA_STRING - 1 ) {
-		index = 0;
-	}
-
-	buf = &string[index];
-	memcpy( buf, temp_buffer, len + 1 );
-
-	index += len + 1;
-
-	return buf;
-}
+//char    * QDECL va( char *format, ... ) {
+//	va_list argptr;
+//	#define MAX_VA_STRING   32000
+//	static char temp_buffer[MAX_VA_STRING];
+//	static char string[MAX_VA_STRING];      // in case va is called by nested functions
+//	static int index = 0;
+//	char    *buf;
+//	int len;
+//
+//
+//	va_start( argptr, format );
+//	vsprintf( temp_buffer, format,argptr );
+//	va_end( argptr );
+//
+//	if ( ( len = strlen( temp_buffer ) ) >= MAX_VA_STRING ) {
+//		Com_Error( ERR_DROP, "Attempted to overrun string in call to va()\n" );
+//	}
+//
+//	if ( len + index >= MAX_VA_STRING - 1 ) {
+//		index = 0;
+//	}
+//
+//	buf = &string[index];
+//	memcpy( buf, temp_buffer, len + 1 );
+//
+//	index += len + 1;
+//
+//	return buf;
+//}
 
 /*
 =============
